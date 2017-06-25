@@ -8,7 +8,7 @@
                 <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p>Иван Иванов</p>
+                <p> <? if (isset(Yii::$app->user->identity->name)) echo Yii::$app->user->identity->name; ?></p>
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -31,13 +31,11 @@
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
                     ['label' => 'Меню', 'options' => ['class' => 'header']],
-                    ['label' => 'Пользоватлеи', 'icon' => 'user', 'url' => ['/users'], 'options' => [
-                        'style' => 'border-bottom: 1px solid #ccc;'
-                    ], 'encodeLabels' =>'false',],
+                    ['label' => 'Пользователи', 'icon' => 'user', 'url' => ['/user'], ],
                     ['label' => 'About', 'icon' => 'file-code-o', 'url' => ['/site/about']],
-                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
-                    ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+//                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
+//                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
+//                    ['label' => 'Login', 'url' => ['auth/login'], 'visible' => Yii::$app->user->isGuest],
                 ],
             ]
         ) ?>

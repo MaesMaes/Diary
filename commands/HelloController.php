@@ -53,4 +53,52 @@ class HelloController extends Controller
 
         echo "Роли успешно добавлены\n";
     }
+
+    /**
+     * Создает и распределяет права доступа
+     */
+    public function actionCreatePermit()
+    {
+        die;
+        $auth = Yii::$app->authManager;
+
+        $permissions = [
+            'admin' => [
+                'permit' => 'userManage',
+                'desc' => 'CRUD пользователей'
+            ]
+        ];
+
+        foreach ($permissions as $roleName => $info) {
+            $permit = $auth->createPermission($info['permit']);
+            $permit->description = $info['desc'];
+            $auth->add($permit);
+
+            $role = $auth->getRole($roleName);
+            $auth->addChild($role, $permit);
+        }
+
+        echo "Права доступа успешно распределены\n";
+    }
+
+    /**
+     * Назначает роли пользователям
+     */
+    public function actionAssignRoles()
+    {
+        $roles = [
+            'admin' => [1],
+        ];
+
+        $auth = Yii::$app->authManager;
+        foreach ($roles as $roleName => $ids) {
+            $role = $auth->getRole($roleName);
+
+            foreach ($ids as $id) {
+                $auth->assign($role, $id);
+            }
+        }
+
+        echo "Роли успешно распределены\n";
+    }
 }
