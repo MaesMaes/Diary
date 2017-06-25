@@ -7,6 +7,7 @@
 
 namespace app\commands;
 
+use Yii;
 use yii\console\Controller;
 
 /**
@@ -26,5 +27,30 @@ class HelloController extends Controller
     public function actionIndex($message = 'hello world')
     {
         echo $message . "\n";
+    }
+
+    /**
+     * Консольная команда для создания стандартных ролей пользователей
+     */
+    public function actionRoleCreate()
+    {
+        die;
+        $auth = Yii::$app->authManager;
+
+        $roles = [
+            'admin' => 'Администратор',
+            'pupil' => 'Ученик',
+            'teacher' => 'Педагог',
+            'expert' => 'Эксперт',
+            'parent' => 'Родитель',
+        ];
+
+        foreach ($roles as $roleName => $desc) {
+            $role = $auth->createRole($roleName);
+            $role->description = $desc;
+            $auth->add($role);
+        }
+
+        echo "Роли успешно добавлены\n";
     }
 }

@@ -34,6 +34,7 @@
                     ['label' => 'Пользоватлеи', 'icon' => 'user', 'url' => ['/users'], 'options' => [
                         'style' => 'border-bottom: 1px solid #ccc;'
                     ], 'encodeLabels' =>'false',],
+                    ['label' => 'About', 'icon' => 'file-code-o', 'url' => ['/site/about']],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
