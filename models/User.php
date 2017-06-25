@@ -179,4 +179,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $role = $auth->getRole($roleName);
         $auth->assign($role, $userID);
     }
+
+    /**
+     * Возвращает имя по роли по ID пользователя
+     *
+     * @param $id
+     * @return mixed
+     */
+    public static function getRoleName($id)
+    {
+        $auth = $roles = Yii::$app->authManager;
+        $role = $auth->getRolesByUser($id);
+        $role = ArrayHelper::map($role, 'name', 'description');
+
+        return $role[key($role)];
+    }
 }

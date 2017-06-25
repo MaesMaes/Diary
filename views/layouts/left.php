@@ -8,7 +8,7 @@
                 <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p> <? if (isset(Yii::$app->user->identity->name)) echo Yii::$app->user->identity->name; ?></p>
+                <p> <? if (isset(Yii::$app->user->identity->name)) echo Yii::$app->user->identity->name . ' ' . Yii::$app->user->identity->lastName; ?></p>
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -32,7 +32,7 @@
                 'items' => [
                     ['label' => 'Меню', 'options' => ['class' => 'header']],
                     ['label' => 'Пользователи', 'icon' => 'user', 'url' => ['/user'], ],
-                    ['label' => 'About', 'icon' => 'file-code-o', 'url' => ['/site/about']],
+                    ['label' => 'О проекте', 'icon' => 'bookmark', 'url' => ['/site/about']],
 //                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
 //                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
 //                    ['label' => 'Login', 'url' => ['auth/login'], 'visible' => Yii::$app->user->isGuest],

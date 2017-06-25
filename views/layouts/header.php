@@ -1,4 +1,5 @@
 <?php
+use app\models\User;
 use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
@@ -27,7 +28,7 @@ use yii\helpers\Html;
                                 if (Yii::$app->user->isGuest) {
                                     echo 'Гость';
                                 } else {
-                                    echo Yii::$app->user->identity->name;
+                                    echo Yii::$app->user->identity->name . ' ' . Yii::$app->user->identity->lastName;
                                 }
                             ?>
                         </span>
@@ -39,30 +40,32 @@ use yii\helpers\Html;
                                  alt="User Image"/>
 
                             <p>
-                                <? if (isset(Yii::$app->user->identity->name)) echo Yii::$app->user->identity->name; ?> - Администратор
-                                <small>Member since Nov. 2012</small>
+                                <? if (isset(Yii::$app->user->identity->name)) echo Yii::$app->user->identity->name; ?>
+                                 <? if (isset(Yii::$app->user->identity->lastName)) echo Yii::$app->user->identity->lastName; ?> -
+                                <?= User::getRoleName(Yii::$app->user->id) ?>
+                                <small>С нами с 23 июня 2017</small>
                             </p>
                         </li>
                         <!-- Menu Body -->
-                        <li class="user-body">
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Followers</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Sales</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Friends</a>
-                            </div>
-                        </li>
+<!--                        <li class="user-body">-->
+<!--                            <div class="col-xs-4 text-center">-->
+<!--                                <a href="#">Ссылка</a>-->
+<!--                            </div>-->
+<!--                            <div class="col-xs-4 text-center">-->
+<!--                                <a href="#">Ссылка</a>-->
+<!--                            </div>-->
+<!--                            <div class="col-xs-4 text-center">-->
+<!--                                <a href="#">Ссылка</a>-->
+<!--                            </div>-->
+<!--                        </li>-->
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                <a href="#" class="btn btn-default btn-flat">Профиль</a>
                             </div>
                             <div class="pull-right">
                                 <?= Html::a(
-                                    'Sign out',
+                                    'Выйти',
                                     ['/auth/logout'],
                                     ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
                                 ) ?>
