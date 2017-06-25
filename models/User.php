@@ -163,4 +163,20 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $roles = Yii::$app->authManager->getRoles();
         return ArrayHelper::map($roles, 'name', 'description');
     }
+
+    /**
+     * Update-тит роль пользователя
+     *
+     * @param $userID
+     * @param $roleName
+     */
+    public static function updateRole($userID, $roleName)
+    {
+        $auth = $roles = Yii::$app->authManager;
+
+        $auth->revokeAll($userID);
+
+        $role = $auth->getRole($roleName);
+        $auth->assign($role, $userID);
+    }
 }
