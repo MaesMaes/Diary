@@ -69,11 +69,9 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
-        $rolesData = User::getRolesData($id);
-
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'role' => $rolesData['role'][key($rolesData['role'])]
+            'role' => User::getRoleName($id)
         ]);
     }
 
@@ -89,6 +87,8 @@ class UserController extends Controller
         $roles = User::getRolesMap();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            User::updateRole($model->id, Yii::$app->request->post('role'));
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

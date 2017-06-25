@@ -190,8 +190,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $auth = $roles = Yii::$app->authManager;
         $role = $auth->getRolesByUser($id);
-        $role = ArrayHelper::map($role, 'name', 'description');
 
-        return $role[key($role)];
+        $roleName = '';
+        if ($role) {
+            $role = ArrayHelper::map($role, 'name', 'description');
+            $roleName = $role[key($role)];
+        }
+
+        return $roleName;
     }
 }
