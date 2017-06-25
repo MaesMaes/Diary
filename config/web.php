@@ -4,6 +4,7 @@ $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
 
 $config = [
+    'language' => 'ru-RU',
     'id' => 'basic',
     'name' => 'eDiary 1.0',
     'basePath' => dirname(__DIR__),

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -14,6 +15,9 @@ use yii\web\IdentityInterface;
  * @property string $password
  * @property integer $isAdmin
  * @property string $photo
+ * @property string $lastName
+ * @property string $phone
+ * @property  $birthDate
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -32,7 +36,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['isAdmin'], 'integer'],
-            [['name', 'email', 'password', 'photo'], 'string', 'max' => 255],
+            [['name', 'lastName', 'email', 'phone', 'password', 'photo'], 'string', 'max' => 50],
+            [['birthDate'], 'default', 'value' => date('Y-m-d')],
         ];
     }
 
@@ -43,11 +48,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'email' => 'Email',
-            'password' => 'Password',
+            'name' => 'Имя',
+            'lastName' => 'Фамилия',
+            'birthDate' => 'Дата рождения',
+            'email' => 'Почта',
+            'phone' => 'Телефон',
+            'password' => 'Пароль',
             'isAdmin' => 'Is Admin',
-            'photo' => 'Photo',
+            'photo' => 'Фото',
         ];
     }
 
@@ -124,5 +132,35 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return ($this->password == $password) ? true : false;
+    }
+
+    public static function getRolesData($id)
+    {
+        $auth = Yii::$app->authManager;
+
+        $role = $auth->getRolesByUser($id);
+        $role = ArrayHelper::map($role, 'name', 'description');
+
+        $roles = User::getRolesMap();
+
+        return [
+            'role' => $role,
+            'roles' => $roles
+        ];
+    }
+
+    /**
+     * Возвращает ассоциативный массив всех ролей в виде:
+     * [
+     *    'admin' => 'Администратор'
+     *    ...
+     * ]
+     *
+     * @return array
+     */
+    public static function getRolesMap()
+    {
+        $roles = Yii::$app->authManager->getRoles();
+        return ArrayHelper::map($roles, 'name', 'description');
     }
 }

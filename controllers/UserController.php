@@ -69,8 +69,11 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        $rolesData = User::getRolesData($id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'role' => $rolesData['role'][key($rolesData['role'])]
         ]);
     }
 
@@ -83,11 +86,14 @@ class UserController extends Controller
     {
         $model = new User();
 
+        $roles = User::getRolesMap();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'roles' => $roles,
             ]);
         }
     }
@@ -102,11 +108,15 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
+        $rolesData = User::getRolesData($id);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'role' => key($rolesData['role']),
+                'roles' => $rolesData['roles']
             ]);
         }
     }
