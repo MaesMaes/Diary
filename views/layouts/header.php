@@ -59,7 +59,7 @@ use yii\helpers\Html;
 <!--                            </div>-->
 <!--                        </li>-->
                         <!-- Menu Footer-->
-                        <li class="user-footer">
+                        <li class="user-footer-dark">
                             <div class="pull-left">
                                 <a href="#" class="btn btn-default btn-flat">Профиль</a>
                             </div>
@@ -70,6 +70,7 @@ use yii\helpers\Html;
                                     ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
                                 ) ?>
                             </div>
+                            <div class="clearfix"></div>
                         </li>
                     </ul>
                 </li>
