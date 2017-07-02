@@ -33,6 +33,7 @@
                     ['label' => 'Меню', 'options' => ['class' => 'header']],
                     ['label' => 'Пользователи', 'icon' => 'user', 'url' => ['/user'], ],
                     ['label' => 'Предметы', 'icon' => 'th-list', 'url' => ['/subject'], ],
+                    ['label' => 'Классы', 'icon' => 'list-alt', 'url' => ['/school-class'], ],
                     ['label' => 'О проекте', 'icon' => 'bookmark', 'url' => ['/site/about']],
 //                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
 //                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],

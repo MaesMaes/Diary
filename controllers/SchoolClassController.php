@@ -2,17 +2,19 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
-use app\models\Subject;
-use app\models\SubjectSearch;
+use app\models\SchoolClass;
+use app\models\SchoolClassSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SubjectController implements the CRUD actions for Subject model.
+ * SchoolClassController implements the CRUD actions for SchoolClass model.
  */
-class SubjectController extends Controller
+class SchoolClassController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +32,12 @@ class SubjectController extends Controller
     }
 
     /**
-     * Lists all Subject models.
+     * Lists all SchoolClass models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SubjectSearch();
+        $searchModel = new SchoolClassSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +47,7 @@ class SubjectController extends Controller
     }
 
     /**
-     * Displays a single Subject model.
+     * Displays a single SchoolClass model.
      * @param integer $id
      * @return mixed
      */
@@ -57,16 +59,16 @@ class SubjectController extends Controller
     }
 
     /**
-     * Creates a new Subject model.
+     * Creates a new SchoolClass model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Subject();
+        $model = new SchoolClass();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('index');
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -75,7 +77,7 @@ class SubjectController extends Controller
     }
 
     /**
-     * Updates an existing Subject model.
+     * Updates an existing SchoolClass model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -84,17 +86,30 @@ class SubjectController extends Controller
     {
         $model = $this->findModel($id);
 
+//        $pupils = ArrayHelper::map(User::find()->where(['id' => User::getUsersByRole('pupil')])->all(), 'id', 'name');
+        $pupils = User::getAllPupil();
+        $selectedPupils = $model->getSelectedUsers();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('index');
+
+            //Получаем выбранных учеников из формы
+            $pupils = Yii::$app->request->post('pupils');
+
+            //Сохраняем их
+            $model->savePupils($pupils);
+
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'pupils' => $pupils,
+                'selectedPupils' => $selectedPupils,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Subject model.
+     * Deletes an existing SchoolClass model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,15 +122,15 @@ class SubjectController extends Controller
     }
 
     /**
-     * Finds the Subject model based on its primary key value.
+     * Finds the SchoolClass model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Subject the loaded model
+     * @return SchoolClass the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Subject::findOne($id)) !== null) {
+        if (($model = SchoolClass::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

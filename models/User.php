@@ -199,4 +199,37 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
         return $roleName;
     }
+
+    public function getArticles()
+    {
+        return $this->hasMany(SchoolClass::className(), ['id' => 'school_class_id'])
+            ->viaTable('school_class_users', ['users_id' => 'id']);
+    }
+
+    /**
+     * Возвращает список пользователей по роли
+     *
+     * @param $role
+     * @return array
+     */
+    public static function getUsersByRole($role)
+    {
+        $auth = Yii::$app->authManager;
+        $users = $auth->getUserIdsByRole($role);
+
+        return $users;
+    }
+
+    public static function getAllPupil()
+    {
+        $pupilsId = self::getUsersByRole('pupil');
+        $users = User::find()->where(['id' => $pupilsId])->all();
+
+        $data = [];
+        foreach ($users as $user) {
+            $data[$user->id] = $user->name . ' ' . $user->lastName;
+        }
+
+        return $data;
+    }
 }

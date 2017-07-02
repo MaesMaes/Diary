@@ -19,14 +19,27 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
             'name',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{update}  {delete}',
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    if ($action === 'update') {
+                        $url ='/subject/update?id='.$model->id;
+                        return $url;
+                    }
+                    if ($action === 'delete') {
+                        $url ='/subject/delete?id='.$model->id;
+                        return $url;
+                    }
+                }
+            ],
         ],
     ]); ?>
 </div>
