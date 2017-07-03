@@ -238,4 +238,24 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasOne(SchoolClass::className(), ['id' => 'school_class_id'])
             ->viaTable('school_class_users', ['users_id' => 'id']);
     }
+
+    public static function getDataPupilWithoutClass($classID = 9999)
+    {
+        $pupilsId = self::getUsersByRole('pupil');
+        $usersData = User::find()
+            ->joinWith('class')
+            ->andWhere(['user.id' => $pupilsId, 'school_class_id' => $classID])
+            ->orWhere(['user.id' => $pupilsId, 'school_class_id' => null]);
+
+        return $usersData;
+    }
+
+    /**
+     * Удаляет все связи учеников с данным классом
+     * @param $classId
+     */
+    public static function deleteRelationWithClass($classId)
+    {
+        SchoolClassUsers::deleteAll(['school_class_id' => $classId]);
+    }
 }

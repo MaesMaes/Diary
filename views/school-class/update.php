@@ -15,10 +15,7 @@ $this->params['breadcrumbs'][] = 'Обновить';
 
     <?= $this->render('_form', [
         'model' => $model,
-        'pupils' => $pupils,
-        'selectedPupils' => $selectedPupils,
         'dataProviderPupil' => $dataProviderPupil,
-
     ]) ?>
 
 </div>

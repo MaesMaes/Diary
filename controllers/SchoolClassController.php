@@ -82,6 +82,9 @@ class SchoolClassController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'dataProviderPupil' => new ActiveDataProvider([
+                    'query' => User::getDataPupilWithoutClass()
+                ]),
             ]);
         }
     }
@@ -96,28 +99,25 @@ class SchoolClassController extends Controller
     {
         $model = $this->findModel($id);
 
-        $pupils = User::getAllPupil();
-        $selectedPupils = $model->getSelectedUsers();
-
-        $searchModel = new UserSearch();
-        $dataProviderPupil = $searchModel->search(Yii::$app->request->queryParams);
-
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
             //Получаем выбранных учеников из формы
             $pupils = Yii::$app->request->post('selection');
+            if (empty($pupils)) {
+                User::deleteRelationWithClass($id);
+            }
 
             //Сохраняем их
             $model->savePupils($pupils);
 
             return $this->redirect(['view', 'id' => $model->id]);
+
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'pupils' => $pupils,
-                'selectedPupils' => $selectedPupils,
-                'dataProviderPupil' => $dataProviderPupil,
+                'dataProviderPupil' => new ActiveDataProvider([
+                    'query' => User::getDataPupilWithoutClass($id)
+                ]),
             ]);
         }
     }
@@ -130,6 +130,8 @@ class SchoolClassController extends Controller
      */
     public function actionDelete($id)
     {
+        User::deleteRelationWithClass($id);
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
