@@ -232,4 +232,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
         return $data;
     }
+
+    public function getClass()
+    {
+        return $this->hasOne(SchoolClass::className(), ['id' => 'school_class_id'])
+            ->viaTable('school_class_users', ['users_id' => 'id']);
+    }
 }

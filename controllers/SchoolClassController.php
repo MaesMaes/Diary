@@ -3,9 +3,11 @@
 namespace app\controllers;
 
 use app\models\User;
+use app\models\UserSearch;
 use Yii;
 use app\models\SchoolClass;
 use app\models\SchoolClassSearch;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -53,8 +55,16 @@ class SchoolClassController extends Controller
      */
     public function actionView($id)
     {
+        if (Yii::$app->request->isPost) {
+            echo '<pre>'; print_r(Yii::$app->request->post()); die;
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProviderPupil' => new ActiveDataProvider([
+                'key' => 'id',
+                'query' => User::find()->joinWith('class')->where(['school_class_id' => $id])
+            ]),
         ]);
     }
 
@@ -86,14 +96,17 @@ class SchoolClassController extends Controller
     {
         $model = $this->findModel($id);
 
-//        $pupils = ArrayHelper::map(User::find()->where(['id' => User::getUsersByRole('pupil')])->all(), 'id', 'name');
         $pupils = User::getAllPupil();
         $selectedPupils = $model->getSelectedUsers();
+
+        $searchModel = new UserSearch();
+        $dataProviderPupil = $searchModel->search(Yii::$app->request->queryParams);
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
             //Получаем выбранных учеников из формы
-            $pupils = Yii::$app->request->post('pupils');
+            $pupils = Yii::$app->request->post('selection');
 
             //Сохраняем их
             $model->savePupils($pupils);
@@ -104,6 +117,7 @@ class SchoolClassController extends Controller
                 'model' => $model,
                 'pupils' => $pupils,
                 'selectedPupils' => $selectedPupils,
+                'dataProviderPupil' => $dataProviderPupil,
             ]);
         }
     }
@@ -134,6 +148,13 @@ class SchoolClassController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionPupilDataUpdate()
+    {
+        if (Yii::$app->request->isPost) {
+            echo '<pre>'; print_r(Yii::$app->request->post()); die;
         }
     }
 }

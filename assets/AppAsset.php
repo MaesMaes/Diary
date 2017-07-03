@@ -8,6 +8,7 @@
 namespace app\assets;
 
 use yii\web\AssetBundle;
+use yii\web\View;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -22,9 +23,11 @@ class AppAsset extends AssetBundle
         'css/main.css',
     ];
     public $js = [
+//        'js/view-school_class.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+//    public $jsOptions = ['position' => View::POS_HEAD];
 }

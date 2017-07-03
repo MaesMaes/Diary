@@ -51,6 +51,11 @@ $config = [
             'class' => 'yii\rbac\DbManager',
         ],
     ],
+    'modules' => [
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module'
+        ]
+    ],
     'params' => $params,
 
 ];

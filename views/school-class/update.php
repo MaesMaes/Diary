@@ -17,6 +17,8 @@ $this->params['breadcrumbs'][] = 'Обновить';
         'model' => $model,
         'pupils' => $pupils,
         'selectedPupils' => $selectedPupils,
+        'dataProviderPupil' => $dataProviderPupil,
+
     ]) ?>
 
 </div>
