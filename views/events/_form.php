@@ -1,7 +1,6 @@
 <?php
 
-use app\models\Subject;
-use yii\helpers\ArrayHelper;
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -22,10 +21,10 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'subject')->dropDownList($subjects) ?><br/>
         </div>
         <div class="col-md-3">
-            <?= $form->field($model, 'date')->textInput() ?>
+            <?= $form->field($model, 'date')->widget(DatePicker::classname(), [])?>
         </div>
         <div class="col-md-3">
-            <?= $form->field($model, 'moderator')->textInput() ?>
+            <?= $form->field($model, 'moderator')->dropDownList($moderators) ?><br/>
         </div>
     </div>
 

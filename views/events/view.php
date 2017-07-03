@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Subject;
+use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -35,8 +36,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Subject::findOne($model->subject)->name;
                 }
             ],
-            'date',
-            'moderator',
+            [
+                'attribute' => 'date',
+                'value' => Yii::$app->formatter->asDate($model->date)
+            ],
+            [
+                'attribute' => 'moderator',
+                'value' => function($model) {
+                    $model = User::findOne($model->moderator);
+                    return $model->name . ' ' . $model->lastName;
+                }
+            ],
         ],
     ]) ?>
 

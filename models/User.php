@@ -233,6 +233,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $data;
     }
 
+    public static function getAllModerators()
+    {
+        $pupilsId = self::getUsersByRole(['expert', 'teacher']);
+        $users = User::find()->where(['id' => $pupilsId])->all();
+
+        $data = [];
+        foreach ($users as $user) {
+            $data[$user->id] = $user->name . ' ' . $user->lastName;
+        }
+
+        return $data;
+    }
+
     public function getClass()
     {
         return $this->hasOne(SchoolClass::className(), ['id' => 'school_class_id'])
@@ -275,5 +288,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             return $roles[key($roles)]->description;
 
         return '';
+    }
+
+    public static function getUsersModelByRoleName($roleName)
+    {
+
     }
 }

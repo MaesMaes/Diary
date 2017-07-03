@@ -3,9 +3,11 @@
 namespace app\controllers;
 
 use app\models\Subject;
+use app\models\User;
 use Yii;
 use app\models\Events;
 use app\models\EventsSearch;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -87,9 +89,7 @@ class EventsController extends Controller
     {
         $model = $this->findModel($id);
 
-//        if (Yii::$app->request->post()) {
-//            echo '<pre>'; print_r(Yii::$app->request->post()); die;
-//        }
+        $this->formatDateFields($model);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -97,6 +97,7 @@ class EventsController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'subjects' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
+                'moderators' => User::getAllModerators(),
             ]);
         }
     }
@@ -128,5 +129,20 @@ class EventsController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * Форматирует дату в  формат d.m.Y
+     *
+     * @param $model
+     */
+    private function formatDateFields($model)
+    {
+        $model->date = Yii::$app->formatter->asDate($model->date);
+
+        // Ставим обработчик который после успешной проверки данных в пользовательском формате вернет дату в формат для mysql
+        $model->on(ActiveRecord::EVENT_BEFORE_UPDATE, function () use ($model) {
+            $model->date = \DateTime::createFromFormat('d.m.Y', $model->date)->format('Y-m-d');
+        });
     }
 }
