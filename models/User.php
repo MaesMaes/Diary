@@ -258,4 +258,22 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         SchoolClassUsers::deleteAll(['school_class_id' => $classId]);
     }
+
+    /**
+     * Возвращает название роли пользователя, если их несколько - вернет
+     * имя первой.
+     *
+     * @param $userId
+     * @return string
+     */
+    public static function getRoleNameByUserId($userId)
+    {
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRolesByUser($userId);
+
+        if (isset($roles[key($roles)]->description))
+            return $roles[key($roles)]->description;
+
+        return '';
+    }
 }

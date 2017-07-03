@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -26,6 +27,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute' => 'lastName'],
             ['attribute' => 'email'],
             ['attribute' => 'phone'],
+            [
+                'label' => 'Роль',
+                'value' => function($model) {
+                    return User::getRoleNameByUserId($model->id);
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
