@@ -19,7 +19,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'isAdmin'], 'integer'],
-            [['name', 'email', 'password', 'photo', 'lastName', 'phone', 'birthDate'], 'safe'],
+            [['name', 'email', 'password', 'photo', 'lastName', 'phone', 'birthDate', 'class', 'className'], 'safe'],
         ];
     }
 
@@ -49,11 +49,22 @@ class UserSearch extends User
             'query' => $query,
         ]);
 
-        $this->load($params);
+        $dataProvider->setSort([
+            'attributes' => [
+                'className' => [
+                    'asc' => ['school_class.name' => SORT_ASC],
+                    'desc' => ['school_class.name' => SORT_DESC],
+                    'label' => 'Класс'
+                ]
+            ]
+        ]);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
+            /**
+             * Жадная загрузка данных модели Страны
+             * для работы сортировки.
+             */
+            $query->joinWith(['class']);
             return $dataProvider;
         }
 

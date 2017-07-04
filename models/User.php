@@ -56,6 +56,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'password' => 'Пароль',
             'isAdmin' => 'Is Admin',
             'photo' => 'Фото',
+            'className' => 'Класс',
         ];
     }
 
@@ -200,11 +201,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $roleName;
     }
 
-    public function getArticles()
-    {
-        return $this->hasMany(SchoolClass::className(), ['id' => 'school_class_id'])
-            ->viaTable('school_class_users', ['users_id' => 'id']);
-    }
+
+
 
     /**
      * Возвращает список пользователей по роли
@@ -250,6 +248,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(SchoolClass::className(), ['id' => 'school_class_id'])
             ->viaTable('school_class_users', ['users_id' => 'id']);
+    }
+
+    public function getClassName()
+    {
+        return (isset($this->class->name)) ? $this->class->name : '';
     }
 
     public static function getDataPupilWithoutClass($classID = 9999)

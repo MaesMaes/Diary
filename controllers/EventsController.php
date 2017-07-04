@@ -4,9 +4,11 @@ namespace app\controllers;
 
 use app\models\Subject;
 use app\models\User;
+use app\models\UserSearch;
 use Yii;
 use app\models\Events;
 use app\models\EventsSearch;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -98,6 +100,10 @@ class EventsController extends Controller
                 'model' => $model,
                 'subjects' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
                 'moderators' => User::getAllModerators(),
+                'dataProviderPupils' => new ActiveDataProvider([
+                    'query' => User::find()->joinWith('class')->where(['user.id' => User::getUsersByRole('pupil')])
+                ]),
+                'searchModelPupils' => new UserSearch(),
             ]);
         }
     }
