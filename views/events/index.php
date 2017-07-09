@@ -1,5 +1,7 @@
 <?php
 
+use app\models\Subject;
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -25,9 +27,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'id',
             'name',
-            'subject',
-            'date',
-            'moderator',
+            [
+                'attribute' => 'subject',
+                'value' => function($model) {
+                    return Subject::findOne($model->subject)->name;
+                }
+            ],
+            [
+                'attribute' => 'date',
+                'value' => function($model) {
+                    return Yii::$app->formatter->asDate($model->date);
+                }
+            ],
+            [
+                'attribute' => 'moderator',
+                'value' => function($model) {
+                    $model = User::findOne($model->moderator);
+                    return $model->name . ' ' . $model->lastName;
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
