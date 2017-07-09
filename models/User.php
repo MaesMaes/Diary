@@ -21,6 +21,8 @@ use yii\web\IdentityInterface;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    const USER_TYPE_ADMIN = 'admin';
+
     /**
      * @inheritdoc
      */
@@ -250,9 +252,31 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->viaTable('school_class_users', ['users_id' => 'id']);
     }
 
+    public function getEvents()
+    {
+        return $this->hasMany(Events::className(), ['id' => 'event_id'])
+            ->viaTable('events_users', ['user_id' => 'id']);
+    }
+
+    public function getEvent()
+    {
+        return $this->hasOne(Events::className(), ['id' => 'event_id'])
+            ->viaTable('events_users', ['user_id' => 'id']);
+    }
+
     public function getClassName()
     {
         return (isset($this->class->name)) ? $this->class->name : '';
+    }
+
+    public function getEventName()
+    {
+        return (isset($this->events->name)) ? $this->events->name : '';
+    }
+
+    public function getEventId()
+    {
+        return (isset($this->events->id)) ? $this->events->id : '';
     }
 
     public static function getDataPupilWithoutClass($classID = 9999)
@@ -276,13 +300,22 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Удаляет все связи учеников с событием
+     * @param $eventId
+     */
+    public static function deleteRelationWithEvent($eventId)
+    {
+        EventsUsers::deleteAll(['event_id' => $eventId]);
+    }
+
+    /**
      * Возвращает название роли пользователя, если их несколько - вернет
      * имя первой.
      *
      * @param $userId
      * @return string
      */
-    public static function getRoleNameByUserId($userId)
+    public static function getRoleDescByUserId( $userId)
     {
         $auth = Yii::$app->authManager;
         $roles = $auth->getRolesByUser($userId);
@@ -293,8 +326,31 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return '';
     }
 
-    public static function getUsersModelByRoleName($roleName)
+    /**
+     * Возвращает название роли пользователя, если их несколько - вернет
+     * имя первой.
+     *
+     * @param $userId
+     * @return string
+     */
+    public static function getRoleNameByUserId( $userId)
     {
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRolesByUser($userId);
 
+        if (isset($roles[key($roles)]->name))
+            return $roles[key($roles)]->name;
+
+        return '';
     }
+
+    public function isPupilInThisEvent($eventId)
+    {
+        foreach ($this->events as $event)
+            if ($event->id == $eventId)
+                return true;
+
+        return false;
+    }
+
 }

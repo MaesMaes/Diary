@@ -15,6 +15,5 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <p>   Adipisci aperiam asperiores, commodi cupiditate deleniti dicta dolorem harum laborum neque pariatur, perferendis placeat provident quaerat quia similique sint veniam? Ab alias assumenda atque, autem consequatur cum dolores eius incidunt labore modi molestiae mollitia nemo, nihil obcaecati quibusdam repellat repellendus, tempore ut voluptatibus voluptatum! Accusantium consequatur cum dolorum provident temporibus, vero. Ab nemo quidem veniam!
     </p>
-
-
+<pre><? print_r(Yii::$app->user->identity); ?></pre>
 </div>

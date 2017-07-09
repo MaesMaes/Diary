@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Роль',
                 'value' => function($model) {
-                    return User::getRoleNameByUserId($model->id);
+                    return User::getRoleDescByUserId($model->id);
                 }
             ],
             ['class' => 'yii\grid\ActionColumn'],

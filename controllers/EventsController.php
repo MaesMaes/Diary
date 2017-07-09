@@ -59,6 +59,9 @@ class EventsController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProviderPupilsOnEvent' => new ActiveDataProvider([
+                'query' => User::find()->joinWith('events')->where(['event_id' => $id])
+            ]),
         ]);
     }
 
@@ -77,6 +80,7 @@ class EventsController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'subjects' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
+                'moderators' => User::getAllModerators(),
             ]);
         }
     }
@@ -94,6 +98,16 @@ class EventsController extends Controller
         $this->formatDateFields($model);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            //Получаем выбранных учеников из формы
+            $pupils = Yii::$app->request->post('selection');
+            if (empty($pupils)) {
+                User::deleteRelationWithEvent($id);
+            }
+
+            //Сохраняем их
+            $model->savePupils($pupils);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -102,6 +116,9 @@ class EventsController extends Controller
                 'moderators' => User::getAllModerators(),
                 'dataProviderPupils' => new ActiveDataProvider([
                     'query' => User::find()->joinWith('class')->where(['user.id' => User::getUsersByRole('pupil')])
+                ]),
+                'dataProviderPupilsOnEvent' => new ActiveDataProvider([
+                    'query' => User::find()->joinWith('events')->where(['event_id' => $model->id])
                 ]),
                 'searchModelPupils' => new UserSearch(),
             ]);

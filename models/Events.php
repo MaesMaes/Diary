@@ -48,4 +48,33 @@ class Events extends \yii\db\ActiveRecord
             'moderator' => 'Модератор',
         ];
     }
+
+    public function getPupil()
+    {
+        return $this->hasMany(User::className(), ['id' => 'user_id'])
+            ->viaTable('events_users', ['event_id' => 'id']);
+    }
+
+    /**
+     * Удалим все связи с текущем id
+     */
+    private function clearCurrentPupils()
+    {
+        EventsUsers::deleteAll(['event_id' => $this->id]);
+    }
+
+    public function savePupils( $pupils )
+    {
+        if(is_array($pupils))
+        {
+            //Удалим все связи с текущем id
+            $this->clearCurrentPupils();
+
+            foreach($pupils as $pupilId)
+            {
+                $pupil = User::findOne($pupilId);
+                $this->link('pupil', $pupil);
+            }
+        }
+    }
 }

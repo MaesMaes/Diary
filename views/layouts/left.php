@@ -1,3 +1,6 @@
+<?php
+use app\models\User;
+?>
 <aside class="main-sidebar">
 
     <section class="sidebar">
@@ -29,7 +32,7 @@
             [
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
-                    ['label' => 'Меню', 'options' => ['class' => 'header']],
+                    ['label' => 'Меню', 'options' => ['class' => 'header'], 'visible' => !Yii::$app->user->isGuest && User::getRoleNameByUserId(Yii::$app->user->identity->id) == User::USER_TYPE_ADMIN,],
                     ['label' => 'Пользователи', 'icon' => 'user', 'url' => ['/user'], ],
                     ['label' => 'Предметы', 'icon' => 'th-list', 'url' => ['/subject'], ],
                     ['label' => 'Классы', 'icon' => 'list-alt', 'url' => ['/school-class'], ],

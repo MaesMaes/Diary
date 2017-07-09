@@ -1,37 +1,44 @@
 <?php
 
-use yii\helpers\Html;
-
 /* @var $this yii\web\View */
 /* @var $name string */
 /* @var $message string */
 /* @var $exception Exception */
 
-$this->title = 'Ошибка доступа';
+use yii\helpers\Html;
+
+$this->title = $name;
 ?>
-<section class="content">
 
-    <div class="error-page">
-        <h2 class="headline text-info"><i class="fa fa-warning text-yellow"></i></h2>
+<div class="st-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="primary" class="content-area padding-content white-color">
+                    <main id="main" class="site-main" role="main">
 
-            <h1>Такого адреса не существует или у вас нет доступа</h1>
-            <p>
-                The above error occurred while the Web server was processing your request.
-                Please contact us if you think this is a server error. Thank you.
-                Meanwhile, you may return to dashboard or try using the search
-                form.
-            </p>
+                        <section class="error-404 not-found text-center">
+                            <h1 class="404">404</h1>
 
-            <form class='search-form'>
-                <div class='input-group'>
-                    <input type="text" name="search" class='form-control' placeholder="Search"/>
+                            <p class="lead">Sorry, we could not found the page you are looking for!</p>
 
-                    <div class="input-group-btn">
-                        <button type="submit" name="submit" class="btn btn-primary"><i class="fa fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
+                            <div class="row">
+                                <div class="col-sm-4 col-sm-offset-4">
+                                    <form role="search" method="get" id="searchform" action="#">
+                                        <div>
+                                            <input type="text" placeholder="Search and hit enter..." name="s" id="s"/>
+                                        </div>
+                                    </form>
+                                    <p class="go-back-home"><a href="index.html">
+                                            Back to Home Page</a></p>
+                                </div>
+                            </div>
+
+                        </section><!-- .error-404 -->
+
+                    </main><!-- #main -->
+                </div><!-- #primary -->
+            </div>
         </div>
-
-</section>
+    </div>
+</div>

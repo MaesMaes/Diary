@@ -2,6 +2,7 @@
 
 use app\models\Subject;
 use app\models\User;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -49,5 +50,22 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
+
+    <h4>Список участников</h4>
+    <?= GridView::widget([
+        'dataProvider' => $dataProviderPupilsOnEvent,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            ['attribute' => 'name'],
+            ['attribute' => 'lastName'],
+            [
+                'attribute' => 'birthDate',
+                'value' => function($model) {
+                    return Yii::$app->formatter->asDate($model->birthDate);
+                }
+            ],
+            ['attribute' => 'className'],
+        ],
+    ]); ?>
 
 </div>

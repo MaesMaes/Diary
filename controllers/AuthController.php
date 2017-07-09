@@ -17,6 +17,8 @@ use yii\web\Controller;
 
 class AuthController extends Controller
 {
+    public $layout = "main-login";
+
     /**
      * Login action.
      *

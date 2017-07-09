@@ -12,6 +12,8 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+    public $layout = "default";
+
     /**
      * @inheritdoc
      */
@@ -27,20 +29,14 @@ class SiteController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index'],
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['about'],
-                        'roles' => ['@'],
+                        'actions' => ['about', 'error'],
                     ],
                 ],
                 'denyCallback' => function ($rule, $action) {
                     if (Yii::$app->user->isGuest) {
                         $this->redirect('/auth/login');
                     } else {
-                        $this->redirect('/auth/error');
+                        $this->redirect('/site/error');
                     }
                 }
             ],
@@ -131,5 +127,15 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     * Displays about page.
+     *
+     * @return string
+     */
+    public function actionError()
+    {
+        return $this->render('error');
     }
 }
