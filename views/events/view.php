@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
 //            'id',
             'name',
+            'place',
             [
                 'attribute' => 'subject',
                 'value' => function($model) {
@@ -48,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->name . ' ' . $model->lastName;
                 }
             ],
+
         ],
     ]) ?>
 

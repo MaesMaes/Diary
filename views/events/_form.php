@@ -13,19 +13,28 @@ use yii\widgets\Pjax;
 
 <div class="events-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <? if (!$model->isNewRecord) { ?>
+<!--        --><?php //Pjax::begin(); ?>
+    <? } ?>
+
+    <?php $form = ActiveForm::begin(); ?> <br>
 
     <div class="row">
         <div class="col-md-3">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
+        <div class="col-md-2">
+            <?= $form->field($model, 'place')->textInput(['maxlength' => true]) ?><br/>
+        </div>
+<!--    </div>-->
+<!--    <div class="row">-->
         <div class="col-md-3">
             <?= $form->field($model, 'subject')->dropDownList($subjects) ?><br/>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <?= $form->field($model, 'date')->widget(DatePicker::classname(), [])?>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <?= $form->field($model, 'moderator')->dropDownList($moderators) ?><br/>
         </div>
     </div>
@@ -34,6 +43,7 @@ use yii\widgets\Pjax;
     <? if (!$model->isNewRecord) { ?>
         <?= GridView::widget([
             'dataProvider' => $dataProviderPupilsOnEvent,
+//            'filterModel' => $searchModelPupils,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 ['attribute' => 'name'],
@@ -45,6 +55,15 @@ use yii\widgets\Pjax;
                     }
                 ],
                 ['attribute' => 'className'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{delete}',
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        if ( $action === 'delete' ) {
+                            return '/events/delete-pupil-from-event?id=' . $model->id;
+                        }
+                    }
+                ],
             ],
         ]); ?>
     <? } else { ?>
@@ -53,18 +72,21 @@ use yii\widgets\Pjax;
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <? if (!$model->isNewRecord) { ?>
-            <a href="#myModal" class="btn btn-success btn-right" data-toggle="modal">Редактировать список участников</a>
+            <?= Html::a('Добавить участников', ['pupils-list', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('Оценить участников', ['event-pupils-points', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
         <? } ?>
     </div>
+    <?php ActiveForm::end(); ?>
 
     <? if ($model->isNewRecord) { ?>
-        <?php ActiveForm::end(); ?>
+<!--        --><?php //ActiveForm::end(); ?>
+<!--        --><?php //Pjax::end(); ?>
     <? } ?>
 
 </div>
 
 <? if (!$model->isNewRecord) { ?>
-    <!-- HTML-код модального окна -->
+<!--     HTML-код модального окна -->
     <div id="myModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -75,8 +97,24 @@ use yii\widgets\Pjax;
                 </div>
                 <!-- Основное содержимое модального окна -->
                 <div class="modal-body">
-    <!--                --><?php //Pjax::begin(); ?>
-    <!--                --><?php //$form = ActiveForm::begin(); ?>
+                    <?php Pjax::begin([
+                        'clientOptions' => [
+                            'push' => false
+                        ],
+                    ]); ?>
+
+<!--                    --><?php //$form = ActiveForm::begin([
+//                        'action' => ['update', 'id' => $model->id],
+//                        'method' => 'get',
+//                    ]); ?>
+<!--                    --><?//= $form->field($searchModelPupils, 'name') ?>
+<!--                    <div class="form-group">-->
+<!--                        --><?//= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+<!--                        --><?//= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+<!--                    </div>-->
+<!--                    --><?php //ActiveForm::end(); ?>
+
+<!--                    --><?php //$form = ActiveForm::begin(); ?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProviderPupils,
                         'filterModel' => $searchModelPupils,
@@ -94,13 +132,8 @@ use yii\widgets\Pjax;
                             [
                                 'class'=>'kartik\grid\CheckboxColumn',
                                 'vAlign'=>'middle',
-    //                            'header' => 'доб',
                                 'rowSelectedClass' => GridView::TYPE_SUCCESS,
                                 'checkboxOptions' => function($model) {
-//                                    echo '<pre>'; print_r($model->events);
-//                                    if (!empty($model->events) &&
-//                                        in_array(Yii::$app->request->get('id'), $model->events))
-//                                        $model->events[0]->id == Yii::$app->request->get('id'))
                                     if ($model->isPupilInThisEvent(Yii::$app->request->get('id')))
                                         return ["value" => $model->id,  'checked' => 'true', 'event_id' => Yii::$app->request->get('id')];
                                 },
@@ -110,9 +143,18 @@ use yii\widgets\Pjax;
                     ]); ?>
                     <div class="modal-footer">
                         <?= Html::submitButton('Добавить в список участников', ['class' => 'btn btn-success']) ?>
-                        <?php ActiveForm::end(); ?>
-    <!--                    --><?php //Pjax::end(); ?>
+<!--                        --><?php //ActiveForm::end(); ?>
+                        <?php Pjax::end(); ?>
                     </div>
+                    <?php
+//                        $this->registerJs(
+//                            '$("document").ready(function(){
+//                                $("#new_note").on("pjax:end", function() {
+//                                    $.pjax.reload({container:"#notes"});  //Reload GridView
+//                                });
+//                            });'
+//                        );
+                    ?>
                 </div>
             </div>
         </div>

@@ -97,30 +97,40 @@ class EventsController extends Controller
 
         $this->formatDateFields($model);
 
+        //Обновление списка участников
+//        if (Yii::$app->request->post('selection'))
+//        {
+//            //Получаем выбранных учеников из формы
+//            $pupils = Yii::$app->request->post('selection');
+//            if (empty($pupils)) {
+//                User::deleteRelationWithEvent($id);
+//            }
+//
+//            //Сохраняем их
+//            $model->savePupils($pupils);
+//
+//            return $this->redirect(['update', 'id' => $model->id]);
+//        }
+
+        //Обновление основной формы
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            //Получаем выбранных учеников из формы
-            $pupils = Yii::$app->request->post('selection');
-            if (empty($pupils)) {
-                User::deleteRelationWithEvent($id);
-            }
-
-            //Сохраняем их
-            $model->savePupils($pupils);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $s = new UserSearch();
             return $this->render('update', [
                 'model' => $model,
                 'subjects' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
                 'moderators' => User::getAllModerators(),
-                'dataProviderPupils' => new ActiveDataProvider([
-                    'query' => User::find()->joinWith('class')->where(['user.id' => User::getUsersByRole('pupil')])
-                ]),
+//                'dataProviderPupils' => new ActiveDataProvider([
+//                    'query' => User::find()->joinWith('class')->where(['user.id' => User::getUsersByRole('pupil')])
+//                ]),
+                'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
                 'dataProviderPupilsOnEvent' => new ActiveDataProvider([
                     'query' => User::find()->joinWith('events')->where(['event_id' => $model->id])
                 ]),
-                'searchModelPupils' => new UserSearch(),
+//                'dataProviderPupilsOnEvent' => $s->search(Yii::$app->request->queryParams),
+                'searchModelPupils' => $s,
             ]);
         }
     }
@@ -137,6 +147,89 @@ class EventsController extends Controller
 
         return $this->redirect(['index']);
     }
+
+    /**
+     * Добавление участников события
+     *
+     * @param $id
+     * @return string|\yii\web\Response
+     */
+    public function actionPupilsList($id)
+    {
+        $s = new UserSearch();
+
+        if (Yii::$app->request->isPost)
+        {
+            $model = $this->findModel($id);
+
+            if ($pupils = Yii::$app->request->post('pupilsId')) {
+                $pupils = explode(',', $pupils);
+                $model->savePupils($pupils, false);
+            }
+//            else {
+//                User::deleteRelationWithEvent($id);
+//            }
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('pupilsList', [
+            'model' => $this->findModel($id),
+            'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
+            'searchModelPupils' => $s,
+            'dataProviderPupilsOnEvent' => new ActiveDataProvider([
+                'query' => User::find()->joinWith('events')->where(['event_id' => $id])
+            ]),
+        ]);
+    }
+
+    /**
+     * Оценить участников события
+     *
+     * @param $id
+     * @return string|\yii\web\Response
+     */
+    public function actionEventPupilsPoints($id)
+    {
+        if (Yii::$app->request->isPost)
+        {
+            $model = $this->findModel($id);
+
+            if ($pupils = Yii::$app->request->post('pupilsId')) {
+                $pupils = explode(',', $pupils);
+                $model->savePupils($pupils, false);
+            }
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('eventPupilsPoints', [
+            'model' => $this->findModel($id),
+            'dataProviderPupilsOnEvent' => new ActiveDataProvider([
+                'query' => User::find()->joinWith('events')->where(['event_id' => $id])
+            ]),
+        ]);
+    }
+
+//    public function actionPupilsListA($id)
+//    {
+//        $s = new UserSearch();
+//
+//        if (Yii::$app->request->isPost) {
+//            echo '<pre>';
+//            print_r(Yii::$app->request->post());
+//            die;
+//        }
+//
+//        return $this->render('pupilsList', [
+//            'model' => $this->findModel($id),
+//            'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
+//            'searchModelPupils' => $s,
+//            'dataProviderPupilsOnEvent' => new ActiveDataProvider([
+//                'query' => User::find()->joinWith('events')->where(['event_id' => $id])
+//            ]),
+//        ]);
+//    }
 
     /**
      * Finds the Events model based on its primary key value.

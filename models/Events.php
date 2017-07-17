@@ -12,6 +12,7 @@ use Yii;
  * @property integer $subject
  * @property string $date
  * @property integer $moderator
+ * @property string $place
  */
 class Events extends \yii\db\ActiveRecord
 {
@@ -31,7 +32,7 @@ class Events extends \yii\db\ActiveRecord
         return [
             [['subject', 'moderator'], 'integer'],
             [['date'], 'safe'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'place'], 'string', 'max' => 255],
         ];
     }
 
@@ -46,6 +47,7 @@ class Events extends \yii\db\ActiveRecord
             'subject' => 'Предмет',
             'date' => 'Дата проведения',
             'moderator' => 'Модератор',
+            'place' => 'Место проведения'
         ];
     }
 
@@ -63,17 +65,20 @@ class Events extends \yii\db\ActiveRecord
         EventsUsers::deleteAll(['event_id' => $this->id]);
     }
 
-    public function savePupils( $pupils )
+    public function savePupils( $pupils, $delete = true )
     {
-        if(is_array($pupils))
+        if(is_array($pupils) && !empty($pupils))
         {
             //Удалим все связи с текущем id
-            $this->clearCurrentPupils();
+            if ($delete)
+                $this->clearCurrentPupils();
 
             foreach($pupils as $pupilId)
             {
                 $pupil = User::findOne($pupilId);
-                $this->link('pupil', $pupil);
+//                echo '<pre>'; print_r($pupil->events); die;
+                if ($pupil->events[0]->id != $this->id)
+                    $this->link('pupil', $pupil);
             }
         }
     }
