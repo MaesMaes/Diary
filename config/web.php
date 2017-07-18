@@ -65,7 +65,11 @@ $config = [
     'modules' => [
         'gridview' =>  [
             'class' => '\kartik\grid\Module'
-        ]
+        ],
+        'dynagrid'=> [
+            'class'=>'\kartik\dynagrid\Module',
+            // other module settings
+        ],
     ],
     'params' => $params,
 ];

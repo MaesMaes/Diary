@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Points;
 use app\models\Subject;
 use app\models\User;
 use app\models\UserSearch;
@@ -11,6 +12,7 @@ use app\models\EventsSearch;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -193,23 +195,26 @@ class EventsController extends Controller
     {
         // validate if there is a editable input saved via AJAX
         if (Yii::$app->request->post('hasEditable')) {
-            echo '<pre>'; print_r(Yii::$app->request->post()); die;
+            $userId = Yii::$app->request->post('editableKey');
+            $point = current($_POST['User'])['point'] ?? 0;
+
+            if (empty(Points::findOne([ 'user_id' => $userId, 'event_id' => $id ]))) {
+                $model = new Points();
+                $model->event_id = $id;
+                $model->user_id = $userId;
+                $model->point = $point;
+                $model->save();
+            } else {
+                $model = Points::findOne([ 'user_id' => $userId, 'event_id' => $id ]);
+                $model->point = $point;
+                $model->save();
+            }
+
+            $out = Json::encode(['output' => '', 'message' => '']);
+            echo $out;
+
+            return;
         }
-
-//        if (Yii::$app->request->isPost)
-//        {
-//            $model = $this->findModel($id);
-//
-//            if ($pupils = Yii::$app->request->post('pupilsId')) {
-//                $pupils = explode(',', $pupils);
-//                $model->savePupils($pupils, false);
-//            }
-//
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        }
-
-//        $u = User::findOne(4);
-//        echo '<pre>'; print_r($u->getEvents()); die;
 
         return $this->render('eventPupilsPoints', [
             'model' => $this->findModel($id),

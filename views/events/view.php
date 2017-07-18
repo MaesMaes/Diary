@@ -67,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             ['attribute' => 'className'],
+            ['attribute' => 'point'],
         ],
     ]); ?>
 

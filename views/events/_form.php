@@ -55,6 +55,7 @@ use yii\widgets\Pjax;
                     }
                 ],
                 ['attribute' => 'className'],
+                ['attribute' => 'point'],
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{delete}',

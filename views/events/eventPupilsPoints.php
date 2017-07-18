@@ -8,15 +8,24 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Events */
 
 $this->title = 'Оценка участников';
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['events/update', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Оценить участников';
 ?>
 <div class="events-view">
 
-    <?php $form = ActiveForm::begin(); ?> <br>
+<!--    --><?php //$form = ActiveForm::begin(); ?><!-- <br>-->
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProviderPupilsOnEvent,
+    <?= \kartik\dynagrid\DynaGrid::widget([
+        'gridOptions' => [
+            'dataProvider' => $dataProviderPupilsOnEvent,
+            'pjax' => true,
+            'responsive' => true,
+            'hover' => true,
+            'resizableColumns' => true,
+            'showPageSummary'=>false,
+
+        ],
+//        'theme'=>'panel-info',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             ['attribute' => 'name'],
@@ -33,10 +42,11 @@ $this->params['breadcrumbs'][] = 'Оценить участников';
                 'attribute' => 'point',
             ],
         ],
+        'options' => ['id' => 'user']
     ]); ?>
 
-    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success js-send-pupils__list', 'data' => ['id' => $model->id]]) ?>
+<!--    --><?//= Html::submitButton('Сохранить', ['class' => 'btn btn-success js-send-pupils__list', 'data' => ['id' => $model->id]]) ?>
 
-    <?php ActiveForm::end(); ?>
+<!--    --><?php //ActiveForm::end(); ?>
 
 </div>
