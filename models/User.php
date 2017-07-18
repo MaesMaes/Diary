@@ -40,6 +40,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['isAdmin'], 'integer'],
             [['name', 'lastName', 'email', 'phone', 'password', 'photo'], 'string', 'max' => 50],
             [['birthDate'], 'default', 'value' => date('Y-m-d')],
+//            [['point'], 'safe'],
         ];
     }
 
@@ -59,6 +60,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'isAdmin' => 'Is Admin',
             'photo' => 'Фото',
             'className' => 'Класс',
+            'point' => 'Оценка',
         ];
     }
 
@@ -262,6 +264,20 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(Events::className(), ['id' => 'event_id'])
             ->viaTable('events_users', ['user_id' => 'id']);
+    }
+
+    public function getPoints()
+    {
+//        return $this->hasMany(Events::className(), ['id' => 'event_id'])
+//            ->viaTable('points', ['user_id' => 'id']);
+        return $this->hasOne(Points::className(), ['user_id' => 'id']);
+//            ->andOnCondition(['points.event_id' => 'user.event_id']);
+    }
+
+    public function getPoint()
+    {
+        return (isset($this->points->point)) ? $this->points->point : '';
+
     }
 
     public function getClassName()

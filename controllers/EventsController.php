@@ -191,17 +191,25 @@ class EventsController extends Controller
      */
     public function actionEventPupilsPoints($id)
     {
-        if (Yii::$app->request->isPost)
-        {
-            $model = $this->findModel($id);
-
-            if ($pupils = Yii::$app->request->post('pupilsId')) {
-                $pupils = explode(',', $pupils);
-                $model->savePupils($pupils, false);
-            }
-
-            return $this->redirect(['view', 'id' => $model->id]);
+        // validate if there is a editable input saved via AJAX
+        if (Yii::$app->request->post('hasEditable')) {
+            echo '<pre>'; print_r(Yii::$app->request->post()); die;
         }
+
+//        if (Yii::$app->request->isPost)
+//        {
+//            $model = $this->findModel($id);
+//
+//            if ($pupils = Yii::$app->request->post('pupilsId')) {
+//                $pupils = explode(',', $pupils);
+//                $model->savePupils($pupils, false);
+//            }
+//
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        }
+
+//        $u = User::findOne(4);
+//        echo '<pre>'; print_r($u->getEvents()); die;
 
         return $this->render('eventPupilsPoints', [
             'model' => $this->findModel($id),
