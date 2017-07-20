@@ -93,9 +93,12 @@ class UserController extends Controller
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $pupils = User::getAllPupil();
+
             return $this->render('create', [
                 'model' => $model,
                 'roles' => $roles,
+                'pupils' => $pupils,
             ]);
         }
     }
@@ -117,10 +120,13 @@ class UserController extends Controller
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $pupils = User::getAllPupil();
+
             return $this->render('update', [
                 'model' => $model,
                 'role' => key($rolesData['role']),
-                'roles' => $rolesData['roles']
+                'roles' => $rolesData['roles'],
+                'pupils' => $pupils,
             ]);
         }
     }

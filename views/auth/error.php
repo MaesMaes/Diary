@@ -7,7 +7,7 @@
 
 use yii\helpers\Html;
 
-$this->title = $name;
+$this->title = 'Ошибочка вышла';
 ?>
 
 <div class="st-content">

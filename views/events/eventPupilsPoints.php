@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = 'Оценить участников';
             'showPageSummary'=>false,
 
         ],
-//        'theme'=>'panel-info',
+        'theme'=>'panel-info',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             ['attribute' => 'name'],

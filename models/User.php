@@ -17,11 +17,16 @@ use yii\web\IdentityInterface;
  * @property string $photo
  * @property string $lastName
  * @property string $phone
- * @property  $birthDate
+ * @property $birthDate
+ * @property integer $child
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     const USER_TYPE_ADMIN = 'admin';
+    const USER_TYPE_TEACHER = 'teacher';
+    const USER_TYPE_EXPERT = 'expert';
+    const USER_TYPE_PUPIL = 'pupil';
+    const USER_TYPE_PARENT = 'parent';
 
     /**
      * @inheritdoc
@@ -37,7 +42,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['isAdmin'], 'integer'],
+            [['isAdmin', 'child'], 'integer'],
             [['name', 'lastName', 'email', 'phone', 'password', 'photo'], 'string', 'max' => 50],
             [['birthDate'], 'default', 'value' => date('Y-m-d')],
 //            [['point'], 'safe'],
@@ -61,6 +66,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'photo' => 'Фото',
             'className' => 'Класс',
             'point' => 'Оценка',
+            'child' => 'Ребенок',
         ];
     }
 
@@ -366,6 +372,33 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             if ($event->id == $eventId)
                 return true;
 
+        return false;
+    }
+
+    /**
+     * Проверяет является ли текущий пользователь администратором
+     *
+     * @return bool
+     */
+    public static function isAdmin()
+    {
+        $role = self::getRoleNameByUserId(Yii::$app->user->identity->id);
+        if ($role == self::USER_TYPE_ADMIN)
+            return true;
+        return false;
+    }
+
+    /**
+     * Проверяет имеет ли текущий пользователь определенную роль
+     *
+     * @param $roleName
+     * @return bool
+     */
+    public static function isRole($roleName)
+    {
+        $role = self::getRoleNameByUserId(Yii::$app->user->identity->id);
+        if ($role == $roleName)
+            return true;
         return false;
     }
 

@@ -27,20 +27,53 @@ use app\models\User;
 <!--            </div>-->
 <!--        </form>-->
         <!-- /.search form -->
+        <?php
+            $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);
+            $guest = Yii::$app->user->isGuest;
 
+            $eventsUrl = '/events';
+            if ($role == User::USER_TYPE_PUPIL || $role == User::USER_TYPE_PARENT)
+                $eventsUrl = '/events/score';
+        ?>
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
-                    ['label' => 'Меню', 'options' => ['class' => 'header'], 'visible' => !Yii::$app->user->isGuest && User::getRoleNameByUserId(Yii::$app->user->identity->id) == User::USER_TYPE_ADMIN,],
-                    ['label' => 'Пользователи', 'icon' => 'user', 'url' => ['/user'], ],
-                    ['label' => 'Предметы', 'icon' => 'th-list', 'url' => ['/subject'], ],
-                    ['label' => 'Классы', 'icon' => 'list-alt', 'url' => ['/school-class'], ],
-                    ['label' => 'События', 'icon' => 'star', 'url' => ['/events']],
+                    ['label' => 'Профиль', 'icon' => 'user', 'url' => ['/profile'], ],
+                    ['label' => 'Меню', 'options' => ['class' => 'header'], ],
+                    [
+                        'label' => 'Пользователи',
+                        'icon' => 'user',
+                        'url' => ['/user'],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+                    ],
+                    [
+                        'label' => 'Предметы',
+                        'icon' => 'th-list',
+                        'url' => ['/subject'],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+                    ],
+                    [
+                        'label' => 'Классы',
+                        'icon' => 'list-alt',
+                        'url' => ['/school-class'],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+                    ],
+                    [
+                        'label' => 'События',
+                        'icon' => 'star',
+                        'url' => [$eventsUrl],
+                        'visible' => !$guest
+                    ],
                     ['label' => 'О проекте', 'icon' => 'bookmark', 'url' => ['/site/about']],
-                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
+                    [
+                        'label' => 'Gii',
+                        'icon' => 'file-code-o',
+                        'url' => ['/gii'],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+                    ],
 //                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
-//                    ['label' => 'Login', 'url' => ['auth/login'], 'visible' => Yii::$app->user->isGuest],
+//                    ['label' => 'Login', 'url' => ['auth/login'], 'visible' => $guest],
                 ],
             ]
         ) ?>

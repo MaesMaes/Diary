@@ -46,8 +46,42 @@ class EventsController extends Controller
         $searchModel = new EventsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        //Выводим инфу о событиях только тем пользователям которые его создавали
+        $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);
+        if ($role != User::USER_TYPE_ADMIN) {
+            $dataProvider->query->where('moderator = ' . Yii::$app->user->id);
+        }
+
         return $this->render('index', [
             'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Отображение расписания события где ученик является участником,
+     * список оценок по событиям. Выводиться ученику и родителю.
+     *
+     * @return mixed
+     */
+    public function actionScore()
+    {
+        $query = Events::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        if (User::isRole(User::USER_TYPE_PUPIL))
+            $query->leftJoin('events_users', 'event_id=id')->where('user_id=' . Yii::$app->user->id);
+
+        if (User::isRole(User::USER_TYPE_PARENT)) {
+            $childId = User::findOne(Yii::$app->user->id)->child ?? 0;
+            $query->leftJoin('events_users', 'event_id=id')->where('user_id=' . $childId);
+        }
+
+        return $this->render('indexForPupils', [
+//            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

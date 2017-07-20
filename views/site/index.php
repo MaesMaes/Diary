@@ -11,7 +11,7 @@ $this->title = '';
 
         <p class="lead">Вы успешно вошли в свой аккаунт. Хотите узнать что мы умеем?</p>
 
-        <p><a class="btn btn-lg btn-success" href="/user">Войти в личный кабинет</a></p>
+        <p><a class="btn btn-lg btn-success" href="/profile">Войти в личный кабинет</a></p>
     </div>
 
 </div>

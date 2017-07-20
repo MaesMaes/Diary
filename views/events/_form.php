@@ -35,7 +35,13 @@ use yii\widgets\Pjax;
             <?= $form->field($model, 'date')->widget(DatePicker::classname(), [])?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($model, 'moderator')->dropDownList($moderators) ?><br/>
+            <?php
+                if (\app\models\User::isAdmin()) {
+                    echo $form->field($model, 'moderator', ['readonly' => true])->dropDownList($moderators);
+                } else {
+                    echo $form->field($model, 'moderator')->dropDownList($moderators, ['disabled' => true, 'value' => Yii::$app->user->id]);
+                }
+            ?><br/>
         </div>
     </div>
 

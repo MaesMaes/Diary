@@ -42,12 +42,19 @@ use yii\widgets\ActiveForm;
         <div class="col-md-3">
             <div class="form-group field-user-password">
                 <label class="control-label" for="user-role">Роль</label>
-                <?= Html::dropDownList('role', $role, $roles, ['class' => 'form-control']) ?><br/>
+                <?= Html::dropDownList('role', $role, $roles, ['class' => 'form-control']) ?>
                 <div class="help-block"></div>
             </div>
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'child')->dropDownList($pupils, ['prompt'=>'Нет']) ?>
+        </div>
+    </div>
+
+    <br>
 
 
 <!--    --><?//= $form->field($model, 'isAdmin')->textInput() ?>

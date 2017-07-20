@@ -82,4 +82,21 @@ class Events extends \yii\db\ActiveRecord
             }
         }
     }
+
+    /**
+     * Возвращает оценку за текущее событие у ученика
+     *
+     * @param $eventId
+     * @return int|string
+     */
+    public static function getCurrentPupilPoint($eventId)
+    {
+        $pupilId = Yii::$app->user->id;
+        if (User::isRole(User::USER_TYPE_PARENT))
+            $pupilId = User::findOne(Yii::$app->user->id)->child ?? 0;
+
+        if ($pupilId === 0) return '';
+
+        return Points::findOne(['user_id' => $pupilId, 'event_id' => $eventId])->point ?? '';
+    }
 }
