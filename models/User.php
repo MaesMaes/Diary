@@ -286,6 +286,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     }
 
+    public function getPointed($eventId = 0)
+    {
+        return Points::findOne(['event_id' => $eventId, 'user_id' => $this->id]) ?? '';
+    }
+
     public function getClassName()
     {
         return (isset($this->class->name)) ? $this->class->name : '';

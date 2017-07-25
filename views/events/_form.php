@@ -37,7 +37,7 @@ use yii\widgets\Pjax;
         <div class="col-md-2">
             <?php
                 if (\app\models\User::isAdmin()) {
-                    echo $form->field($model, 'moderator', ['readonly' => true])->dropDownList($moderators);
+                    echo $form->field($model, 'moderator')->dropDownList($moderators);
                 } else {
                     echo $form->field($model, 'moderator')->dropDownList($moderators, ['disabled' => true, 'value' => Yii::$app->user->id]);
                 }

@@ -232,6 +232,8 @@ class EventsController extends Controller
             $userId = Yii::$app->request->post('editableKey');
             $point = current($_POST['User'])['point'] ?? 0;
 
+//            print_r($id); die;
+
             if (empty(Points::findOne([ 'user_id' => $userId, 'event_id' => $id ]))) {
                 $model = new Points();
                 $model->event_id = $id;
@@ -253,7 +255,8 @@ class EventsController extends Controller
         return $this->render('eventPupilsPoints', [
             'model' => $this->findModel($id),
             'dataProviderPupilsOnEvent' => new ActiveDataProvider([
-                'query' => User::find()->joinWith('events')->where(['event_id' => $id])
+                'query' => User::find()
+                    ->joinWith('events')->where(['events_users.event_id' => $id])
             ]),
         ]);
     }

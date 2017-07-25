@@ -14,7 +14,9 @@ $this->params['breadcrumbs'][] = 'Оценить участников';
 <div class="events-view">
 
 <!--    --><?php //$form = ActiveForm::begin(); ?><!-- <br>-->
-
+    <?php
+        $eventId = $model->id;
+    ?>
     <?= \kartik\dynagrid\DynaGrid::widget([
         'gridOptions' => [
             'dataProvider' => $dataProviderPupilsOnEvent,
