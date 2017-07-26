@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b88655519542347ba523bbee265edc6",
+    "content-hash": "b7b2c2d519622a653d9b7e0f4bfdd008",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -149,6 +149,51 @@
             ]
         },
         {
+            "name": "bower-asset/fullcalendar",
+            "version": "v3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fullcalendar/fullcalendar.git",
+                "reference": "447ab267528a211b253058dfb5d898b7a2296492"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fullcalendar/fullcalendar/zipball/447ab267528a211b253058dfb5d898b7a2296492",
+                "reference": "447ab267528a211b253058dfb5d898b7a2296492",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=2,<4.0",
+                "bower-asset/moment": ">=2.9.0,<3.0.0"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "dist/fullcalendar.js",
+                    "dist/fullcalendar.css"
+                ],
+                "bower-asset-ignore": [
+                    "*",
+                    "**/.*",
+                    "!/dist/**",
+                    "!/README.*",
+                    "!/LICENSE.*",
+                    "!/CHANGELOG.*",
+                    "!/CONTRIBUTING.*"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Full-sized drag & drop event calendar",
+            "keywords": [
+                "calendar",
+                "event",
+                "full-sized",
+                "jquery-plugin"
+            ]
+        },
+        {
             "name": "bower-asset/jquery",
             "version": "2.2.4",
             "source": {
@@ -178,6 +223,31 @@
                 "jquery",
                 "library"
             ]
+        },
+        {
+            "name": "bower-asset/jquery-ui",
+            "version": "1.11.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jqueryui.git",
+                "reference": "c34f8dbf3ba57b3784b93f26119f436c0e8288e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jqueryui/zipball/c34f8dbf3ba57b3784b93f26119f436c0e8288e1",
+                "reference": "c34f8dbf3ba57b3784b93f26119f436c0e8288e1",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.6"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "jquery-ui.js"
+                ],
+                "bower-asset-ignore": []
+            }
         },
         {
             "name": "bower-asset/jquery.inputmask",
@@ -236,6 +306,48 @@
                 "jquery",
                 "mask",
                 "plugins"
+            ]
+        },
+        {
+            "name": "bower-asset/moment",
+            "version": "2.18.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moment/moment.git",
+                "reference": "b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moment/moment/zipball/b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378",
+                "reference": "b8a7fc310eb3625e83fc0c8f1ea2840fa83c7378",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "moment.js",
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "benchmarks",
+                    "bower_components",
+                    "meteor",
+                    "node_modules",
+                    "scripts",
+                    "tasks",
+                    "test",
+                    "component.json",
+                    "composer.json",
+                    "CONTRIBUTING.md",
+                    "ender.js",
+                    "Gruntfile.js",
+                    "Moment.js.nuspec",
+                    "package.js",
+                    "package.json",
+                    "ISSUE_TEMPLATE.md",
+                    "typing-tests"
+                ]
+            },
+            "license": [
+                "MIT"
             ]
         },
         {
@@ -462,6 +574,57 @@
                 "yii2"
             ],
             "time": "2017-03-30T09:04:16+00:00"
+        },
+        {
+            "name": "edofre/yii2-fullcalendar",
+            "version": "V1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Edofre/yii2-fullcalendar.git",
+                "reference": "b94f8e525c44bca7348e6adbeb4200e97be4ad54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Edofre/yii2-fullcalendar/zipball/b94f8e525c44bca7348e6adbeb4200e97be4ad54",
+                "reference": "b94f8e525c44bca7348e6adbeb4200e97be4ad54",
+                "shasum": ""
+            },
+            "require": {
+                "npm-asset/fullcalendar": "3.2.0",
+                "php": ">=5.5.0",
+                "yiisoft/yii2": ">=2.0.9",
+                "yiisoft/yii2-jui": ">=2.0.6"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "edofre\\fullcalendar\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Edo Freriks",
+                    "email": "edofre@gmail.com"
+                }
+            ],
+            "description": "Yii2 widget for fullcalendar",
+            "homepage": "https://github.com/edofre/yii2-fullcalendar",
+            "keywords": [
+                "calendar",
+                "event",
+                "fullcalendar",
+                "javascript"
+            ],
+            "time": "2017-06-20T20:56:48+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1078,6 +1241,55 @@
             "time": "2016-09-04T10:52:50+00:00"
         },
         {
+            "name": "kartik-v/yii2-widget-datetimepicker",
+            "version": "v1.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
+                "reference": "e843520aca008dc0807aa7ea99bfab2cc03c9a3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/e843520aca008dc0807aa7ea99bfab2cc03c9a3c",
+                "reference": "e843520aca008dc0807aa7ea99bfab2cc03c9a3c",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\datetime\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Enhanced Yii2 wrapper for the bootstrap datetimepicker plugin (sub repo split from yii2-widgets)",
+            "homepage": "https://github.com/kartik-v/yii2-widget-datetimepicker",
+            "keywords": [
+                "datetime",
+                "extension",
+                "form",
+                "jquery",
+                "picker",
+                "plugin",
+                "select2",
+                "widget",
+                "yii2"
+            ],
+            "time": "2017-06-08T05:53:28+00:00"
+        },
+        {
             "name": "kartik-v/yii2-widget-select2",
             "version": "v2.0.9",
             "source": {
@@ -1129,6 +1341,338 @@
                 "yii2"
             ],
             "time": "2017-04-12T09:00:24+00:00"
+        },
+        {
+            "name": "npm-asset/fullcalendar",
+            "version": "3.2.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/fullcalendar/-/fullcalendar-3.2.0.tgz",
+                "reference": null,
+                "shasum": "0718964c5edacc45e7204ad797a56bcab535068b"
+            },
+            "require": {
+                "npm-asset/jquery": ">=2,<4.0",
+                "npm-asset/moment": ">=2.9.0,<3.0.0"
+            },
+            "require-dev": {
+                "npm-asset/bootstrap": ">=3.3.7,<4.0.0",
+                "npm-asset/components-jqueryui": "dev-github:components/jqueryui",
+                "npm-asset/del": ">=2.2.1,<3.0.0",
+                "npm-asset/gulp": ">=3.9.1,<4.0.0",
+                "npm-asset/gulp-concat": ">=2.6.0,<3.0.0",
+                "npm-asset/gulp-cssmin": ">=0.1.7,<0.2.0",
+                "npm-asset/gulp-file": ">=0.3.0,<0.4.0",
+                "npm-asset/gulp-filter": ">=4.0.0,<5.0.0",
+                "npm-asset/gulp-jscs": ">=4.0.0,<5.0.0",
+                "npm-asset/gulp-jshint": ">=2.0.1,<3.0.0",
+                "npm-asset/gulp-modify": ">=0.1.1,<0.2.0",
+                "npm-asset/gulp-plumber": ">=1.1.0,<2.0.0",
+                "npm-asset/gulp-rename": ">=1.2.2,<2.0.0",
+                "npm-asset/gulp-replace": ">=0.5.4,<0.6.0",
+                "npm-asset/gulp-sourcemaps": ">=1.6.0,<2.0.0",
+                "npm-asset/gulp-template": ">=4.0.0,<5.0.0",
+                "npm-asset/gulp-uglify": ">=2.0.0,<3.0.0",
+                "npm-asset/gulp-util": ">=3.0.7,<4.0.0",
+                "npm-asset/gulp-zip": ">=3.2.0,<4.0.0",
+                "npm-asset/jasmine-core": ">=2.4.1,<3.0.0",
+                "npm-asset/jasmine-fixture": ">=2.0.0,<3.0.0",
+                "npm-asset/jasmine-jquery": ">=2.1.1,<3.0.0",
+                "npm-asset/jquery-mockjax": ">=2.2.0,<3.0.0",
+                "npm-asset/jquery-simulate": "dev-github:jquery/jquery-simulate",
+                "npm-asset/jshint": ">=2.9.2,<3.0.0",
+                "npm-asset/karma": ">=0.13.22,<0.14.0",
+                "npm-asset/karma-jasmine": ">=1.0.2,<2.0.0",
+                "npm-asset/karma-phantomjs-launcher": ">=1.0.0,<2.0.0",
+                "npm-asset/lodash": ">=4.14.1,<5.0.0",
+                "npm-asset/moment-timezone": ">=0.5.5,<0.6.0",
+                "npm-asset/native-promise-only": ">=0.8.1,<0.9.0",
+                "npm-asset/phantomjs-prebuilt": ">=2.1.7,<3.0.0",
+                "npm-asset/socket.io": "1.4.5",
+                "npm-asset/yargs": ">=4.8.1,<5.0.0"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://fullcalendar.io/wiki/Reporting-Bugs/"
+                },
+                "npm-asset-files": [
+                    "dist/*.js",
+                    "dist/*.css",
+                    "dist/locale/*.js",
+                    "README.*",
+                    "LICENSE.*",
+                    "CHANGELOG.*",
+                    "CONTRIBUTING.*"
+                ],
+                "npm-asset-main": "dist/fullcalendar.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/fullcalendar/fullcalendar.git"
+                },
+                "npm-asset-scripts": {
+                    "test": "gulp test:single",
+                    "lint": "gulp lint"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Shaw",
+                    "email": "arshaw@arshaw.com",
+                    "url": "http://arshaw.com/"
+                }
+            ],
+            "description": "Full-sized drag & drop event calendar",
+            "homepage": "https://fullcalendar.io/",
+            "keywords": [
+                "calendar",
+                "event",
+                "full-sized",
+                "jquery-plugin"
+            ]
+        },
+        {
+            "name": "npm-asset/jquery",
+            "version": "3.2.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery/-/jquery-3.2.1.tgz",
+                "reference": null,
+                "shasum": "5c4d9de652af6cd0a770154a631bba12b015c787"
+            },
+            "require-dev": {
+                "npm-asset/babel-preset-es2015": "6.6.0",
+                "npm-asset/commitplease": "2.6.1",
+                "npm-asset/core-js": "2.2.2",
+                "npm-asset/cross-spawn": "2.2.3",
+                "npm-asset/eslint-config-jquery": "1.0.0",
+                "npm-asset/grunt": "1.0.1",
+                "npm-asset/grunt-babel": "6.0.0",
+                "npm-asset/grunt-cli": "1.2.0",
+                "npm-asset/grunt-compare-size": "0.4.2",
+                "npm-asset/grunt-contrib-uglify": "1.0.1",
+                "npm-asset/grunt-contrib-watch": "1.0.0",
+                "npm-asset/grunt-eslint": "19.0.0",
+                "npm-asset/grunt-git-authors": "3.2.0",
+                "npm-asset/grunt-jsonlint": "1.0.7",
+                "npm-asset/grunt-newer": "1.2.0",
+                "npm-asset/grunt-npmcopy": "0.1.0",
+                "npm-asset/gzip-js": "0.3.2",
+                "npm-asset/husky": "0.11.4",
+                "npm-asset/insight": "0.8.1",
+                "npm-asset/jsdom": "5.6.1",
+                "npm-asset/load-grunt-tasks": "3.5.0",
+                "npm-asset/native-promise-only": "0.8.1",
+                "npm-asset/promises-aplus-tests": "2.1.2",
+                "npm-asset/q": "1.4.1",
+                "npm-asset/qunit-assert-step": "1.0.3",
+                "npm-asset/qunitjs": "1.23.1",
+                "npm-asset/requirejs": "2.2.0",
+                "npm-asset/sinon": "1.17.3",
+                "npm-asset/sizzle": "2.3.3",
+                "npm-asset/strip-json-comments": "2.0.1",
+                "npm-asset/testswarm": "1.1.0"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/jquery/jquery/issues"
+                },
+                "npm-asset-main": "dist/jquery.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/jquery/jquery.git"
+                },
+                "npm-asset-scripts": {
+                    "build": "npm install && grunt",
+                    "start": "grunt watch",
+                    "test": "grunt && grunt test:slow",
+                    "precommit": "grunt lint:newer",
+                    "commitmsg": "node node_modules/commitplease"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "JS Foundation and other contributors",
+                    "url": "https://github.com/jquery/jquery/blob/3.2.1/AUTHORS.txt"
+                }
+            ],
+            "description": "JavaScript library for DOM operations",
+            "homepage": "https://jquery.com",
+            "keywords": [
+                "browser",
+                "javascript",
+                "jquery",
+                "library"
+            ]
+        },
+        {
+            "name": "npm-asset/moment",
+            "version": "2.18.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/moment/-/moment-2.18.1.tgz",
+                "reference": null,
+                "shasum": "c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
+            },
+            "require-dev": {
+                "npm-asset/benchmark": "dev-default|*",
+                "npm-asset/coveralls": ">=2.11.2,<3.0.0",
+                "npm-asset/es6-promise": "dev-default|*",
+                "npm-asset/grunt": "~0.4",
+                "npm-asset/grunt-benchmark": "dev-default|*",
+                "npm-asset/grunt-cli": "dev-default|*",
+                "npm-asset/grunt-contrib-clean": "dev-default|*",
+                "npm-asset/grunt-contrib-concat": "dev-default|*",
+                "npm-asset/grunt-contrib-copy": "dev-default|*",
+                "npm-asset/grunt-contrib-jshint": "dev-default|*",
+                "npm-asset/grunt-contrib-uglify": "dev-default|*",
+                "npm-asset/grunt-contrib-watch": "dev-default|*",
+                "npm-asset/grunt-env": "dev-default|*",
+                "npm-asset/grunt-exec": "dev-default|*",
+                "npm-asset/grunt-jscs": "dev-default|*",
+                "npm-asset/grunt-karma": "dev-default|*",
+                "npm-asset/grunt-nuget": "dev-default|*",
+                "npm-asset/grunt-string-replace": "dev-default|*",
+                "npm-asset/karma": "dev-default|*",
+                "npm-asset/karma-chrome-launcher": "dev-default|*",
+                "npm-asset/karma-firefox-launcher": "dev-default|*",
+                "npm-asset/karma-qunit": "dev-default|*",
+                "npm-asset/karma-sauce-launcher": "dev-default|*",
+                "npm-asset/load-grunt-tasks": "dev-default|*",
+                "npm-asset/nyc": ">=2.1.4,<3.0.0",
+                "npm-asset/qunit": ">=0.7.5,<0.8.0",
+                "npm-asset/qunit-cli": ">=0.1.4,<0.2.0",
+                "npm-asset/rollup": "dev-default|*",
+                "npm-asset/spacejam": "dev-default|*",
+                "npm-asset/typescript": ">=1.8.10,<2.0.0",
+                "npm-asset/uglify-js": "dev-default|*"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/moment/moment/issues"
+                },
+                "npm-asset-main": "./moment.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/moment/moment.git"
+                },
+                "npm-asset-scripts": {
+                    "typescript-test": "tsc --project typing-tests",
+                    "test": "grunt test",
+                    "coverage": "nyc npm test && nyc report",
+                    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+                },
+                "npm-asset-engines": {
+                    "node": "*"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Iskren Ivov Chernev",
+                    "email": "iskren.chernev@gmail.com",
+                    "url": "https://github.com/ichernev"
+                },
+                {
+                    "name": "Tim Wood",
+                    "email": "washwithcare@gmail.com",
+                    "url": "http://timwoodcreates.com/"
+                },
+                {
+                    "name": "Rocky Meza",
+                    "url": "http://rockymeza.com"
+                },
+                {
+                    "name": "Matt Johnson",
+                    "email": "mj1856@hotmail.com",
+                    "url": "http://codeofmatt.com"
+                },
+                {
+                    "name": "Isaac Cambron",
+                    "email": "isaac@isaaccambron.com",
+                    "url": "http://isaaccambron.com"
+                },
+                {
+                    "name": "Andre Polykanine",
+                    "email": "andre@oire.org",
+                    "url": "https://github.com/oire"
+                }
+            ],
+            "description": "Parse, validate, manipulate, and display dates",
+            "homepage": "http://momentjs.com",
+            "keywords": [
+                "date",
+                "ender",
+                "format",
+                "i18n",
+                "l10n",
+                "moment",
+                "parse",
+                "time",
+                "validate"
+            ]
+        },
+        {
+            "name": "philippfrenzel/yii2fullcalendar",
+            "version": "3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/philippfrenzel/yii2fullcalendar.git",
+                "reference": "4b287f2d5a5ccf6720e66b63c7f29e41f025bb6b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/philippfrenzel/yii2fullcalendar/zipball/4b287f2d5a5ccf6720e66b63c7f29e41f025bb6b",
+                "reference": "4b287f2d5a5ccf6720e66b63c7f29e41f025bb6b",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/fullcalendar": "3.*",
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-jui": "*"
+            },
+            "require-dev": {
+                "codeception/codeception": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "yii2fullcalendar\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philipp Frenzel",
+                    "email": "philipp@frenzel.net",
+                    "homepage": "http://www.frenzel.net/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Yii2 fullcalendar Widgets",
+            "homepage": "http://www.frenzel.net/",
+            "keywords": [
+                "fullcalendar",
+                "yii2"
+            ],
+            "time": "2016-09-23T10:20:14+00:00"
         },
         {
             "name": "rmrevin/yii2-fontawesome",
@@ -1435,6 +1979,56 @@
                 "yii2"
             ],
             "time": "2016-12-20T13:26:02+00:00"
+        },
+        {
+            "name": "yiisoft/yii2-jui",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-jui.git",
+                "reference": "843a2160cfe30f5c8b0cb2e9dbd8ee6bcf97e71d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-jui/zipball/843a2160cfe30f5c8b0cb2e9dbd8ee6bcf97e71d",
+                "reference": "843a2160cfe30f5c8b0cb2e9dbd8ee6bcf97e71d",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery-ui": "1.11.*@stable",
+                "yiisoft/yii2": ">=2.0.4"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                },
+                "asset-installer-paths": {
+                    "npm-asset-library": "vendor/npm",
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\jui\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Qiang Xue",
+                    "email": "qiang.xue@gmail.com"
+                }
+            ],
+            "description": "The Jquery UI extension for the Yii framework",
+            "keywords": [
+                "jQuery UI",
+                "yii2"
+            ],
+            "time": "2016-07-22T22:26:59+00:00"
         },
         {
             "name": "yiisoft/yii2-swiftmailer",

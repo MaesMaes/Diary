@@ -22,7 +22,10 @@
         "kartik-v/yii2-grid": "@dev",
         "kartik-v/yii2-widget-datepicker": "*",
         "kartik-v/yii2-editable": "@dev",
-        "kartik-v/yii2-dynagrid": "@dev"
+        "kartik-v/yii2-dynagrid": "@dev",
+        "philippfrenzel/yii2fullcalendar":"*",
+        "edofre/yii2-fullcalendar": "V1.0.9",
+        "kartik-v/yii2-widget-datetimepicker": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

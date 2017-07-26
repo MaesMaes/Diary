@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'date',
-                'value' => Yii::$app->formatter->asDate($model->date)
+                'value' => Yii::$app->formatter->asDatetime($model->date)
             ],
             [
                 'attribute' => 'moderator',

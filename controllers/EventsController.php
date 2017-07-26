@@ -6,6 +6,8 @@ use app\models\Points;
 use app\models\Subject;
 use app\models\User;
 use app\models\UserSearch;
+use DateTime;
+use edofre\fullcalendar\models\Event;
 use Yii;
 use app\models\Events;
 use app\models\EventsSearch;
@@ -45,16 +47,39 @@ class EventsController extends Controller
     {
         $searchModel = new EventsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $eventsForCalendar = $dataProvider->query->all();
 
         //Выводим инфу о событиях только тем пользователям которые его создавали
         $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);
         if ($role != User::USER_TYPE_ADMIN) {
             $dataProvider->query->where('moderator = ' . Yii::$app->user->id);
+            $eventsForCalendar = $dataProvider->query->where('moderator = ' . Yii::$app->user->id)->all();
         }
+
+        $events = [];
+        foreach ($eventsForCalendar as $event) {
+            $date = new DateTime();
+            $date->setTimestamp(strtotime($event->date) + 2700);
+            $dateEventEnd = $date->format('Y-m-d H:i:s');
+
+            $events[] = new Event([
+                    'id'               => $event->id,
+                    'title'            => $event->name,
+                    'start'            => str_replace(' ', 'T', $event->date),
+                    'end'              => str_replace(' ', 'T', $dateEventEnd),
+                    'startEditable'    => false,
+                    'durationEditable' => false,
+                    'overlap'          => false,
+                    'url'              => '/events/view?id=' . $event->id,
+                    'color'            => 'orange',
+            ]);
+        }
+//        echo '<pre>'; print_r($events); die;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'events' => $events,
         ]);
     }
 
@@ -131,7 +156,7 @@ class EventsController extends Controller
     {
         $model = $this->findModel($id);
 
-        $this->formatDateFields($model);
+//        $this->formatDateFields($model);
 
         //Обновление списка участников
 //        if (Yii::$app->request->post('selection'))

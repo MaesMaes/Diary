@@ -1,6 +1,7 @@
 <?php
 
 use kartik\date\DatePicker;
+use kartik\datetime\DateTimePicker;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -23,7 +24,7 @@ use yii\widgets\Pjax;
         <div class="col-md-3">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <?= $form->field($model, 'place')->textInput(['maxlength' => true]) ?><br/>
         </div>
 <!--    </div>-->
@@ -31,17 +32,19 @@ use yii\widgets\Pjax;
         <div class="col-md-3">
             <?= $form->field($model, 'subject')->dropDownList($subjects) ?><br/>
         </div>
-        <div class="col-md-2">
-            <?= $form->field($model, 'date')->widget(DatePicker::classname(), [])?>
-        </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <?php
-                if (\app\models\User::isAdmin()) {
-                    echo $form->field($model, 'moderator')->dropDownList($moderators);
-                } else {
-                    echo $form->field($model, 'moderator')->dropDownList($moderators, ['disabled' => true, 'value' => Yii::$app->user->id]);
-                }
+            if (\app\models\User::isAdmin()) {
+                echo $form->field($model, 'moderator')->dropDownList($moderators);
+            } else {
+                echo $form->field($model, 'moderator')->dropDownList($moderators, ['disabled' => true, 'value' => Yii::$app->user->id]);
+            }
             ?><br/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'date')->widget(DateTimePicker::classname(), [])?>
         </div>
     </div>
 

@@ -113,3 +113,17 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.fc-row.fc-week.fc-widget-content {
+    height: auto!important;
+    min-height: 96px!important;
+}
+.fullcalendar {
+    background: #fff;
+}
+.fc-scroller.fc-time-grid-container {
+    height: 500px!important;
+}
+.fc-unthemed td.fc-today {
+    background: #eeeeee !important;
+}
