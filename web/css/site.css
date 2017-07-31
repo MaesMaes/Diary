@@ -127,3 +127,39 @@ a.desc:after {
 .fc-unthemed td.fc-today {
     background: #eeeeee !important;
 }
+
+.profile-slick__banner {
+    height: 200px;
+}
+
+.main-sidebar {
+    /*background: url('../images/left-menu-bg.jpeg') center center no-repeat;*/
+    /*background-size: cover;*/
+}
+
+#myDropzone {
+    border: .2rem dashed #616778!important;
+    background: none;
+}
+.dropzone .dz-message {
+    margin: 3em 0!important;
+}
+
+.img-block {
+    margin-left: 15px;
+    width: 120px;
+    display: inline-block;
+}
+.img-block-img {
+    border-radius: 20px;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: block;
+    z-index: 10;
+}
+.img-block a {
+    text-align: center;
+    display: block;
+}

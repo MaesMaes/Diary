@@ -1,9 +1,114 @@
 <?php
 /* @var $this yii\web\View */
-?>
-<h1>profile/index</h1>
+use evgeniyrru\yii2slick\Slick;
+use yii\helpers\Html;
+use yii\web\JsExpression;
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+$this->title = '';
+//$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="profile">
+    <h1>Привет, <?= Yii::$app->user->identity->name ?>, как настрой?</h1>
+    <div class="row">
+        <div class="col-md-3 ">
+            <?=Slick::widget([
+
+                // HTML tag for container. Div is default.
+                'itemContainer' => 'div',
+
+                // HTML attributes for widget container
+                'containerOptions' => ['class' => ''],
+
+                // Items for carousel. Empty array not allowed, exception will be throw, if empty
+                'items' => [
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                ],
+
+                // HTML attribute for every carousel item
+                'itemOptions' => ['class' => 'profile-slick__banner'],
+
+                // settings for js plugin
+                // @see http://kenwheeler.github.io/slick/#settings
+                'clientOptions' => [
+                    'autoplay' => true,
+                    'dots'     => false,
+                    // note, that for params passing function you should use JsExpression object
+                    'onAfterChange' => new JsExpression('function() {console.log("The cat has shown")}'),
+                    'slidesToShow' => 1,
+                    'slidesToScroll' => 1,
+                    'arrows' => false,
+                ],
+
+            ]); ?>
+        </div>
+        <div class="col-md-3 col-md-offset-1">
+            <?=Slick::widget([
+
+                // HTML tag for container. Div is default.
+                'itemContainer' => 'div',
+
+                // HTML attributes for widget container
+                'containerOptions' => ['class' => ''],
+
+                // Items for carousel. Empty array not allowed, exception will be throw, if empty
+                'items' => [
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                ],
+
+                // HTML attribute for every carousel item
+                'itemOptions' => ['class' => 'profile-slick__banner'],
+
+                // settings for js plugin
+                // @see http://kenwheeler.github.io/slick/#settings
+                'clientOptions' => [
+                    'autoplay' => true,
+                    'dots'     => true,
+                    // note, that for params passing function you should use JsExpression object
+                    'onAfterChange' => new JsExpression('function() {console.log("The cat has shown")}'),
+                    'slidesToShow' => 1,
+                    'slidesToScroll' => 1,
+                    'arrows' => false,
+                ],
+
+            ]); ?>
+        </div>
+        <div class="col-md-3 col-md-offset-1">
+            <?=Slick::widget([
+
+                // HTML tag for container. Div is default.
+                'itemContainer' => 'div',
+
+                // HTML attributes for widget container
+                'containerOptions' => ['class' => ''],
+
+                // Items for carousel. Empty array not allowed, exception will be throw, if empty
+                'items' => [
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+                ],
+
+                // HTML attribute for every carousel item
+                'itemOptions' => ['class' => 'profile-slick__banner'],
+
+                // settings for js plugin
+                // @see http://kenwheeler.github.io/slick/#settings
+                'clientOptions' => [
+                    'autoplay' => true,
+                    'dots'     => true,
+                    // note, that for params passing function you should use JsExpression object
+                    'onAfterChange' => new JsExpression('function() {console.log("The cat has shown")}'),
+                    'slidesToShow' => 1,
+                    'slidesToScroll' => 1
+                ],
+
+            ]); ?>
+        </div>
+    </div>
+
+</div>
+

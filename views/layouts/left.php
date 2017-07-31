@@ -72,6 +72,30 @@ use app\models\User;
                         'url' => ['/gii'],
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
+                    [
+                        'label' => 'Настройки',
+                        'icon' => 'gear',
+                        'url' => '#',
+                        'items' =>
+                            [
+                                [
+                                    'label' => 'Баннеры',
+                                    'url' => ['/banners'],
+                                    'icon' => 'image',
+                                ],
+//                                [
+//                                    'label' => 'Option 2',
+//                                    'url' => ['#'],
+//                                    'icon' => 'calendar',
+//                                ],
+//                                [
+//                                    'label' => 'Option 3',
+//                                    'url' => ['#'],
+////                                    'icon' => 'user',
+//                                ],
+                            ],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+                    ],
 //                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
 //                    ['label' => 'Login', 'url' => ['auth/login'], 'visible' => $guest],
                 ],

@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
         'css/main.css',
     ];
     public $js = [
-//        'js/view-school_class.js'
+//        'js/slick.min.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
