@@ -163,3 +163,8 @@ a.desc:after {
     text-align: center;
     display: block;
 }
+
+.profile-banner {
+    width: 400px;
+    margin-left: 15px;
+}

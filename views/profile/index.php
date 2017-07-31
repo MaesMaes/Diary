@@ -10,104 +10,51 @@ $this->title = '';
 <div class="profile">
     <h1>Привет, <?= Yii::$app->user->identity->name ?>, как настрой?</h1>
     <div class="row">
-        <div class="col-md-3 ">
-            <?=Slick::widget([
+        <?php
+            foreach ($banners as $banner):
+                $urls = json_decode($banner->URLs);
+                if (empty($urls)) continue;
+                $items = [];
+                foreach ($urls as $url)
+                    $items[] = Html::img('/tmp/banners/' . $url);
+        ?>
+                <br>
+                <div class="profile-banner">
+                <?=Slick::widget([
 
-                // HTML tag for container. Div is default.
-                'itemContainer' => 'div',
+                    // HTML tag for container. Div is default.
+                    'itemContainer' => 'div',
 
-                // HTML attributes for widget container
-                'containerOptions' => ['class' => ''],
+                    // HTML attributes for widget container
+                    'containerOptions' => ['class' => ''],
 
-                // Items for carousel. Empty array not allowed, exception will be throw, if empty
-                'items' => [
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                ],
+                    // Items for carousel. Empty array not allowed, exception will be throw, if empty
+    //                'items' => [
+    //                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+    //                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+    //                    Html::img('/tmp/profile/profile-bg-1.jpg'),
+    //                ],
+                    'items' => $items,
 
-                // HTML attribute for every carousel item
-                'itemOptions' => ['class' => 'profile-slick__banner'],
+                    // HTML attribute for every carousel item
+                    'itemOptions' => ['class' => 'profile-slick__banner'],
 
-                // settings for js plugin
-                // @see http://kenwheeler.github.io/slick/#settings
-                'clientOptions' => [
-                    'autoplay' => true,
-                    'dots'     => false,
-                    // note, that for params passing function you should use JsExpression object
-                    'onAfterChange' => new JsExpression('function() {console.log("The cat has shown")}'),
-                    'slidesToShow' => 1,
-                    'slidesToScroll' => 1,
-                    'arrows' => false,
-                ],
-
-            ]); ?>
-        </div>
-        <div class="col-md-3 col-md-offset-1">
-            <?=Slick::widget([
-
-                // HTML tag for container. Div is default.
-                'itemContainer' => 'div',
-
-                // HTML attributes for widget container
-                'containerOptions' => ['class' => ''],
-
-                // Items for carousel. Empty array not allowed, exception will be throw, if empty
-                'items' => [
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                ],
-
-                // HTML attribute for every carousel item
-                'itemOptions' => ['class' => 'profile-slick__banner'],
-
-                // settings for js plugin
-                // @see http://kenwheeler.github.io/slick/#settings
-                'clientOptions' => [
-                    'autoplay' => true,
-                    'dots'     => true,
-                    // note, that for params passing function you should use JsExpression object
-                    'onAfterChange' => new JsExpression('function() {console.log("The cat has shown")}'),
-                    'slidesToShow' => 1,
-                    'slidesToScroll' => 1,
-                    'arrows' => false,
-                ],
-
-            ]); ?>
-        </div>
-        <div class="col-md-3 col-md-offset-1">
-            <?=Slick::widget([
-
-                // HTML tag for container. Div is default.
-                'itemContainer' => 'div',
-
-                // HTML attributes for widget container
-                'containerOptions' => ['class' => ''],
-
-                // Items for carousel. Empty array not allowed, exception will be throw, if empty
-                'items' => [
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-                ],
-
-                // HTML attribute for every carousel item
-                'itemOptions' => ['class' => 'profile-slick__banner'],
-
-                // settings for js plugin
-                // @see http://kenwheeler.github.io/slick/#settings
-                'clientOptions' => [
-                    'autoplay' => true,
-                    'dots'     => true,
-                    // note, that for params passing function you should use JsExpression object
-                    'onAfterChange' => new JsExpression('function() {console.log("The cat has shown")}'),
-                    'slidesToShow' => 1,
-                    'slidesToScroll' => 1
-                ],
-
-            ]); ?>
-        </div>
+                    // settings for js plugin
+                    // @see http://kenwheeler.github.io/slick/#settings
+                    'clientOptions' => [
+                        'autoplay' => true,
+                        'dots'     => false,
+                        // note, that for params passing function you should use JsExpression object
+                        'onAfterChange' => new JsExpression('function() {console.log("The cat has shown")}'),
+                        'slidesToShow' => 1,
+                        'slidesToScroll' => 1,
+                        'arrows' => false,
+                    ],
+                ]); ?>
+             </div>
+        <?
+            endforeach;
+        ?>
     </div>
 
 </div>

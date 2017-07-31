@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Banners;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -9,7 +10,10 @@ class ProfileController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        return $this->render('index');
+        $banners = Banners::findAll(['place' => 1]);
+        return $this->render('index', [
+            'banners' => $banners
+        ]);
     }
 
     /**
