@@ -82,13 +82,21 @@ class Banners extends \yii\db\ActiveRecord
     public function deleteImages($imageName)
     {
         $images = json_decode($this->URLs);
+        echo '<pre>'; print_r($images);
 
+        foreach ($images as $img => $imgName)
+            if ($imgName == $imageName)
+                unset($images[$img]);
 
-        $images = array_flip($images); //Меняем местами ключи и значения
-        unset ($images[$imageName]) ; //Удаляем элемент массива
-        $images = array_flip($images); //Меняем местами ключи и значения
+//        echo '<pre>'; print_r($images);
+
+//        $images = array_flip($images); //Меняем местами ключи и значения
+//        unset ($images[$imageName]) ; //Удаляем элемент массива
+//        $images = array_flip($images); //Меняем местами ключи и значения
 
         $this->URLs = json_encode($images);
+//        echo '<pre>'; print_r($this->URLs); die;
+
         $this->save(false);
     }
 

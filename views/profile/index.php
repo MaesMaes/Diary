@@ -16,7 +16,7 @@ $this->title = '';
                 if (empty($urls)) continue;
                 $items = [];
                 foreach ($urls as $url)
-                    $items[] = Html::img('/tmp/banners/' . $url);
+                    $items[] = Html::img('/tmp/banners/' . $url, ['class' => 'a-slide']);
         ?>
                 <br>
                 <div class="profile-banner">

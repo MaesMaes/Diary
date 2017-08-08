@@ -168,3 +168,7 @@ a.desc:after {
     width: 400px;
     margin-left: 15px;
 }
+
+.a-slide {
+    height: 100%; width: 100%; background-size: cover !important;
+}

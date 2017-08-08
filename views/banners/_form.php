@@ -26,6 +26,7 @@ use yii\widgets\ActiveForm;
         <div class="row">
             <?php
                 $images = json_decode($model->URLs);
+                if (!empty($images))
                 foreach ($images as $img):
             ?>
                     <div class="img-block">
