@@ -31,6 +31,7 @@ class Incoming extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['date'], 'safe'],
             [['childName', 'subject', 'sum', 'checkingAccount'], 'integer'],
             [['description', 'parentName'], 'string', 'max' => 255],
         ];
@@ -42,13 +43,24 @@ class Incoming extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'incomingID' => 'Incoming ID',
-            'childName' => 'Child Name',
-            'subject' => 'Subject',
-            'sum' => 'Sum',
-            'description' => 'Description',
-            'parentName' => 'Parent Name',
-            'checkingAccount' => 'Checking Account',
+            'incomingID' => 'ID прихода',
+            'childName' => 'Имя ребенка',
+            'subject' => 'За что',
+            'sum' => 'Сумма',
+            'description' => 'Примечание',
+            'parentName' => 'Родитель',
+            'checkingAccount' => 'Тип платежа',
+            'date' => 'Дата',
+        ];
+    }
+
+    public static function getAllSubjects()
+    {
+        return [
+            0 => 'Пункт 1',
+            1 => 'Пункт 2',
+            2 => 'Пункт 3',
+            3 => 'Пункт 4',
         ];
     }
 }

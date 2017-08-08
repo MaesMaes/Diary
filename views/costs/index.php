@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -7,27 +8,38 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\CostsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Costs';
+$this->title = 'Расходы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="costs-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Costs', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+//            ['class' => 'yii\grid\SerialColumn'],
 
-            'costsID',
+//            'costsID',
             'date',
-            'itemOfExpenditure',
-            'name',
+            [
+                'attribute' => 'itemOfExpenditure',
+                'value' => function($model) {
+                    return \app\models\Costs::getAllItemOfExpenditure()[$model->itemOfExpenditure];
+                }
+            ],
+            [
+                'attribute' => 'name',
+                'value' => function($model) {
+                    $model = User::findOne($model->name);
+                    if ($model) return $model->name . ' ' . $model->lastName;
+                    else return '';
+                }
+            ],
             'sum',
             // 'description',
 

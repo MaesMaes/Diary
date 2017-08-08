@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use app\models\Costs;
 use app\models\CostsSearch;
@@ -70,6 +71,8 @@ class CostsController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'itemsOfExpenditure' => Costs::getAllItemOfExpenditure(),
+                'users' => User::getAllModerators(),
             ]);
         }
     }
@@ -89,6 +92,8 @@ class CostsController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'itemsOfExpenditure' => Costs::getAllItemOfExpenditure(),
+                'users' => User::getAllModerators(),
             ]);
         }
     }

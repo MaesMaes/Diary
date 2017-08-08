@@ -1,5 +1,6 @@
 <?php
 
+use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,20 +13,35 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'childName')->textInput() ?>
+    <div class="row">
+        <div class="col-md-4">
+            <?= $form->field($model, 'childName')->dropDownList($pupils) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'parentName')->dropDownList($parents, ['prompt'=>'Нет']) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'subject')->dropDownList($subject) ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'subject')->textInput() ?>
+    <div class="row">
+        <div class="col-md-4">
+            <?= $form->field($model, 'sum')->textInput() ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'date')->widget(DateTimePicker::classname(), [])?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'sum')->textInput() ?>
+    <?= $form->field($model, 'checkingAccount')->checkbox(['label' => 'На расчетный счет'])?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'parentName')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'checkingAccount')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

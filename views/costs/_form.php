@@ -1,5 +1,6 @@
 <?php
 
+use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,18 +13,29 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'date')->textInput() ?>
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'itemOfExpenditure')->dropDownList($itemsOfExpenditure) ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'date')->widget(DateTimePicker::classname(), [])?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'name')->dropDownList($users) ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'sum')->textInput() ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'itemOfExpenditure')->textInput() ?>
-
-    <?= $form->field($model, 'name')->textInput() ?>
-
-    <?= $form->field($model, 'sum')->textInput() ?>
-
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    <div class="row">
+        <div class="col-md-12">
+            <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

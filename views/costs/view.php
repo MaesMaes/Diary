@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -7,19 +8,17 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Costs */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Costs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Расходы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="costs-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->costsID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->costsID], [
+        <?= Html::a('Редактировать', ['update', 'id' => $model->costsID], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->costsID], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -28,10 +27,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'costsID',
+//            'costsID',
             'date',
-            'itemOfExpenditure',
-            'name',
+            [
+                'attribute' => 'itemOfExpenditure',
+                'value' => function($model) {
+                    return \app\models\Costs::getAllItemOfExpenditure()[$model->itemOfExpenditure];
+                }
+            ],
+            [
+                'attribute' => 'name',
+                'value' => function($model) {
+                    $model = User::findOne($model->name);
+                    if ($model) return $model->name . ' ' . $model->lastName;
+                    else return '';
+                }
+            ],
             'sum',
             'description',
         ],

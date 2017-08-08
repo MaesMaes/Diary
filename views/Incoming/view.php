@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -7,19 +8,17 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Incoming */
 
 $this->title = $model->incomingID;
-$this->params['breadcrumbs'][] = ['label' => 'Incomings', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Приходы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="incoming-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->incomingID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->incomingID], [
+        <?= Html::a('Редактировать', ['update', 'id' => $model->incomingID], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->incomingID], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,12 +28,35 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'incomingID',
-            'childName',
-            'subject',
+            [
+                'attribute' => 'childName',
+                'value' => function($model) {
+                    $model = User::findOne($model->childName);
+                    return $model->name . ' ' . $model->lastName;
+                }
+            ],
+            [
+                'attribute' => 'subject',
+                'value' => function($model) {
+                    return \app\models\Incoming::getAllSubjects()[$model->subject];
+                }
+            ],
             'sum',
             'description',
-            'parentName',
-            'checkingAccount',
+            [
+                'attribute' => 'parentName',
+                'value' => function($model) {
+                    $model = User::findOne($model->parentName);
+                    if ($model) return $model->name . ' ' . $model->lastName;
+                    else return '';
+                }
+            ],
+            [
+                'attribute' => 'checkingAccount',
+                'value' => function($model) {
+                    return ($model->checkingAccount == 1) ? 'На расчетный счет' : 'В кассу';
+                }
+            ],
         ],
     ]) ?>
 

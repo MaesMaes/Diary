@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Costs;
+use app\models\User;
 use Yii;
 use app\models\Incoming;
 use app\models\IncomingSearch;
@@ -70,6 +72,9 @@ class IncomingController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'pupils' => User::getAllPupil(),
+                'parents' => User::getAllParents(),
+                'subject' => Incoming::getAllSubjects(),
             ]);
         }
     }
@@ -89,6 +94,9 @@ class IncomingController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'pupils' => User::getAllPupil(),
+                'parents' => User::getAllParents(),
+                'subject' => Incoming::getAllSubjects(),
             ]);
         }
     }
@@ -120,5 +128,22 @@ class IncomingController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionCashBalance()
+    {
+        $incomig = 0;
+        $incomigArr = Incoming::findAll(['checkingAccount' => 0]);
+        foreach ($incomigArr as $in)
+            $incomig += $in->sum;
+
+        $costs = 0;
+        $costsArr = Costs::findAll([]);
+        foreach ($costsArr as $co)
+            $costs += $co->sum;
+
+        return $this->render('cashBalance',[
+            'balance' => $incomig - $costs
+        ]);
     }
 }

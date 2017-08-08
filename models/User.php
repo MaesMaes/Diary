@@ -241,6 +241,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $data;
     }
 
+    public static function getAllParents()
+    {
+        $pupilsId = self::getUsersByRole('parent');
+        $users = User::find()->where(['id' => $pupilsId])->all();
+
+        $data = [];
+        foreach ($users as $user) {
+            $data[$user->id] = $user->name . ' ' . $user->lastName;
+        }
+
+        return $data;
+    }
+
     public static function getAllModerators()
     {
         $pupilsId = self::getUsersByRole(['expert', 'teacher']);

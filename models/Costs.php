@@ -42,12 +42,22 @@ class Costs extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'costsID' => 'Costs ID',
-            'date' => 'Date',
-            'itemOfExpenditure' => 'Item Of Expenditure',
-            'name' => 'Name',
-            'sum' => 'Sum',
-            'description' => 'Description',
+            'costsID' => 'ИД расхода',
+            'date' => 'Дата',
+            'itemOfExpenditure' => 'Статья расхода',
+            'name' => 'ФИО получившего',
+            'sum' => 'Сумма',
+            'description' => 'Примечание',
+        ];
+    }
+
+    public static function getAllItemOfExpenditure()
+    {
+        return [
+            0 => 'Статья 1',
+            1 => 'Статья 2',
+            2 => 'Статья 3',
+            3 => 'Статья 4',
         ];
     }
 }

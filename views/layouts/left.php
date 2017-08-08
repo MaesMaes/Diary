@@ -73,6 +73,30 @@ use app\models\User;
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
                     [
+                        'label' => 'ДДС',
+                        'icon' => 'usd',
+                        'url' => '#',
+                        'items' =>
+                            [
+                                [
+                                    'label' => 'Приходы',
+                                    'url' => ['/incoming'],
+                                    'icon' => 'arrow-left',
+                                ],
+                                [
+                                    'label' => 'Расходы',
+                                    'url' => ['/costs'],
+                                    'icon' => 'arrow-right',
+                                ],
+                                [
+                                    'label' => 'Кассовый остаток',
+                                    'url' => ['/incoming/cash-balance'],
+                                    'icon' => 'briefcase',
+                                ],
+                            ],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+                    ],
+                    [
                         'label' => 'Настройки',
                         'icon' => 'gear',
                         'url' => '#',
@@ -83,16 +107,6 @@ use app\models\User;
                                     'url' => ['/banners'],
                                     'icon' => 'image',
                                 ],
-//                                [
-//                                    'label' => 'Option 2',
-//                                    'url' => ['#'],
-//                                    'icon' => 'calendar',
-//                                ],
-//                                [
-//                                    'label' => 'Option 3',
-//                                    'url' => ['#'],
-////                                    'icon' => 'user',
-//                                ],
                             ],
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],

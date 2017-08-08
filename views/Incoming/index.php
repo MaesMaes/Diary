@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -7,30 +8,46 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\IncomingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Incomings';
+$this->title = 'Приходы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="incoming-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Incoming', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить приход', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
+//        'showFooter' => true,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'incomingID',
-            'childName',
-            'subject',
-            'sum',
-            'description',
-            // 'parentName',
-            // 'checkingAccount',
+//            'incomingID',
+            [
+                'attribute' => 'childName',
+                'value' => function($model) {
+                    $model = User::findOne($model->childName);
+                    return $model->name . ' ' . $model->lastName;
+                },
+                'footer'=> '<b>Итого:</b>',
+            ],
+            [
+                'attribute' => 'subject',
+                'value' => function($model) {
+                    return \app\models\Incoming::getAllSubjects()[$model->subject];
+                }
+            ],
+            [
+                'attribute' => 'sum',
+            ],
+            [
+                'attribute' => 'checkingAccount',
+                'value' => function($model) {
+                    return ($model->checkingAccount == 1) ? 'На расчетный счет' : 'В кассу';
+                }
+            ],
+            'date',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
