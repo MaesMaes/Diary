@@ -14,6 +14,7 @@ use Yii;
  * @property string $description
  * @property string $parentName
  * @property integer $checkingAccount
+ * @property string $date
  */
 class Incoming extends \yii\db\ActiveRecord
 {
@@ -63,4 +64,6 @@ class Incoming extends \yii\db\ActiveRecord
             3 => 'Пункт 4',
         ];
     }
+
+
 }

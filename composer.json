@@ -27,7 +27,9 @@
         "edofre/yii2-fullcalendar": "V1.0.9",
         "kartik-v/yii2-widget-datetimepicker": "*",
         "evgeniyrru/yii2-slick": "*",
-        "perminder-klair/yii2-dropzone": "dev-master"
+        "perminder-klair/yii2-dropzone": "dev-master",
+        "phpoffice/phpexcel": "1.8.1",
+        "dompdf/dompdf": "v0.8.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

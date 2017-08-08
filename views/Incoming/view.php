@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Incoming */
 
-$this->title = $model->incomingID;
+$this->title = 'Приход №' . $model->incomingID;
 $this->params['breadcrumbs'][] = ['label' => 'Приходы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -22,6 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <? if ($model->checkingAccount == 0): ?>
+            <?= Html::a('Скачать ПКО', ['test-excel', 'id' => $model->incomingID], ['class' => 'btn btn-warning']) ?>
+        <? endif; ?>
     </p>
 
     <?= DetailView::widget([
@@ -57,6 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ($model->checkingAccount == 1) ? 'На расчетный счет' : 'В кассу';
                 }
             ],
+            'date',
         ],
     ]) ?>
 

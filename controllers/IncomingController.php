@@ -4,6 +4,9 @@ namespace app\controllers;
 
 use app\models\Costs;
 use app\models\User;
+use Dompdf\Dompdf;
+use PHPExcel_Cell;
+use PHPExcel_IOFactory;
 use Yii;
 use app\models\Incoming;
 use app\models\IncomingSearch;
@@ -145,5 +148,62 @@ class IncomingController extends Controller
         return $this->render('cashBalance',[
             'balance' => $incomig - $costs
         ]);
+    }
+
+    public function actionTestExcel($id)
+    {
+        $model = $this->findModel($id);
+        $tmpFilePath = Yii::getAlias('@app') . '/web/files/Приход №' . $id . '.xlsx';
+
+        $objPHPExcel = PHPExcel_IOFactory::load(Yii::getAlias('@app') . '/web/files/pko_ko-1.xlsx');
+        $objWorksheet = $objPHPExcel->getActiveSheet();
+        $highestRow = $objWorksheet->getHighestRow();
+        $highestColumn = $objWorksheet->getHighestColumn();
+        $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+        for ($row = 1; $row <= $highestRow; ++$row) {
+            for ($col = 0; $col <= $highestColumnIndex; ++$col) {
+                $cell = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+                switch ($cell) {
+                    case '%ORGANIZATION%':
+                        $objWorksheet->setCellValueByColumnAndRow($col, $row, 'ООО "Гипердом"');
+                        break;
+                    case '%DOC_NUM%':
+                        $objWorksheet->setCellValueByColumnAndRow($col, $row, '40000' . $model->incomingID);
+                        break;
+                    case '%DATE%':
+                        $objWorksheet->setCellValueByColumnAndRow($col, $row, $model->date);
+                        break;
+                    case '%DEBET%':
+                        $objWorksheet->setCellValueByColumnAndRow($col, $row, $model->sum);
+                        break;
+                    case '%CREDIT%':
+                        $objWorksheet->setCellValueByColumnAndRow($col, $row, $model->sum);
+                        break;
+                    case '%SUM%':
+                        $objWorksheet->setCellValueByColumnAndRow($col, $row, $model->sum);
+                        break;
+                }
+            }
+        }
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($tmpFilePath);
+
+        return Yii::$app->response->sendFile($tmpFilePath);
+
+//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'HTML');
+//        $objWriter->save(Yii::getAlias('@app') . '/web/files/pko_tmp.html');
+//
+//        $html = file_get_contents(Yii::getAlias('@app') . '/web/files/pko_tmp.html');
+//        $dompdf = new Dompdf();
+//        $dompdf->loadHtml($html);
+//
+//        // (Optional) Setup the paper size and orientation
+//        $dompdf->setPaper('A4', 'landscape');
+//
+//        // Render the HTML as PDF
+//        $dompdf->render();
+//
+//        // Output the generated PDF to Browser
+//        $dompdf->stream();
     }
 }
