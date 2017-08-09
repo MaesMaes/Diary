@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
         <? if ($model->checkingAccount == 0): ?>
-            <?= Html::a('Скачать ПКО', ['test-excel', 'id' => $model->incomingID], ['class' => 'btn btn-warning']) ?>
+            <?= Html::a('Сформировать ПКО', ['test-excel', 'id' => $model->incomingID], ['class' => 'btn btn-warning', 'target' => '_blank']) ?>
         <? endif; ?>
     </p>
 

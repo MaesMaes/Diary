@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Costs;
 use app\models\User;
+use DateTimeZone;
 use Dompdf\Dompdf;
 use PHPExcel_Cell;
 use PHPExcel_IOFactory;
@@ -185,15 +186,18 @@ class IncomingController extends Controller
                 }
             }
         }
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save($tmpFilePath);
-
-        return Yii::$app->response->sendFile($tmpFilePath);
-
-//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'HTML');
-//        $objWriter->save(Yii::getAlias('@app') . '/web/files/pko_tmp.html');
+//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+//        $objWriter->save($tmpFilePath);
 //
-//        $html = file_get_contents(Yii::getAlias('@app') . '/web/files/pko_tmp.html');
+//        return Yii::$app->response->sendFile($tmpFilePath);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'HTML');
+        $objWriter->save(Yii::getAlias('@app') . '/web/files/pko_tmp.html');
+
+        $html = file_get_contents(Yii::getAlias('@app') . '/web/files/pko_tmp.html');
+
+        return $html;
+
 //        $dompdf = new Dompdf();
 //        $dompdf->loadHtml($html);
 //

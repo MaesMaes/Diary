@@ -37,7 +37,7 @@ $this->title = '';
                     'items' => $items,
 
                     // HTML attribute for every carousel item
-                    'itemOptions' => ['class' => 'profile-slick__banner'],
+                    'itemOptions' => [],
 
                     // settings for js plugin
                     // @see http://kenwheeler.github.io/slick/#settings
@@ -49,6 +49,7 @@ $this->title = '';
                         'slidesToShow' => 1,
                         'slidesToScroll' => 1,
                         'arrows' => false,
+                        'adaptiveHeight' => true,
                     ],
                 ]); ?>
              </div>
