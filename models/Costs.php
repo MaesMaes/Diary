@@ -31,6 +31,7 @@ class Costs extends \yii\db\ActiveRecord
     {
         return [
             [['date'], 'safe'],
+            [['date'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['itemOfExpenditure', 'name', 'sum'], 'integer'],
             [['description'], 'string', 'max' => 255],
         ];

@@ -18,18 +18,14 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'itemOfExpenditure')->dropDownList($itemsOfExpenditure) ?>
         </div>
         <div class="col-md-3">
-            <?= $form->field($model, 'date')->widget(DateTimePicker::classname(), [])?>
+<!--            --><?//= $form->field($model, 'date')->widget(DateTimePicker::classname(), [])?>
+            <?= $form->field($model, 'sum')->textInput() ?>
+
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'name')->dropDownList($users) ?>
         </div>
         <div class="col-md-3">
-            <?= $form->field($model, 'sum')->textInput() ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
             <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
         </div>
     </div>

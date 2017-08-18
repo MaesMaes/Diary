@@ -11,11 +11,19 @@ use Yii;
  * @property string $name
  * @property integer $subject
  * @property string $date
+ * @property integer $duration
  * @property integer $moderator
  * @property string $place
  */
 class Events extends \yii\db\ActiveRecord
 {
+    public $eventTypes = [
+        'Урок' => 'Урок',
+        'Секция' => 'Секция',
+        'Самостоятельная работа' => 'Самостоятельная работа',
+        'Модуль' => 'Модуль',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -30,9 +38,11 @@ class Events extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['subject', 'moderator'], 'integer'],
+            [['subject', 'moderator', 'duration'], 'integer'],
             [['date'], 'safe'],
             [['name', 'place'], 'string', 'max' => 255],
+            [['duration'], 'default', 'value' => 45],
+//            [['moderator'], 'required'],
         ];
     }
 
@@ -43,9 +53,10 @@ class Events extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Название',
+            'name' => 'Тип события',
             'subject' => 'Предмет',
             'date' => 'Дата проведения',
+            'duration' => 'Длительность (мин)',
             'moderator' => 'Модератор',
             'place' => 'Место проведения'
         ];
@@ -98,5 +109,30 @@ class Events extends \yii\db\ActiveRecord
         if ($pupilId === 0) return '';
 
         return Points::findOne(['user_id' => $pupilId, 'event_id' => $eventId])->point ?? '';
+    }
+
+    /**
+     * Возвращает названия классов участвующих в событии
+     *
+     * @param bool $toString - возвротить в виде строки
+     * @return array
+     */
+    public function getEventClasses($toString = false)
+    {
+        $classes = [];
+        $users = User::find()->joinWith('events')->where(['event_id' => $this->id])->all();
+        foreach ($users as $user)
+            if (!in_array($user->className, $classes))
+                $classes[] = $user->className;
+
+        if($toString) {
+            $str = '';
+            foreach ($classes as $class)
+                $str .= $class . ' , ';
+
+            return mb_substr($str, 0, -2);
+        }
+
+        return $classes;
     }
 }

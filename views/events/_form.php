@@ -22,7 +22,7 @@ use yii\widgets\Pjax;
 
     <div class="row">
         <div class="col-md-3">
-            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true])->dropDownList($model->eventTypes); ?>
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'place')->textInput(['maxlength' => true]) ?><br/>
@@ -37,7 +37,7 @@ use yii\widgets\Pjax;
             if (\app\models\User::isAdmin()) {
                 echo $form->field($model, 'moderator')->dropDownList($moderators);
             } else {
-                echo $form->field($model, 'moderator')->dropDownList($moderators, ['disabled' => true, 'value' => Yii::$app->user->id]);
+                echo $form->field($model, 'moderator')->dropDownList($moderators, ['disabled' => 'disabled', 'value' => Yii::$app->user->id]);
             }
             ?><br/>
         </div>
@@ -45,6 +45,9 @@ use yii\widgets\Pjax;
     <div class="row">
         <div class="col-md-3">
             <?= $form->field($model, 'date')->widget(DateTimePicker::classname(), [])?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'duration')->textInput(['maxlength' => true])?>
         </div>
     </div>
 
@@ -64,7 +67,18 @@ use yii\widgets\Pjax;
                     }
                 ],
                 ['attribute' => 'className'],
-                ['attribute' => 'point'],
+//                ['attribute' => 'point'],
+                [
+//                    'label' => 'Оценить ученика',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{link}',
+                    'buttons' => [
+                        'link' => function ($url,$model,$key) {
+                            return Html::a('Оценить', '#myModal', ['data-toggle' => 'modal', 'modal-id' => $model->id]);
+                        },
+                    ],
+                ],
+//                <a href="#myModal" class="btn btn-primary" data-toggle="modal">Открыть модальное окно</a>
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{delete}',
@@ -72,7 +86,7 @@ use yii\widgets\Pjax;
                         if ( $action === 'delete' ) {
                             return '/events/delete-pupil-from-event?id=' . $model->id;
                         }
-                    }
+                    },
                 ],
             ],
         ]); ?>
@@ -83,7 +97,7 @@ use yii\widgets\Pjax;
         <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <? if (!$model->isNewRecord) { ?>
             <?= Html::a('Добавить участников', ['pupils-list', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
-            <?= Html::a('Оценить участников', ['event-pupils-points', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+<!--            --><?//= Html::a('Оценить участников', ['event-pupils-points', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
         <? } ?>
     </div>
     <?php ActiveForm::end(); ?>
@@ -94,6 +108,81 @@ use yii\widgets\Pjax;
     <? } ?>
 
 </div>
+
+<? if (!$model->isNewRecord) { ?>
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Заголовок модального окна -->
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Оценить ученика</h4>
+                </div>
+                <!-- Основное содержимое модального окна -->
+                <div class="modal-body">
+<!--                    --><?php //Pjax::begin([
+//                        'clientOptions' => [
+//                            'push' => false
+//                        ],
+//                    ]); ?>
+
+                    <!--                    --><?php //$form = ActiveForm::begin([
+                    //                        'action' => ['update', 'id' => $model->id],
+                    //                        'method' => 'get',
+                    //                    ]); ?>
+                    <!--                    --><?//= $form->field($searchModelPupils, 'name') ?>
+                    <!--                    <div class="form-group">-->
+                    <!--                        --><?//= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+                    <!--                        --><?//= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+                    <!--                    </div>-->
+                    <!--                    --><?php //ActiveForm::end(); ?>
+
+                    <!--                    --><?php //$form = ActiveForm::begin(); ?>
+<!--                    --><?//= GridView::widget([
+//                        'dataProvider' => $dataProviderPupils,
+//                        'filterModel' => $searchModelPupils,
+//                        'columns' => [
+//                            ['class' => 'yii\grid\SerialColumn'],
+//                            ['attribute' => 'name'],
+//                            ['attribute' => 'lastName'],
+//                            [
+//                                'attribute' => 'birthDate',
+//                                'value' => function($model) {
+//                                    return Yii::$app->formatter->asDate($model->birthDate);
+//                                }
+//                            ],
+//                            ['attribute' => 'className'],
+//                            [
+//                                'class'=>'kartik\grid\CheckboxColumn',
+//                                'vAlign'=>'middle',
+//                                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+//                                'checkboxOptions' => function($model) {
+//                                    if ($model->isPupilInThisEvent(Yii::$app->request->get('id')))
+//                                        return ["value" => $model->id,  'checked' => 'true', 'event_id' => Yii::$app->request->get('id')];
+//                                },
+//                                'options' => ['class_id' => $model->id]
+//                            ]
+//                        ],
+//                    ]); ?>
+                    <div class="modal-footer">
+                        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+                        <!--                        --><?php //ActiveForm::end(); ?>
+<!--                        --><?php //Pjax::end(); ?>
+                    </div>
+                    <?php
+                    //                        $this->registerJs(
+                    //                            '$("document").ready(function(){
+                    //                                $("#new_note").on("pjax:end", function() {
+                    //                                    $.pjax.reload({container:"#notes"});  //Reload GridView
+                    //                                });
+                    //                            });'
+                    //                        );
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<? } ?>
 
 <? if (!$model->isNewRecord) { ?>
 <!--     HTML-код модального окна -->

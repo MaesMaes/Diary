@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Points;
+use app\models\SchoolClass;
 use app\models\Subject;
 use app\models\User;
 use app\models\UserSearch;
@@ -53,18 +54,39 @@ class EventsController extends Controller
         $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);
         if ($role != User::USER_TYPE_ADMIN) {
             $dataProvider->query->where('moderator = ' . Yii::$app->user->id);
-            $eventsForCalendar = $dataProvider->query->where('moderator = ' . Yii::$app->user->id)->all();
+//            $eventsForCalendar = $dataProvider->query->where('moderator = ' . Yii::$app->user->id)->all();
         }
+//        echo '<pre>';
 
         $events = [];
+        $classManagementID = User::findOne(Yii::$app->user->id)->classManagement;
+        $classManagement = SchoolClass::findOne($classManagementID)->name;
+//        print_r($classManagement);
+
         foreach ($eventsForCalendar as $event) {
             $date = new DateTime();
-            $date->setTimestamp(strtotime($event->date) + 2700);
+
+            //Показываем только события класса где пользователь ведет руководство
+            if ($role != User::USER_TYPE_ADMIN) {
+                $classNames = $event->getEventClasses();
+//                print_r($classNames);
+
+                if ($event->moderator != Yii::$app->user->id && !in_array($classManagement, $classNames)) continue;
+            }
+
+            $duration = 2700;
+            if (isset($event->duration))
+                $duration = $event->duration * 60;
+
+            $date->setTimestamp(strtotime($event->date) + $duration);
             $dateEventEnd = $date->format('Y-m-d H:i:s');
 
             $events[] = new Event([
                     'id'               => $event->id,
-                    'title'            => $event->name,
+                    'title'            => $event->name . ": "
+                                            . Subject::findOne($event->subject)->name . ' - '
+                                            . $event->place . ', Классы: '
+                                            . $event->getEventClasses(true),
                     'start'            => str_replace(' ', 'T', $event->date),
                     'end'              => str_replace(' ', 'T', $dateEventEnd),
                     'startEditable'    => false,
@@ -136,6 +158,8 @@ class EventsController extends Controller
         $model = new Events();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->checkModeratorValue($model);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -175,6 +199,7 @@ class EventsController extends Controller
 
         //Обновление основной формы
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->checkModeratorValue($model);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -239,7 +264,8 @@ class EventsController extends Controller
             'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
             'searchModelPupils' => $s,
             'dataProviderPupilsOnEvent' => new ActiveDataProvider([
-                'query' => User::find()->joinWith('events')->where(['event_id' => $id])
+                'query' => User::find()->joinWith('events')->where(['event_id' => $id]),
+                'pagination' => false,
             ]),
         ]);
     }
@@ -335,5 +361,19 @@ class EventsController extends Controller
         $model->on(ActiveRecord::EVENT_BEFORE_UPDATE, function () use ($model) {
             $model->date = \DateTime::createFromFormat('d.m.Y', $model->date)->format('Y-m-d');
         });
+    }
+
+    /**
+     * Проверяет установлено ли поле модератор, если нет -
+     * установит текущего пользователя
+     *
+     * @param $model
+     */
+    private function checkModeratorValue($model)
+    {
+        if (!isset($model->moderator)) {
+            $model->moderator = Yii::$app->user->id;
+            $model->save();
+        }
     }
 }

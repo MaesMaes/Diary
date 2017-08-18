@@ -47,7 +47,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ($model->checkingAccount == 1) ? 'На расчетный счет' : 'В кассу';
                 }
             ],
-            'date',
+            [
+                'attribute' => 'date',
+                'value' => function($model) {
+                    return (null !== Yii::$app->formatter->asDatetime($model->date)) ? Yii::$app->formatter->asDatetime($model->date) : '';
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

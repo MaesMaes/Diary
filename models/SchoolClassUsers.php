@@ -41,4 +41,19 @@ class SchoolClassUsers extends \yii\db\ActiveRecord
             'users_id' => 'Users ID',
         ];
     }
+
+    public static function setPupil($classID, $userID)
+    {
+        $model = SchoolClassUsers::findOne(['users_id' => $userID]);
+        if (!$model) {
+            $model = new SchoolClassUsers();
+            $model->users_id = $userID;
+            $model->school_class_id = $classID;
+            $model->save();
+        } else {
+            $model->school_class_id = $classID;
+            $model->save();
+        }
+
+    }
 }

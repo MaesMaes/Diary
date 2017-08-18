@@ -19,6 +19,7 @@ use yii\web\IdentityInterface;
  * @property string $phone
  * @property $birthDate
  * @property integer $child
+ * @property integer $classManagement
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -42,7 +43,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['isAdmin', 'child'], 'integer'],
+            [['isAdmin', 'child', 'classManagement', 'parent'], 'integer'],
             [['name', 'lastName', 'email', 'phone', 'password', 'photo'], 'string', 'max' => 50],
             [['birthDate'], 'default', 'value' => date('Y-m-d')],
 //            [['point'], 'safe'],
@@ -65,8 +66,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'isAdmin' => 'Is Admin',
             'photo' => 'Фото',
             'className' => 'Класс',
+            'class' => 'Класс',
             'point' => 'Оценка',
             'child' => 'Ребенок',
+            'classManagement' => 'Классное руководство',
+            'parent' => 'Родитель',
         ];
     }
 

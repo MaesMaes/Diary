@@ -28,14 +28,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'name',
+//            'id',
             'lastName',
+            'name',
             'birthDate',
             'email:email',
-            'phone',
             'password',
-            'photo',
+            [
+                'attribute' => 'photo',
+                'visible' => (isset($model->photo)) ? true : false
+            ],
+            [
+                'attribute' => 'phone',
+                'visible' => (isset($model->phone)) ? true : false
+            ],
+            [
+                'attribute' => 'className',
+//                'visible' => (isset($model->phone)) ? true : false
+            ],
+            [
+                'attribute' => 'classManagement',
+                'value' => function($model) {
+                    return \app\models\SchoolClass::findOne($model->classManagement)->name;
+                },
+                'visible' => (isset($model->classManagement)) ? true : false
+            ],
+            [
+                'attribute' => 'parent',
+                'value' => function($model) {
+                    return \app\models\User::findOne($model->parent)->name . ' ' . \app\models\User::findOne($model->parent)->lastName;
+                },
+                'visible' => (isset($model->parent)) ? true : false
+            ],
             [
                 'label' => 'Роль',
                 'value' => $role

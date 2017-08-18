@@ -40,13 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'date',
-                'value' => Yii::$app->formatter->asDatetime($model->date)
+//                'value' => Yii::$app->formatter->asDatetime($model->date)
             ],
             [
                 'attribute' => 'moderator',
                 'value' => function($model) {
                     $model = User::findOne($model->moderator);
-                    return $model->name . ' ' . $model->lastName;
+                    if (isset($model->name) && isset($model->lastName))
+                        return $model->name . ' ' . $model->lastName;
+
+                    return '';
                 }
             ],
 
@@ -67,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             ['attribute' => 'className'],
-            ['attribute' => 'point'],
+//            ['attribute' => 'point'],
         ],
     ]); ?>
 

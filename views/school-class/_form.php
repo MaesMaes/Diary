@@ -14,7 +14,7 @@ $gridColumns = [
     ['class' => 'kartik\grid\SerialColumn'],
     [
         'class' => 'kartik\grid\DataColumn',
-        'attribute' => 'name',
+        'attribute' => 'lastName',
 //        'pageSummary' => 'Page Total',
         'vAlign'=>'middle',
 //        'headerOptions'=>['class'=>'kv-sticky-column'],
@@ -23,13 +23,14 @@ $gridColumns = [
     ],
     [
         'class' => 'kartik\grid\DataColumn',
-        'attribute' => 'lastName',
+        'attribute' => 'name',
 //        'pageSummary' => 'Page Total',
         'vAlign'=>'middle',
 //        'headerOptions'=>['class'=>'kv-sticky-column'],
 //        'contentOptions'=>['class'=>'kv-sticky-column'],
 //        'editableOptions'=>['header'=>'Name', 'size'=>'md']
     ],
+
     [
         'class' => 'kartik\grid\DataColumn',
         'attribute' => 'birthDate',

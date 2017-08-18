@@ -2,10 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\SchoolClass;
+use app\models\SchoolClassUsers;
 use Yii;
 use app\models\User;
 use app\models\UserSearch;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -99,6 +102,8 @@ class UserController extends Controller
                 'model' => $model,
                 'roles' => $roles,
                 'pupils' => $pupils,
+                'parents' => User::getAllParents(),
+                'classManagement' => ArrayHelper::map(SchoolClass::find()->asArray()->all(), 'id', 'name'),
             ]);
         }
     }
@@ -117,6 +122,7 @@ class UserController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             User::updateRole($id, Yii::$app->request->post('role'));
+            SchoolClassUsers::setPupil(Yii::$app->request->post('User')['class'], $model->id);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -127,6 +133,8 @@ class UserController extends Controller
                 'role' => key($rolesData['role']),
                 'roles' => $rolesData['roles'],
                 'pupils' => $pupils,
+                'parents' => User::getAllParents(),
+                'classManagement' => ArrayHelper::map(SchoolClass::find()->asArray()->all(), 'id', 'name'),
             ]);
         }
     }

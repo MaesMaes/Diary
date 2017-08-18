@@ -33,6 +33,7 @@ class Incoming extends \yii\db\ActiveRecord
     {
         return [
             [['date'], 'safe'],
+            [['date'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['childName', 'subject', 'sum', 'checkingAccount'], 'integer'],
             [['description', 'parentName'], 'string', 'max' => 255],
         ];

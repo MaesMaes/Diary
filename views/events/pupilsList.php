@@ -1,6 +1,8 @@
 <?php
 
+use app\models\SchoolClass;
 use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
 
@@ -23,15 +25,19 @@ $this->params['breadcrumbs'][] = 'Добавить участников';
         'filterModel' => $searchModelPupils,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            ['attribute' => 'name'],
             ['attribute' => 'lastName'],
+            ['attribute' => 'name'],
             [
                 'attribute' => 'birthDate',
                 'value' => function($model) {
                     return Yii::$app->formatter->asDate($model->birthDate);
                 }
             ],
-            ['attribute' => 'className'],
+            [
+                'attribute' => 'className',
+                'filter' => ArrayHelper::map(SchoolClass::find()->asArray()->all(), 'name', 'name'),
+                'options' => ['4A' => ['selected' => true]],
+            ],
             [
                 'class'=>'kartik\grid\CheckboxColumn',
                 'vAlign'=>'middle',

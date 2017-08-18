@@ -19,6 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'roles' => $roles,
         'role' => 'admin',
         'pupils' => $pupils,
+        'parents' => $parents,
+        'classManagement' => $classManagement,
     ]) ?>
 
 </div>

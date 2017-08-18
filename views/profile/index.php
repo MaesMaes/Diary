@@ -27,15 +27,7 @@ $this->title = '';
 
                     // HTML attributes for widget container
                     'containerOptions' => ['class' => ''],
-
-                    // Items for carousel. Empty array not allowed, exception will be throw, if empty
-    //                'items' => [
-    //                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-    //                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-    //                    Html::img('/tmp/profile/profile-bg-1.jpg'),
-    //                ],
                     'items' => $items,
-
                     // HTML attribute for every carousel item
                     'itemOptions' => [],
 
