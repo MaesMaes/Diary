@@ -63,7 +63,8 @@ class SchoolClassController extends Controller
             'model' => $this->findModel($id),
             'dataProviderPupil' => new ActiveDataProvider([
                 'key' => 'id',
-                'query' => User::find()->joinWith('class')->where(['school_class_id' => $id])
+                'query' => User::find()->joinWith('class')->where(['school_class_id' => $id]),
+                'sort' => ['defaultOrder' => ['lastName' => SORT_ASC]],
             ]),
         ]);
     }

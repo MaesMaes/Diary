@@ -37,6 +37,7 @@ class SubjectController extends Controller
     {
         $searchModel = new SubjectSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort = ['defaultOrder' => ['name' => SORT_ASC]];
 
         return $this->render('index', [
             'searchModel' => $searchModel,

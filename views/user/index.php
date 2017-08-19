@@ -29,9 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute' => 'phone'],
             [
                 'label' => 'Роль',
+                'attribute' => 'role',
                 'value' => function($model) {
                     return User::getRoleDescByUserId($model->id);
-                }
+                },
+                'filter' => User::getRolesMap()
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
