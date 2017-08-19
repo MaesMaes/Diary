@@ -259,9 +259,14 @@ class EventsController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $dataProviderPupils = $s->search(Yii::$app->request->queryParams);
+//        $dataProviderPupils->pagination = true;
+        $dataProviderPupils->pagination  = false;
+
         return $this->render('pupilsList', [
             'model' => $this->findModel($id),
-            'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
+//            'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
+            'dataProviderPupils' => $dataProviderPupils,
             'searchModelPupils' => $s,
             'dataProviderPupilsOnEvent' => new ActiveDataProvider([
                 'query' => User::find()->joinWith('events')->where(['event_id' => $id]),

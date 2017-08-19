@@ -93,6 +93,7 @@ class UserController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             User::updateRole($model->id, Yii::$app->request->post('role'));
+            SchoolClassUsers::setPupil(Yii::$app->request->post('User')['class'], $model->id);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

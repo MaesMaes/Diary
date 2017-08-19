@@ -113,11 +113,14 @@ class SchoolClassController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
 
         } else {
+            $dataProviderPupil = new ActiveDataProvider([
+                'query' => User::getDataPupilWithoutClass($id),
+            ]);
+            $dataProviderPupil->pagination = false;
+
             return $this->render('update', [
                 'model' => $model,
-                'dataProviderPupil' => new ActiveDataProvider([
-                    'query' => User::getDataPupilWithoutClass($id)
-                ]),
+                'dataProviderPupil' => $dataProviderPupil
             ]);
         }
     }
