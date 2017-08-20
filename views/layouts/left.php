@@ -97,6 +97,18 @@ use app\models\User;
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
                     [
+                        'label' => 'Нормативные документы',
+                        'icon' => 'file-pdf-o',
+                        'url' => '/documents',
+                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN),
+                    ],
+                    [
+                        'label' => 'Нормативные документы',
+                        'icon' => 'file-pdf-o',
+                        'url' => '/documents/smart-view',
+                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN || $role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_PARENT),
+                    ],
+                    [
                         'label' => 'Настройки',
                         'icon' => 'gear',
                         'url' => '#',
