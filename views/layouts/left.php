@@ -65,6 +65,18 @@ use app\models\User;
                         'url' => [$eventsUrl],
                         'visible' => !$guest
                     ],
+                    [
+                        'label' => 'Фотоальбомы',
+                        'icon' => 'file-image-o',
+                        'url' => '/albums',
+                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN || $role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_EXPERT),
+                    ],
+                    [
+                        'label' => 'Фотоальбомы',
+                        'icon' => 'file-image-o',
+                        'url' => '/albums/all-index',
+                        'visible' => !$guest && ($role == User::USER_TYPE_PARENT || $role == User::USER_TYPE_PUPIL),
+                    ],
                     ['label' => 'О проекте', 'icon' => 'bookmark', 'url' => ['/site/about']],
                     [
                         'label' => 'Gii',
@@ -106,7 +118,7 @@ use app\models\User;
                         'label' => 'Нормативные документы',
                         'icon' => 'file-pdf-o',
                         'url' => '/documents/smart-view',
-                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN || $role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_PARENT),
+                        'visible' => !$guest && ($role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_PARENT),
                     ],
                     [
                         'label' => 'Настройки',

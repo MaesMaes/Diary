@@ -149,6 +149,7 @@ a.desc:after {
     margin-left: 15px;
     width: 120px;
     display: inline-block;
+    margin-bottom: 15px;
 }
 .img-block-img {
     border-radius: 20px;
@@ -171,4 +172,38 @@ a.desc:after {
 
 .a-slide {
     height: 100%; width: 100%; background-size: cover !important;
+}
+
+.album-wrap {
+    margin-left: 15px;
+    width: 120px;
+    display: inline-block;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.album-wrap-img:after {
+    content: '';
+    background: rgba(0, 0, 0, 0.48);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.album-wrap-img {
+    border-radius: 20px;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: block;
+    z-index: 10;
+}
+
+.album-wrap-img-title {
+    text-align: center;
+    color: #fff;
+    position: relative;
+    top: 45%;
+    z-index: 100;
 }

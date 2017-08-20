@@ -11,7 +11,7 @@ $this->title = 'Нормативные документы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="documents-index">
-    <?= GridView::widget([
+-    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
