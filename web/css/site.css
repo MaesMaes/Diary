@@ -211,3 +211,64 @@ a.desc:after {
 .img-block-active_check {
     margin-left: 15px;
 }
+
+.lights {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: 6px;
+    border-radius: 100px;
+}
+.lights:hover {
+    border: 1px solid #204d74;
+    transition: .15s;
+}
+.lights-green {
+    background: #5acd5e;
+}
+.lights-yellow {
+    background: #e9eb51;
+}
+.lights-red {
+    background: #ef5e4c;
+}
+.test__lesson__mark {
+    width: 25px;
+}
+.test__lesson__percent {
+    padding-left: 5px;
+}
+.event-notes {
+    display: block;
+    color: #ef5e4c;
+}
+
+.smile {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: 6px;
+    border-radius: 100px;
+}
+.smile:hover {
+    border: 2px solid #204d74;
+    transition: .15s;
+}
+.smile-1 {
+    background: url('../images/004-happy.png') center center no-repeat;
+    background-size: cover;
+}
+.smile-2 {
+    background: url('../images/002-surprised.png') center center no-repeat;
+    background-size: cover;
+}
+.smile-3 {
+    background: url('../images/001-nervous.png') center center no-repeat;
+    background-size: cover;
+}
+.smile-4 {
+    background: url('../images/003-sad.png') center center no-repeat;
+    background-size: cover;
+}

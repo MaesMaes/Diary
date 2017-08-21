@@ -58,17 +58,92 @@ use yii\widgets\Pjax;
 //            'filterModel' => $searchModelPupils,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                ['attribute' => 'name'],
                 ['attribute' => 'lastName'],
+                ['attribute' => 'name'],
                 ['attribute' => 'className'],
-//                ['attribute' => 'point'],
                 [
-//                    'label' => 'Оценить ученика',
+                    'header' => 'Контрольная работа',
                     'class' => 'yii\grid\ActionColumn',
-                    'template' => '{link}',
+                    'template' => '{test-mark}',
                     'buttons' => [
-                        'link' => function ($url,$model,$key) {
-                            return Html::a('Оценить', '#myModal', ['data-toggle' => 'modal', 'modal-id' => $model->id]);
+                        'test-mark' => function ($url,$model,$key) {
+                            return Html::dropDownList(
+                                'list',
+                                5,
+                                [0 => '-', 2 => 2, 3 => 3, 4 => 4, 5 => 5],
+                                ['data-pupil-id' => $model->id, 'class' => 'js-set-test__mark']
+                            );
+                        },
+                    ],
+                ],
+                [
+                    'header' => 'Срез по итогам темы',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{test-theme-mark}',
+                    'buttons' => [
+                        'test-theme-mark' => function ($url,$model,$key) {
+                            return Html::dropDownList(
+                                'list',
+                                5,
+                                [0 => '-', 2 => 2, 3 => 3, 4 => 4, 5 => 5],
+                                ['data-pupil-id' => $model->id, 'class' => 'js-set-test__theme__mark']
+                            );
+                        },
+                    ],
+                ],
+                [
+                    'header' => 'Срез по итогам урока',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{test-lesson-mark}',
+                    'buttons' => [
+                        'test-lesson-mark' => function ($url,$model,$key) {
+                            return Html::input('string', 'test__lesson__mark', 50, ['data-pupil-id' => $model->id, 'class' => 'js-set-test__lesson__mark test__lesson__mark'])
+                                 . Html::tag('span', '%', ['class' => 'test__lesson__percent']);
+                        },
+                    ],
+                ],
+                [
+                    'header' => 'Светофор',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{lights-green}{lights-yellow}{lights-red}',
+                    'buttons' => [
+                        'lights-green' => function ($url,$model,$key) {
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights-green lights lights-green']);
+                        },
+                        'lights-yellow' => function ($url,$model,$key) {
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights-yellow lights lights-yellow']);
+                        },
+                        'lights-red' => function ($url,$model,$key) {
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights-red lights lights-red']);
+                        },
+                    ],
+                ],
+                [
+                    'header' => 'Активность на уроке',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{smile-1}{smile-2}{smile-3}{smile-4}',
+                    'buttons' => [
+                        'smile-1' => function ($url,$model,$key) {
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile__1 smile smile-1']);
+                        },
+                        'smile-2' => function ($url,$model,$key) {
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile__2 smile smile-2']);
+                        },
+                        'smile-3' => function ($url,$model,$key) {
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile__3 smile smile-3']);
+                        },
+                        'smile-4' => function ($url,$model,$key) {
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile__4 smile smile-4']);
+                        },
+                    ],
+                ],
+                [
+                    'header' => 'Замечания',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{notes}',
+                    'buttons' => [
+                        'notes' => function ($url,$model,$key) {
+                            return Html::a('Добавить замечание', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-notes btn event-notes']);
                         },
                     ],
                 ],
