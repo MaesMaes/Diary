@@ -60,7 +60,7 @@ class EventsController extends Controller
 
         $events = [];
         $classManagementID = User::findOne(Yii::$app->user->id)->classManagement;
-        $classManagement = SchoolClass::findOne($classManagementID)->name;
+        $classManagement = SchoolClass::findOne($classManagementID)->name ?? '';
 //        print_r($classManagement);
 
         foreach ($eventsForCalendar as $event) {

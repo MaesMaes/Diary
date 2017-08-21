@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -17,13 +18,16 @@ use yii\widgets\ActiveForm;
     <? if (!$model->isNewRecord): ?>
         <div class="row">
             <?php
-            $images = json_decode($model->images);
+//            $images = json_decode($model->images);
             if (!empty($images))
                 foreach ($images as $img):
                     ?>
                     <div class="img-block">
-                        <div class="img-block-img" style="background: url('<?='/uploads/albums/' . $model->id . '/' . $img?>'); background-size: cover;"></div>
-                        <a class="js-delete__image" data-modelID="<?=$model->id ?>"  data-imageName="<?=$img ?>" href="#0">Удалить файл</a>
+                        <div class="img-block-img" style="background: url('<?='/uploads/albums/' . $model->id . '/' . $img->url?>'); background-size: cover;"></div>
+                        <? if (User::getRoleNameByUserId(Yii::$app->user->identity->id) == User::USER_TYPE_ADMIN): ?>
+                            <span class="img-block-active_check" data-image-id="<?= $img->id ?>"><input class="js-activate__image" data-image-id="<?= $img->id ?>" type="checkbox" <? if ($img->active) echo 'checked' ?>/> Активность</span>
+                        <? endif; ?>
+                        <a class="js-delete__image" data-album-id="<?=$model->id ?>" data-image-id="<?=$img->id ?>" href="#0">Удалить файл</a>
                     </div>
                     <?php
                 endforeach;
@@ -57,3 +61,37 @@ use yii\widgets\ActiveForm;
     </div>
     <?php ActiveForm::end(); ?>
 </div>
+
+<script>
+    $(function() {
+        $('.js-activate__image').on('click', function (e) {
+            var imageID = $(this).attr('data-image-id');
+            var that = $(this);
+            $.ajax({
+                url: '/albums/check-active',
+                method: 'POST',
+                data: {
+                    imageID: imageID,
+                    status: that.prop('checked')
+                }
+            });
+        });
+        $('.js-delete__image').on('click', function (e) {
+            e.preventDefault();
+            var imageID = $(this).attr('data-image-id');
+            var albumID = $(this).attr('data-album-id');
+            var that = $(this);
+            $.ajax({
+                url: '/albums/delete-image',
+                method: 'POST',
+                data: {
+                    imageID: imageID,
+                    albumID: albumID
+                },
+                success: function() {
+                    that.parent().fadeOut();
+                }
+            });
+        });
+    });
+</script>

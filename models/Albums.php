@@ -59,12 +59,18 @@ class Albums extends \yii\db\ActiveRecord
 
     public function saveImages($imageName)
     {
-        $images = json_decode($this->images);
+        $photo = new Photo();
+        $photo->albumID = $this->id;
+        $photo->url = $imageName;
+        $photo->active = false;
+        $photo->save(false);
+    }
 
-        $tmp = [];
-        $tmp = array_merge($tmp, (array)$images, [$imageName]);
+    public function deleteImageFile($imageId)
+    {
+        $photo = Photo::findOne($imageId);
+        unlink(self::$savePath . $this->id . '/' . $photo->url);
 
-        $this->images = json_encode($tmp);
-        $this->save(false);
+        $photo->delete();
     }
 }

@@ -60,12 +60,6 @@ use yii\widgets\Pjax;
                 ['class' => 'yii\grid\SerialColumn'],
                 ['attribute' => 'name'],
                 ['attribute' => 'lastName'],
-                [
-                    'attribute' => 'birthDate',
-                    'value' => function($model) {
-                        return Yii::$app->formatter->asDate($model->birthDate);
-                    }
-                ],
                 ['attribute' => 'className'],
 //                ['attribute' => 'point'],
                 [

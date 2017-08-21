@@ -207,3 +207,7 @@ a.desc:after {
     top: 45%;
     z-index: 100;
 }
+
+.img-block-active_check {
+    margin-left: 15px;
+}

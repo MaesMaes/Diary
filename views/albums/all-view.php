@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="albums-view">
     <div class="row">
         <?php
-        $images = json_decode($model->images);
+//        $images = json_decode($model->images);
         if (!empty($images))
             foreach ($images as $img):
                 ?>
@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                </a>-->
 
                 <div class="img-block">
-                    <a id="single_image" href="<?='/uploads/albums/' . $model->id . '/' . $img ?>">
-                        <div class="img-block-img" style="background: url('<?='/uploads/albums/' . $model->id . '/' . $img ?>'); background-size: cover;"></div>
+                    <a id="single_image" href="<?='/uploads/albums/' . $model->id . '/' . $img->url ?>">
+                        <div class="img-block-img" style="background: url('<?='/uploads/albums/' . $model->id . '/' . $img->url ?>'); background-size: cover;"></div>
                     </a>
                 </div>
                 <?php

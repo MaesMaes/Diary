@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Photo;
+use app\models\User;
 use Yii;
 use app\models\Albums;
 use app\models\AlbumsSearch;
@@ -38,7 +40,16 @@ class AlbumsController extends Controller
     public function actionIndex()
     {
         $searchModel = new AlbumsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $params = Yii::$app->request->queryParams;
+
+        if (!User::isAdmin())
+        $params = [
+            'AlbumsSearch' => [
+                'creatorID' => Yii::$app->user->id
+            ]
+        ];
+
+        $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -56,10 +67,11 @@ class AlbumsController extends Controller
         $models = Albums::find()->all();
 
         foreach ($models as $model) {
+            $img = Photo::findOne(['albumID' => $model->id, 'active' => 1])->url ?? '';
             $data[] = [
                 'name' => $model->name,
                 'id' => $model->id,
-                'imagePreview' => Yii::$app->homeUrl . Albums::$savePath . $model->id . '/' . json_decode($model->images)[0]
+                'imagePreview' => Yii::$app->homeUrl . Albums::$savePath . $model->id . '/' . $img
             ];
         }
 
@@ -72,6 +84,7 @@ class AlbumsController extends Controller
     {
         return $this->render('all-view', [
             'model' => $this->findModel($id),
+            'images' => Photo::findAll(['albumID' => $id, 'active' => 1])
         ]);
     }
 
@@ -84,6 +97,7 @@ class AlbumsController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'images' =>  $images = Photo::findAll(['albumID' => $id, 'active' => true]),
         ]);
     }
 
@@ -117,17 +131,15 @@ class AlbumsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $images = Photo::findAll(['albumID' => $id]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+        $model->load(Yii::$app->request->post());
+        $model->save();
+
+        return $this->render('update', [
+            'model' => $model,
+            'images' => $images,
+        ]);
     }
 
     /**
@@ -202,5 +214,38 @@ class AlbumsController extends Controller
         $uploadPath .= '/';
 
         return $uploadPath;
+    }
+
+    /**
+     * Устанавливает или убирает активность фото в альбоме
+     */
+    public function actionCheckActive()
+    {
+        if (Yii::$app->request->isPost) {
+            $imageID = Yii::$app->request->post('imageID');
+            $status = Yii::$app->request->post('status');
+
+            if ($status == 'true') $status = 1;
+            else $status = 0;
+
+            $model = Photo::findOne($imageID);
+            $model->active = $status;
+            $model->save();
+        }
+    }
+
+    /**
+     * Удаляет картинку в альбоме
+     */
+    public function actionDeleteImage()
+    {
+        if (Yii::$app->request->isPost) {
+            $imageID = Yii::$app->request->post('imageID');
+            $albumID = Yii::$app->request->post('albumID');
+
+            $album = Albums::findOne($albumID);
+
+            $album->deleteImageFile($imageID);
+        }
     }
 }

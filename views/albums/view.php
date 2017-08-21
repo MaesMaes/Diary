@@ -39,12 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
     <div class="row">
         <?php
-        $images = json_decode($model->images);
+//        $images = json_decode($model->images);
         if (!empty($images))
             foreach ($images as $img):
                 ?>
                 <div class="img-block">
-                    <div class="img-block-img" style="background: url('<?='/uploads/albums/' . $model->id . '/' . $img?>'); background-size: cover;"></div>
+                    <div class="img-block-img" style="background: url('<?='/uploads/albums/' . $model->id . '/' . $img->url?>'); background-size: cover;"></div>
                 </div>
                 <?php
             endforeach;

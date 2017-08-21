@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Добавить альбом', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Все альбомы', ['all-index'], ['class' => 'btn btn-warning']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
