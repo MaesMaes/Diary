@@ -285,3 +285,15 @@ a.desc:after {
 .smile-no:hover {
     border: 0;
 }
+
+.notes-container, .buttons-container {
+    padding: 15px;
+}
+
+.buttons-container textarea {
+    width: 100%;
+}
+
+.new-note {
+
+}

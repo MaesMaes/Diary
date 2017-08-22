@@ -135,4 +135,17 @@ class Events extends \yii\db\ActiveRecord
 
         return $classes;
     }
+
+    /**
+     * Возвращет id ивента по рефереру
+     *
+     * @param $link
+     * @return mixed
+     */
+    public static function getEventID($link)
+    {
+        $queryParams = parse_url($link)['query'];
+        parse_str($queryParams, $params);
+        return $params['id'];
+    }
 }

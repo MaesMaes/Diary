@@ -155,11 +155,10 @@ use yii\widgets\Pjax;
                     'template' => '{notes}',
                     'buttons' => [
                         'notes' => function ($url,$model,$key) {
-                            return Html::a('Добавить замечание', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-notes event-notes']);
+                            return Html::a('Добавить замечание', '#myModal', ['data-toggle' => "modal", 'data-pupil-id' => $model->id, 'class' => 'js-set-notes event-notes']);
                         },
                     ],
                 ],
-//                <a href="#myModal" class="btn btn-primary" data-toggle="modal">Открыть модальное окно</a>
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{delete}',
@@ -192,12 +191,17 @@ use yii\widgets\Pjax;
                 <!-- Заголовок модального окна -->
                 <div class="modal-header bg-green">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Оценить ученика</h4>
+                    <h4 class="modal-title">Замечания</h4>
                 </div>
                 <!-- Основное содержимое модального окна -->
+                <div class="notes-container js-notes__container"></div>
+                <div class="buttons-container">
+                    <?= Html::textarea('new-note', '', ['class' => 'new-note']) ?><br/>
+                    <?= Html::submitButton('Добавить замечание', ['class' => 'btn btn-success js-add__new__note']) ?>
+                </div>
                 <div class="modal-body">
                     <div class="modal-footer">
-                        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+
                     </div>
                 </div>
             </div>
@@ -207,6 +211,33 @@ use yii\widgets\Pjax;
 
 <script>
     $(function() {
+        function reloadNotesList(pupilID) {
+            $.ajax({
+                url: '/event-notes/get-pupil-notes',
+                method: 'POST',
+                data: {
+                    pupilID: pupilID
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data != 'no-notes') {
+                        var html = '';
+                        $.each(data, function(index, value) {
+                            html += '<p class="note-item">' + value.note + '</p>';
+                        });
+                        $('.js-notes__container').html(html);
+                    } else {
+                        $('.js-notes__container').html('Замечаний нет');
+                    }
+                }
+            });
+        }
+
+        //Замечания
+        $('.js-set-notes').on('click', function() {
+            var pupilID = $(this).attr('data-pupil-id');
+            reloadNotesList(pupilID);
+        });
 
         //Контрольная работа
         $('.js-set-test__mark').on('change', function (e) {
@@ -279,7 +310,6 @@ use yii\widgets\Pjax;
                     type: 'lights'
                 },
                 success: function() {
-//                    $('.js-set-lights').removeClass('active');
                     that.siblings().removeClass('active');
                     that.addClass('active');
                 }
@@ -304,7 +334,6 @@ use yii\widgets\Pjax;
                     type: 'active'
                 },
                 success: function() {
-//                    $('.js-set-smile').removeClass('active');
                     that.siblings().removeClass('active');
                     that.addClass('active');
                 }
