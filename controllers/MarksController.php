@@ -121,4 +121,62 @@ class MarksController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    /**
+     * Контрольная работа
+     */
+    public function actionTestMark()
+    {
+        if (Yii::$app->request->isPost) {
+            $pupilID = Yii::$app->request->post('pupilID');
+            $eventID = $this->getEventID(Yii::$app->request->referrer);
+            $value = Yii::$app->request->post('value');
+            $type = Yii::$app->request->post('type');
+
+            if (!$this->validateActionType($type)) return;
+
+            $model = Marks::getOrCreateModel($eventID, $pupilID);
+            $model->{$type} = $value;
+            print_r($model);
+            $model->save();
+        }
+    }
+
+    /**
+     * Возвращет id ивента по рефереру
+     *
+     * @param $link
+     * @return mixed
+     */
+    private function getEventID($link)
+    {
+        $queryParams = parse_url($link)['query'];
+        parse_str($queryParams, $params);
+        return $params['id'];
+    }
+
+    /**
+     * Проверяет валидность типа из AJAX, это нужно т.к.
+     * будет динамическое обращение к данным из этого поля.
+     *
+     * @param $type
+     * @return bool
+     */
+    private function validateActionType($type)
+    {
+        switch ($type) {
+            case 'test':
+                return true;
+            case 'test_theme':
+                return true;
+            case 'test_lesson':
+                return true;
+            case 'lights':
+                return true;
+            case 'active':
+                return true;
+            default:
+                return false;
+        }
+    }
 }

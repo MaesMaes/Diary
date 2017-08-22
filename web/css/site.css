@@ -220,9 +220,15 @@ a.desc:after {
     margin-top: 6px;
     border-radius: 100px;
 }
+.lights.active {
+    border: 1px solid #204d74;
+}
 .lights:hover {
     border: 1px solid #204d74;
     transition: .15s;
+}
+.lights-no:hover {
+    border: 0;
 }
 .lights-green {
     background: #5acd5e;
@@ -242,6 +248,7 @@ a.desc:after {
 .event-notes {
     display: block;
     color: #ef5e4c;
+    width: 140px;
 }
 
 .smile {
@@ -251,6 +258,9 @@ a.desc:after {
     margin-right: 5px;
     margin-top: 6px;
     border-radius: 100px;
+}
+.smile.active {
+    border: 2px solid #204d74;
 }
 .smile:hover {
     border: 2px solid #204d74;
@@ -271,4 +281,7 @@ a.desc:after {
 .smile-4 {
     background: url('../images/003-sad.png') center center no-repeat;
     background-size: cover;
+}
+.smile-no:hover {
+    border: 0;
 }

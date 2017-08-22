@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Marks;
 use kartik\date\DatePicker;
 use kartik\datetime\DateTimePicker;
 use kartik\grid\GridView;
@@ -14,10 +15,6 @@ use yii\widgets\Pjax;
 
 <div class="events-form">
 
-    <? if (!$model->isNewRecord) { ?>
-<!--        --><?php //Pjax::begin(); ?>
-    <? } ?>
-
     <?php $form = ActiveForm::begin(); ?> <br>
 
     <div class="row">
@@ -27,8 +24,6 @@ use yii\widgets\Pjax;
         <div class="col-md-3">
             <?= $form->field($model, 'place')->textInput(['maxlength' => true]) ?><br/>
         </div>
-<!--    </div>-->
-<!--    <div class="row">-->
         <div class="col-md-3">
             <?= $form->field($model, 'subject')->dropDownList($subjects) ?><br/>
         </div>
@@ -52,10 +47,11 @@ use yii\widgets\Pjax;
     </div>
 
     <h4>Список участников</h4>
-    <? if (!$model->isNewRecord) { ?>
+    <? if (!$model->isNewRecord) {
+        $eventID = $model->id;
+        ?>
         <?= GridView::widget([
             'dataProvider' => $dataProviderPupilsOnEvent,
-//            'filterModel' => $searchModelPupils,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 ['attribute' => 'lastName'],
@@ -66,10 +62,10 @@ use yii\widgets\Pjax;
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{test-mark}',
                     'buttons' => [
-                        'test-mark' => function ($url,$model,$key) {
+                        'test-mark' => function ($url, $model, $key) use ($eventID) {
                             return Html::dropDownList(
                                 'list',
-                                5,
+                                Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test ?? 0,
                                 [0 => '-', 2 => 2, 3 => 3, 4 => 4, 5 => 5],
                                 ['data-pupil-id' => $model->id, 'class' => 'js-set-test__mark']
                             );
@@ -81,10 +77,10 @@ use yii\widgets\Pjax;
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{test-theme-mark}',
                     'buttons' => [
-                        'test-theme-mark' => function ($url,$model,$key) {
+                        'test-theme-mark' => function ($url,$model,$key) use ($eventID){
                             return Html::dropDownList(
                                 'list',
-                                5,
+                                Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_theme ?? 0,
                                 [0 => '-', 2 => 2, 3 => 3, 4 => 4, 5 => 5],
                                 ['data-pupil-id' => $model->id, 'class' => 'js-set-test__theme__mark']
                             );
@@ -96,8 +92,10 @@ use yii\widgets\Pjax;
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{test-lesson-mark}',
                     'buttons' => [
-                        'test-lesson-mark' => function ($url,$model,$key) {
-                            return Html::input('string', 'test__lesson__mark', 50, ['data-pupil-id' => $model->id, 'class' => 'js-set-test__lesson__mark test__lesson__mark'])
+                        'test-lesson-mark' => function ($url,$model,$key) use ($eventID){
+                            return Html::input('string', 'test__lesson__mark',
+                                   Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_lesson ?? 0,
+                                   ['data-pupil-id' => $model->id, 'class' => 'js-set-test__lesson__mark test__lesson__mark'])
                                  . Html::tag('span', '%', ['class' => 'test__lesson__percent']);
                         },
                     ],
@@ -107,14 +105,20 @@ use yii\widgets\Pjax;
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{lights-green}{lights-yellow}{lights-red}',
                     'buttons' => [
-                        'lights-green' => function ($url,$model,$key) {
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights-green lights lights-green']);
+                        'lights-green' => function ($url,$model,$key) use ($eventID) {
+                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                            if ($lights == 1) $lights = 'active'; else $lights = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-green ' . $lights]);
                         },
-                        'lights-yellow' => function ($url,$model,$key) {
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights-yellow lights lights-yellow']);
+                        'lights-yellow' => function ($url,$model,$key) use ($eventID) {
+                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                            if ($lights == 2) $lights = 'active'; else $lights = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-yellow ' . $lights]);
                         },
-                        'lights-red' => function ($url,$model,$key) {
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights-red lights lights-red']);
+                        'lights-red' => function ($url,$model,$key) use ($eventID) {
+                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                            if ($lights == 3) $lights = 'active'; else $lights = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-red ' . $lights]);
                         },
                     ],
                 ],
@@ -123,17 +127,25 @@ use yii\widgets\Pjax;
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{smile-1}{smile-2}{smile-3}{smile-4}',
                     'buttons' => [
-                        'smile-1' => function ($url,$model,$key) {
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile__1 smile smile-1']);
+                        'smile-1' => function ($url,$model,$key) use ($eventID){
+                            $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
+                            if ($active == 1) $active = 'active'; else $active = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile smile smile-1 ' . $active]);
                         },
-                        'smile-2' => function ($url,$model,$key) {
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile__2 smile smile-2']);
+                        'smile-2' => function ($url,$model,$key) use ($eventID) {
+                            $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
+                            if ($active == 2) $active = 'active'; else $active = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile smile smile-2 ' . $active]);
                         },
-                        'smile-3' => function ($url,$model,$key) {
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile__3 smile smile-3']);
+                        'smile-3' => function ($url,$model,$key) use ($eventID) {
+                            $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
+                            if ($active == 3) $active = 'active'; else $active = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile smile smile-3 ' . $active]);
                         },
-                        'smile-4' => function ($url,$model,$key) {
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile__4 smile smile-4']);
+                        'smile-4' => function ($url,$model,$key) use ($eventID) {
+                            $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
+                            if ($active == 4) $active = 'active'; else $active = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile smile smile-4 ' . $active]);
                         },
                     ],
                 ],
@@ -143,7 +155,7 @@ use yii\widgets\Pjax;
                     'template' => '{notes}',
                     'buttons' => [
                         'notes' => function ($url,$model,$key) {
-                            return Html::a('Добавить замечание', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-notes btn event-notes']);
+                            return Html::a('Добавить замечание', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-notes event-notes']);
                         },
                     ],
                 ],
@@ -171,11 +183,6 @@ use yii\widgets\Pjax;
     </div>
     <?php ActiveForm::end(); ?>
 
-    <? if ($model->isNewRecord) { ?>
-<!--        --><?php //ActiveForm::end(); ?>
-<!--        --><?php //Pjax::end(); ?>
-    <? } ?>
-
 </div>
 
 <? if (!$model->isNewRecord) { ?>
@@ -189,142 +196,119 @@ use yii\widgets\Pjax;
                 </div>
                 <!-- Основное содержимое модального окна -->
                 <div class="modal-body">
-<!--                    --><?php //Pjax::begin([
-//                        'clientOptions' => [
-//                            'push' => false
-//                        ],
-//                    ]); ?>
-
-                    <!--                    --><?php //$form = ActiveForm::begin([
-                    //                        'action' => ['update', 'id' => $model->id],
-                    //                        'method' => 'get',
-                    //                    ]); ?>
-                    <!--                    --><?//= $form->field($searchModelPupils, 'name') ?>
-                    <!--                    <div class="form-group">-->
-                    <!--                        --><?//= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-                    <!--                        --><?//= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-                    <!--                    </div>-->
-                    <!--                    --><?php //ActiveForm::end(); ?>
-
-                    <!--                    --><?php //$form = ActiveForm::begin(); ?>
-<!--                    --><?//= GridView::widget([
-//                        'dataProvider' => $dataProviderPupils,
-//                        'filterModel' => $searchModelPupils,
-//                        'columns' => [
-//                            ['class' => 'yii\grid\SerialColumn'],
-//                            ['attribute' => 'name'],
-//                            ['attribute' => 'lastName'],
-//                            [
-//                                'attribute' => 'birthDate',
-//                                'value' => function($model) {
-//                                    return Yii::$app->formatter->asDate($model->birthDate);
-//                                }
-//                            ],
-//                            ['attribute' => 'className'],
-//                            [
-//                                'class'=>'kartik\grid\CheckboxColumn',
-//                                'vAlign'=>'middle',
-//                                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-//                                'checkboxOptions' => function($model) {
-//                                    if ($model->isPupilInThisEvent(Yii::$app->request->get('id')))
-//                                        return ["value" => $model->id,  'checked' => 'true', 'event_id' => Yii::$app->request->get('id')];
-//                                },
-//                                'options' => ['class_id' => $model->id]
-//                            ]
-//                        ],
-//                    ]); ?>
                     <div class="modal-footer">
                         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
-                        <!--                        --><?php //ActiveForm::end(); ?>
-<!--                        --><?php //Pjax::end(); ?>
                     </div>
-                    <?php
-                    //                        $this->registerJs(
-                    //                            '$("document").ready(function(){
-                    //                                $("#new_note").on("pjax:end", function() {
-                    //                                    $.pjax.reload({container:"#notes"});  //Reload GridView
-                    //                                });
-                    //                            });'
-                    //                        );
-                    ?>
                 </div>
             </div>
         </div>
     </div>
 <? } ?>
 
-<? if (!$model->isNewRecord) { ?>
-<!--     HTML-код модального окна -->
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Заголовок модального окна -->
-                <div class="modal-header bg-green">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Добавить участников</h4>
-                </div>
-                <!-- Основное содержимое модального окна -->
-                <div class="modal-body">
-                    <?php Pjax::begin([
-                        'clientOptions' => [
-                            'push' => false
-                        ],
-                    ]); ?>
+<script>
+    $(function() {
 
-<!--                    --><?php //$form = ActiveForm::begin([
-//                        'action' => ['update', 'id' => $model->id],
-//                        'method' => 'get',
-//                    ]); ?>
-<!--                    --><?//= $form->field($searchModelPupils, 'name') ?>
-<!--                    <div class="form-group">-->
-<!--                        --><?//= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-<!--                        --><?//= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-<!--                    </div>-->
-<!--                    --><?php //ActiveForm::end(); ?>
+        //Контрольная работа
+        $('.js-set-test__mark').on('change', function (e) {
+            var pupilID = $(this).attr('data-pupil-id');
+            var value = $(this).val();
+            var that = $(this);
+            $.ajax({
+                url: '/marks/test-mark',
+                method: 'POST',
+                data: {
+                    pupilID: pupilID,
+                    value: value,
+                    type: 'test'
+                },
+                success: function() {
+                }
+            });
+        });
 
-<!--                    --><?php //$form = ActiveForm::begin(); ?>
-                    <?= GridView::widget([
-                        'dataProvider' => $dataProviderPupils,
-                        'filterModel' => $searchModelPupils,
-                        'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
-                            ['attribute' => 'name'],
-                            ['attribute' => 'lastName'],
-                            [
-                                'attribute' => 'birthDate',
-                                'value' => function($model) {
-                                    return Yii::$app->formatter->asDate($model->birthDate);
-                                }
-                            ],
-                            ['attribute' => 'className'],
-                            [
-                                'class'=>'kartik\grid\CheckboxColumn',
-                                'vAlign'=>'middle',
-                                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                                'checkboxOptions' => function($model) {
-                                    if ($model->isPupilInThisEvent(Yii::$app->request->get('id')))
-                                        return ["value" => $model->id,  'checked' => 'true', 'event_id' => Yii::$app->request->get('id')];
-                                },
-                                'options' => ['class_id' => $model->id]
-                            ]
-                        ],
-                    ]); ?>
-                    <div class="modal-footer">
-                        <?= Html::submitButton('Добавить в список участников', ['class' => 'btn btn-success']) ?>
-<!--                        --><?php //ActiveForm::end(); ?>
-                        <?php Pjax::end(); ?>
-                    </div>
-                    <?php
-//                        $this->registerJs(
-//                            '$("document").ready(function(){
-//                                $("#new_note").on("pjax:end", function() {
-//                                    $.pjax.reload({container:"#notes"});  //Reload GridView
-//                                });
-//                            });'
-//                        );
-                    ?>
-                </div>
-            </div>
-        </div>
-    </div>
-<? } ?>
+        //Срез по итогам темы
+        $('.js-set-test__theme__mark').on('change', function (e) {
+            var pupilID = $(this).attr('data-pupil-id');
+            var value = $(this).val();
+            var that = $(this);
+            $.ajax({
+                url: '/marks/test-mark',
+                method: 'POST',
+                data: {
+                    pupilID: pupilID,
+                    value: value,
+                    type: 'test_theme'
+                },
+                success: function() {
+                }
+            });
+        });
+
+        //Срез по итогам урока
+        $('.js-set-test__lesson__mark').on('change', function (e) {
+            var pupilID = $(this).attr('data-pupil-id');
+            var value = $(this).val();
+            var that = $(this);
+            $.ajax({
+                url: '/marks/test-mark',
+                method: 'POST',
+                data: {
+                    pupilID: pupilID,
+                    value: value,
+                    type: 'test_lesson'
+                },
+                success: function() {
+                }
+            });
+        });
+
+        //Светофор
+        $('.js-set-lights').on('click', function (e) {
+            var pupilID = $(this).attr('data-pupil-id');
+            var value = 0;
+            if ($(this).hasClass('lights-green')) value = 1;
+            if ($(this).hasClass('lights-yellow')) value = 2;
+            if ($(this).hasClass('lights-red')) value = 3;
+            var that = $(this);
+            $.ajax({
+                url: '/marks/test-mark',
+                method: 'POST',
+                data: {
+                    pupilID: pupilID,
+                    value: value,
+                    type: 'lights'
+                },
+                success: function() {
+//                    $('.js-set-lights').removeClass('active');
+                    that.siblings().removeClass('active');
+                    that.addClass('active');
+                }
+            });
+        });
+
+        //Активность на урок
+        $('.js-set-smile').on('click', function (e) {
+            var pupilID = $(this).attr('data-pupil-id');
+            var value = 0;
+            if ($(this).hasClass('smile-1')) value = 1;
+            if ($(this).hasClass('smile-2')) value = 2;
+            if ($(this).hasClass('smile-3')) value = 3;
+            if ($(this).hasClass('smile-4')) value = 4;
+            var that = $(this);
+            $.ajax({
+                url: '/marks/test-mark',
+                method: 'POST',
+                data: {
+                    pupilID: pupilID,
+                    value: value,
+                    type: 'active'
+                },
+                success: function() {
+//                    $('.js-set-smile').removeClass('active');
+                    that.siblings().removeClass('active');
+                    that.addClass('active');
+                }
+            });
+        });
+    });
+</script>

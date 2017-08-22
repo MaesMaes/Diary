@@ -53,4 +53,26 @@ class Marks extends \yii\db\ActiveRecord
             'active' => 'Active',
         ];
     }
+
+    /**
+     * Возвращает или создает новую модель
+     *
+     * @param $eventID
+     * @param $pupilID
+     * @return Marks|static
+     */
+    public static function getOrCreateModel($eventID, $pupilID)
+    {
+        $model = Marks::findOne(['eventID' => $eventID, 'pupilID' => $pupilID]);
+        if ($model) {
+            return $model;
+        }
+        else {
+            $model = new Marks();
+            $model->eventID = $eventID;
+            $model->pupilID = $pupilID;
+            $model->save();
+            return $model;
+        }
+    }
 }

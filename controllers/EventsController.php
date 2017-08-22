@@ -213,7 +213,7 @@ class EventsController extends Controller
 //                ]),
                 'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
                 'dataProviderPupilsOnEvent' => new ActiveDataProvider([
-                    'query' => User::find()->joinWith('events')->where(['event_id' => $model->id])
+                    'query' => User::find()->joinWith('events')->where(['event_id' => $model->id])->orderBy('lastName')
                 ]),
 //                'dataProviderPupilsOnEvent' => $s->search(Yii::$app->request->queryParams),
                 'searchModelPupils' => $s,
