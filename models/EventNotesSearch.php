@@ -18,7 +18,7 @@ class EventNotesSearch extends EventNotes
     public function rules()
     {
         return [
-            [['id', 'eventID', 'pupilID', 'worked'], 'integer'],
+            [['id', 'pupilID', 'worked'], 'integer'],
             [['note'], 'safe'],
         ];
     }
@@ -60,7 +60,6 @@ class EventNotesSearch extends EventNotes
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'eventID' => $this->eventID,
             'pupilID' => $this->pupilID,
             'worked' => $this->worked,
         ]);

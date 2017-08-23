@@ -66,6 +66,12 @@ use app\models\User;
                         'visible' => !$guest
                     ],
                     [
+                        'label' => 'Замечания',
+                        'icon' => 'exclamation',
+                        'url' => '/event-notes',
+                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN || $role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_EXPERT)
+                    ],
+                    [
                         'label' => 'Фотоальбомы',
                         'icon' => 'file-image-o',
                         'url' => '/albums',

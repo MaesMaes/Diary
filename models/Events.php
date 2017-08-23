@@ -40,7 +40,7 @@ class Events extends \yii\db\ActiveRecord
         return [
             [['subject', 'moderator', 'duration'], 'integer'],
             [['date'], 'safe'],
-            [['name', 'place'], 'string', 'max' => 255],
+            [['name', 'place', 'theme', 'standard', 'deep',], 'string', 'max' => 255],
             [['duration'], 'default', 'value' => 45],
 //            [['moderator'], 'required'],
         ];
@@ -58,7 +58,10 @@ class Events extends \yii\db\ActiveRecord
             'date' => 'Дата проведения',
             'duration' => 'Длительность (мин)',
             'moderator' => 'Модератор',
-            'place' => 'Место проведения'
+            'place' => 'Место проведения',
+            'theme' => 'Тема',
+            'standard' => 'Стандарт',
+            'deep' => 'Углубление',
         ];
     }
 

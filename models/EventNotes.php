@@ -8,10 +8,10 @@ use Yii;
  * This is the model class for table "event_notes".
  *
  * @property integer $id
- * @property integer $eventID
  * @property integer $pupilID
  * @property string $note
  * @property integer $worked
+ * @property string $date
  */
 class EventNotes extends \yii\db\ActiveRecord
 {
@@ -29,8 +29,9 @@ class EventNotes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['eventID', 'pupilID', 'worked'], 'integer'],
+            [['pupilID', 'worked'], 'integer'],
             [['note'], 'string'],
+            [['date'], 'safe'],
         ];
     }
 
@@ -41,10 +42,23 @@ class EventNotes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'eventID' => 'Event ID',
-            'pupilID' => 'Pupil ID',
-            'note' => 'Note',
-            'worked' => 'Worked',
+            'pupilID' => 'Ученик',
+            'note' => 'Замечание',
+            'worked' => 'Отработано',
+            'date' => 'Дата',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+
+            if ($this->isNewRecord) {
+                $this->date = date("Y-m-d H:i:s");
+            }
+
+            return true;
+        }
+        return false;
     }
 }

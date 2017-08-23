@@ -44,6 +44,15 @@ use yii\widgets\Pjax;
         <div class="col-md-3">
             <?= $form->field($model, 'duration')->textInput(['maxlength' => true])?>
         </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'theme')->textInput(['maxlength' => true])?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'standard')->textInput(['maxlength' => true])?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'deep')->textInput(['maxlength' => true])?>
+        </div>
     </div>
 
     <h4>Список участников</h4>
@@ -57,71 +66,6 @@ use yii\widgets\Pjax;
                 ['attribute' => 'lastName'],
                 ['attribute' => 'name'],
                 ['attribute' => 'className'],
-                [
-                    'header' => 'Контрольная работа',
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{test-mark}',
-                    'buttons' => [
-                        'test-mark' => function ($url, $model, $key) use ($eventID) {
-                            return Html::dropDownList(
-                                'list',
-                                Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test ?? 0,
-                                [0 => '-', 2 => 2, 3 => 3, 4 => 4, 5 => 5],
-                                ['data-pupil-id' => $model->id, 'class' => 'js-set-test__mark']
-                            );
-                        },
-                    ],
-                ],
-                [
-                    'header' => 'Срез по итогам темы',
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{test-theme-mark}',
-                    'buttons' => [
-                        'test-theme-mark' => function ($url,$model,$key) use ($eventID){
-                            return Html::dropDownList(
-                                'list',
-                                Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_theme ?? 0,
-                                [0 => '-', 2 => 2, 3 => 3, 4 => 4, 5 => 5],
-                                ['data-pupil-id' => $model->id, 'class' => 'js-set-test__theme__mark']
-                            );
-                        },
-                    ],
-                ],
-                [
-                    'header' => 'Срез по итогам урока',
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{test-lesson-mark}',
-                    'buttons' => [
-                        'test-lesson-mark' => function ($url,$model,$key) use ($eventID){
-                            return Html::input('string', 'test__lesson__mark',
-                                   Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_lesson ?? 0,
-                                   ['data-pupil-id' => $model->id, 'class' => 'js-set-test__lesson__mark test__lesson__mark'])
-                                 . Html::tag('span', '%', ['class' => 'test__lesson__percent']);
-                        },
-                    ],
-                ],
-                [
-                    'header' => 'Светофор',
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{lights-green}{lights-yellow}{lights-red}',
-                    'buttons' => [
-                        'lights-green' => function ($url,$model,$key) use ($eventID) {
-                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
-                            if ($lights == 1) $lights = 'active'; else $lights = '';
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-green ' . $lights]);
-                        },
-                        'lights-yellow' => function ($url,$model,$key) use ($eventID) {
-                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
-                            if ($lights == 2) $lights = 'active'; else $lights = '';
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-yellow ' . $lights]);
-                        },
-                        'lights-red' => function ($url,$model,$key) use ($eventID) {
-                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
-                            if ($lights == 3) $lights = 'active'; else $lights = '';
-                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-red ' . $lights]);
-                        },
-                    ],
-                ],
                 [
                     'header' => 'Активность на уроке',
                     'class' => 'yii\grid\ActionColumn',
@@ -150,15 +94,85 @@ use yii\widgets\Pjax;
                     ],
                 ],
                 [
-                    'header' => 'Замечания',
+                    'header' => 'Срез урока, %',
                     'class' => 'yii\grid\ActionColumn',
-                    'template' => '{notes}',
+                    'template' => '{test-lesson-mark}',
                     'buttons' => [
-                        'notes' => function ($url,$model,$key) {
-                            return Html::a('Добавить замечание', '#myModal', ['data-toggle' => "modal", 'data-pupil-id' => $model->id, 'class' => 'js-set-notes event-notes']);
+                        'test-lesson-mark' => function ($url,$model,$key) use ($eventID){
+                            return Html::dropDownList(
+                                'list',
+                                Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_lesson ?? 0,
+                                [0 => 0, 20 => 20, 40 => 40, 60 => 60, 80 => 80, 100 => 100],
+                                ['data-pupil-id' => $model->id, 'class' => 'js-set-test__lesson__mark']
+                            );
+//                            return Html::input('string', 'test__lesson__mark',
+//                                Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_lesson ?? 0,
+//                                ['data-pupil-id' => $model->id, 'class' => 'js-set-test__lesson__mark test__lesson__mark']);
                         },
                     ],
                 ],
+                [
+                    'header' => 'Контрольная работа по теме',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{test-theme-mark}',
+                    'buttons' => [
+                        'test-theme-mark' => function ($url,$model,$key) use ($eventID){
+                            return Html::dropDownList(
+                                'list',
+                                Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_theme ?? 0,
+                                [0 => '-', 2 => 2, 3 => 3, 4 => 4, 5 => 5],
+                                ['data-pupil-id' => $model->id, 'class' => 'js-set-test__theme__mark']
+                            );
+                        },
+                    ],
+                ],
+                [
+                    'header' => 'Контрольная работа',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{test-mark}',
+                    'buttons' => [
+                        'test-mark' => function ($url, $model, $key) use ($eventID) {
+                            return Html::dropDownList(
+                                'list',
+                                Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test ?? 0,
+                                [0 => '-', 2 => 2, 3 => 3, 4 => 4, 5 => 5],
+                                ['data-pupil-id' => $model->id, 'class' => 'js-set-test__mark']
+                            );
+                        },
+                    ],
+                ],
+                [
+                    'header' => 'Светофор',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{lights-green}{lights-yellow}{lights-red}',
+                    'buttons' => [
+                        'lights-green' => function ($url,$model,$key) use ($eventID) {
+                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                            if ($lights == 1) $lights = 'active'; else $lights = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-green ' . $lights]);
+                        },
+                        'lights-yellow' => function ($url,$model,$key) use ($eventID) {
+                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                            if ($lights == 2) $lights = 'active'; else $lights = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-yellow ' . $lights]);
+                        },
+                        'lights-red' => function ($url,$model,$key) use ($eventID) {
+                            $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                            if ($lights == 3) $lights = 'active'; else $lights = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-lights lights lights-red ' . $lights]);
+                        },
+                    ],
+                ],
+//                [
+//                    'header' => 'Замечания',
+//                    'class' => 'yii\grid\ActionColumn',
+//                    'template' => '{notes}',
+//                    'buttons' => [
+//                        'notes' => function ($url,$model,$key) {
+//                            return Html::a('Добавить замечание', '#myModal', ['data-toggle' => "modal", 'data-pupil-id' => $model->id, 'class' => 'js-set-notes event-notes']);
+//                        },
+//                    ],
+//                ],
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{delete}',
@@ -211,6 +225,31 @@ use yii\widgets\Pjax;
 
 <script>
     $(function() {
+
+        //Hide fields
+        function hideFields(type) {
+            var s = $('input[name="Events[standard]"]').parent().parent();
+            var d = $('input[name="Events[deep]"]').parent().parent();
+            var t = $('input[name="Events[theme]"]').parent().parent();
+            s.addClass('hidden');
+            d.addClass('hidden');
+            t.addClass('hidden');
+
+            if (type == 'Урок') {
+                t.removeClass('hidden');
+            }
+            if (type == 'Самостоятельная работа') {
+                s.removeClass('hidden');
+                d.removeClass('hidden');
+            }
+        }
+
+        $('select[name="Events[name]"]').on('change', function() {
+            hideFields($(this).val());
+        });
+
+        hideFields($('select[name="Events[name]"]').val());
+
         function reloadNotesList(pupilID) {
             $.ajax({
                 url: '/event-notes/get-pupil-notes',

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Events;
+use app\models\User;
 use Yii;
 use app\models\EventNotes;
 use app\models\EventNotesSearch;
@@ -92,6 +93,7 @@ class EventNotesController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'pupils' => User::getAllPupil(true)
             ]);
         }
     }

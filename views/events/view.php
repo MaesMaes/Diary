@@ -66,58 +66,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute' => 'name'],
             ['attribute' => 'className'],
             [
-                'header' => 'Контрольная работа',
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{test-mark}',
-                'buttons' => [
-                    'test-mark' => function ($url, $model, $key) use ($eventID) {
-                        return Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test ?? '-';
-                    },
-                ],
-            ],
-            [
-                'header' => 'Срез по итогам темы',
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{test-theme-mark}',
-                'buttons' => [
-                    'test-theme-mark' => function ($url,$model,$key) use ($eventID){
-                        return Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_theme ?? '-';
-                    },
-                ],
-            ],
-            [
-                'header' => 'Срез по итогам урока, %',
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{test-lesson-mark}',
-                'buttons' => [
-                    'test-lesson-mark' => function ($url,$model,$key) use ($eventID){
-                        return (Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_lesson ?? '0');
-                    }
-                ],
-            ],
-            [
-                'header' => 'Светофор',
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{lights-green}{lights-yellow}{lights-red}',
-                'buttons' => [
-                    'lights-green' => function ($url,$model,$key) use ($eventID) {
-                        $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
-                        if ($lights == 1) $lights = 'active'; else $lights = '';
-                        return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'lights-no lights lights-green ' . $lights]);
-                    },
-                    'lights-yellow' => function ($url,$model,$key) use ($eventID) {
-                        $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
-                        if ($lights == 2) $lights = 'active'; else $lights = '';
-                        return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'lights-no lights lights-yellow ' . $lights]);
-                    },
-                    'lights-red' => function ($url,$model,$key) use ($eventID) {
-                        $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
-                        if ($lights == 3) $lights = 'active'; else $lights = '';
-                        return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'lights-no lights lights-red ' . $lights]);
-                    },
-                ],
-            ],
-            [
                 'header' => 'Активность на уроке',
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{smile-1}{smile-2}{smile-3}{smile-4}',
@@ -145,15 +93,68 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
             [
-                'header' => 'Замечания',
+                'header' => 'Срез урока, %',
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{notes}',
+                'template' => '{test-lesson-mark}',
                 'buttons' => [
-                    'notes' => function ($url,$model,$key) {
-                        return '-';
+                    'test-lesson-mark' => function ($url,$model,$key) use ($eventID){
+                        return (Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_lesson ?? '0');
+                    }
+                ],
+            ],
+            [
+                'header' => 'Контрольная работа по теме',
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{test-theme-mark}',
+                'buttons' => [
+                    'test-theme-mark' => function ($url,$model,$key) use ($eventID){
+                        return Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test_theme ?? '-';
                     },
                 ],
             ],
+            [
+                'header' => 'Контрольная работа',
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{test-mark}',
+                'buttons' => [
+                    'test-mark' => function ($url, $model, $key) use ($eventID) {
+                        return Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->test ?? '-';
+                    },
+                ],
+            ],
+            [
+                'header' => 'Светофор',
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{lights-green}{lights-yellow}{lights-red}',
+                'buttons' => [
+                    'lights-green' => function ($url,$model,$key) use ($eventID) {
+                        $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                        if ($lights == 1) $lights = 'active'; else $lights = '';
+                        return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'lights-no lights lights-green ' . $lights]);
+                    },
+                    'lights-yellow' => function ($url,$model,$key) use ($eventID) {
+                        $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                        if ($lights == 2) $lights = 'active'; else $lights = '';
+                        return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'lights-no lights lights-yellow ' . $lights]);
+                    },
+                    'lights-red' => function ($url,$model,$key) use ($eventID) {
+                        $lights = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->lights ?? 0;
+                        if ($lights == 3) $lights = 'active'; else $lights = '';
+                        return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'lights-no lights lights-red ' . $lights]);
+                    },
+                ],
+            ],
+
+//            [
+//                'header' => 'Замечания',
+//                'class' => 'yii\grid\ActionColumn',
+//                'template' => '{notes}',
+//                'buttons' => [
+//                    'notes' => function ($url,$model,$key) {
+//                        return '-';
+//                    },
+//                ],
+//            ],
         ],
     ]); ?>
 

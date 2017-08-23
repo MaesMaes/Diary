@@ -232,14 +232,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $users;
     }
 
-    public static function getAllPupil()
+    public static function getAllPupil($revertName = false)
     {
         $pupilsId = self::getUsersByRole('pupil');
         $users = User::find()->where(['id' => $pupilsId])->all();
 
         $data = [];
         foreach ($users as $user) {
-            $data[$user->id] = $user->name . ' ' . $user->lastName;
+            if ($revertName) {
+                $data[$user->id] = $user->lastName . ' ' . $user->name;
+            } else {
+                $data[$user->id] = $user->name . ' ' . $user->lastName;
+            }
         }
 
         return $data;
