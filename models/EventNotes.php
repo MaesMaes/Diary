@@ -61,4 +61,17 @@ class EventNotes extends \yii\db\ActiveRecord
         }
         return false;
     }
+
+    /**
+     * Возвращает отрицательный баланс или 0 сприкров ученика по замечаниям
+     *
+     * @param $pupilID
+     * @return int|string
+     */
+    public static function getSuprikBalance($pupilID)
+    {
+        return EventNotes::find()
+            ->where(['pupilID' => $pupilID])
+            ->count();
+    }
 }

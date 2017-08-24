@@ -74,6 +74,7 @@ class EventNotesController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'pupils' => User::getAllPupil(true),
             ]);
         }
     }

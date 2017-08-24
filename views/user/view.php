@@ -63,6 +63,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Роль',
                 'value' => $role
+            ],
+            [
+                'label' => 'Суприки',
+                'value' => $suprik
             ]
         ],
     ]) ?>

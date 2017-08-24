@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\EventNotes;
+use app\models\Marks;
 use app\models\SchoolClass;
 use app\models\SchoolClassUsers;
 use Yii;
@@ -77,7 +79,8 @@ class UserController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'role' => User::getRoleName($id)
+            'role' => User::getRoleName($id),
+            'suprik' => Marks::getSuprikFromEvents($id) - EventNotes::getSuprikBalance($id),
         ]);
     }
 

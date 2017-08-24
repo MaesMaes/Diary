@@ -15,6 +15,7 @@ use Yii;
  * @property integer $test_lesson
  * @property integer $lights
  * @property integer $active
+ * @property integer $suprik
  */
 class Marks extends \yii\db\ActiveRecord
 {
@@ -32,7 +33,7 @@ class Marks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['eventID', 'test', 'test_theme', 'test_lesson', 'lights', 'active'], 'integer'],
+            [['eventID', 'test', 'test_theme', 'test_lesson', 'lights', 'active', 'suprik'], 'integer'],
             [['pupilID'], 'string', 'max' => 255],
         ];
     }
@@ -51,6 +52,7 @@ class Marks extends \yii\db\ActiveRecord
             'test_lesson' => 'Test Lesson',
             'lights' => 'Lights',
             'active' => 'Active',
+            'suprik' => 'Суприки',
         ];
     }
 
@@ -74,5 +76,63 @@ class Marks extends \yii\db\ActiveRecord
             $model->save();
             return $model;
         }
+    }
+
+    /*
+     * Перед сохранением начисляем суприки
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+
+            $this->calcSuprik();
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Вычисляем суприки
+     */
+    private function calcSuprik()
+    {
+        $suprik = 0;
+
+        if ($this->active != null) {
+            if ($this->active == 1) $suprik++;
+            else $suprik--;
+        }
+        if ($this->test_lesson != null) {
+            if ($this->test_lesson >= 80) $suprik++;
+            else $suprik--;
+        }
+        if ($this->lights != null) {
+            if ($this->lights == 1) $suprik++;
+            else $suprik--;
+        }
+
+        $this->suprik = $suprik;
+    }
+
+    /**
+     * Возвращает кодичество суприков ученика за все ивенты
+     *
+     * @param $pupilID
+     * @return int|mixed
+     */
+    public static function getSuprikFromEvents($pupilID)
+    {
+        $models = Marks::find()
+                    ->select('suprik')
+                    ->where(['pupilID' => $pupilID])
+                    ->all();
+
+        $suprik = 0;
+        foreach ($models as $model) {
+            $suprik += $model->suprik;
+        }
+
+        return $suprik;
     }
 }
