@@ -27,7 +27,16 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'sum')->textInput() ?>
+            <?= $form->field($model, 'sum')->textInput()->widget(\yii\widgets\MaskedInput::className(), [
+                'name' => 'sum',
+                'clientOptions' => [
+                    'alias' => 'decimal',
+                    'radixPoint' => '.',
+                    'groupSeparator' => ' ',
+                    'autoGroup' => true,
+                    'removeMaskOnSubmit' => true,
+                ],
+            ]) ?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>

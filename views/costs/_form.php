@@ -19,7 +19,16 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="col-md-3">
 <!--            --><?//= $form->field($model, 'date')->widget(DateTimePicker::classname(), [])?>
-            <?= $form->field($model, 'sum')->textInput() ?>
+            <?= $form->field($model, 'sum')->textInput()->widget(\yii\widgets\MaskedInput::className(), [
+                'name' => 'sum',
+                'clientOptions' => [
+                    'alias' => 'decimal',
+                    'radixPoint' => '.',
+                    'groupSeparator' => ' ',
+                    'autoGroup' => true,
+                    'removeMaskOnSubmit' => true,
+                ],
+            ]) ?>
 
         </div>
         <div class="col-md-3">

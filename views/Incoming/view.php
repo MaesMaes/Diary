@@ -44,7 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \app\models\Incoming::getAllSubjects()[$model->subject];
                 }
             ],
-            'sum',
+            [
+                'attribute' => 'sum',
+                'value' => function($model) {
+                    return number_format($model->sum, 0, '', ' ') . ' руб.';
+                }
+            ],
             'description',
             [
                 'attribute' => 'parentName',

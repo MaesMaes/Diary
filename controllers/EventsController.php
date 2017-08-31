@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\EventsUsers;
+use app\models\Marks;
 use app\models\Points;
 use app\models\SchoolClass;
 use app\models\Subject;
@@ -92,8 +94,8 @@ class EventsController extends Controller
                     'startEditable'    => false,
                     'durationEditable' => false,
                     'overlap'          => false,
-                    'url'              => '/events/view?id=' . $event->id,
-                    'color'            => 'orange',
+                    'url'              => '/events/update?id=' . $event->id,
+                    'color'            => $event->getEventColor(),
             ]);
         }
 //        echo '<pre>'; print_r($events); die;
@@ -201,21 +203,18 @@ class EventsController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->checkModeratorValue($model);
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect('/events');
+//            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             $s = new UserSearch();
             return $this->render('update', [
                 'model' => $model,
                 'subjects' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
                 'moderators' => User::getAllModerators(),
-//                'dataProviderPupils' => new ActiveDataProvider([
-//                    'query' => User::find()->joinWith('class')->where(['user.id' => User::getUsersByRole('pupil')])
-//                ]),
                 'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
                 'dataProviderPupilsOnEvent' => new ActiveDataProvider([
                     'query' => User::find()->joinWith('events')->where(['event_id' => $model->id])->orderBy('lastName')
                 ]),
-//                'dataProviderPupilsOnEvent' => $s->search(Yii::$app->request->queryParams),
                 'searchModelPupils' => $s,
             ]);
         }
@@ -252,20 +251,17 @@ class EventsController extends Controller
                 $pupils = explode(',', $pupils);
                 $model->savePupils($pupils, false);
             }
-//            else {
-//                User::deleteRelationWithEvent($id);
-//            }
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         $dataProviderPupils = $s->search(Yii::$app->request->queryParams);
-//        $dataProviderPupils->pagination = true;
+        $dataProviderPupils->sort = ['defaultOrder' => ['lastName' => SORT_ASC]];
+        $dataProviderPupils->refresh();
         $dataProviderPupils->pagination  = false;
 
         return $this->render('pupilsList', [
             'model' => $this->findModel($id),
-//            'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
             'dataProviderPupils' => $dataProviderPupils,
             'searchModelPupils' => $s,
             'dataProviderPupilsOnEvent' => new ActiveDataProvider([
@@ -380,5 +376,24 @@ class EventsController extends Controller
             $model->moderator = Yii::$app->user->id;
             $model->save();
         }
+    }
+
+    /**
+     * Создаем минигруппы
+     *
+     * @param $id
+     * @return \yii\web\Response
+     */
+    public function actionCreateMiniGroup($id)
+    {
+        if (Events::checkSpendStatusOfEvent($id)) {
+            $pupils = Marks::getBadPupils($id);
+            $lastEvent = Events::findOne($id);
+
+            Events::createMiniGroup($lastEvent, $pupils['thirdGroup'], 3);
+            Events::createMiniGroup($lastEvent, $pupils['fifthGroup'], 5);
+        }
+
+        return $this->redirect(['view', 'id' => $id]);
     }
 }

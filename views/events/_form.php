@@ -54,6 +54,14 @@ use yii\widgets\Pjax;
             <?= $form->field($model, 'deep')->textInput(['maxlength' => true])?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'task1')->textInput(['maxlength' => true])?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'task2')->textInput(['maxlength' => true])?>
+        </div>
+    </div>
 
     <h4>Список участников</h4>
     <? if (!$model->isNewRecord) {
@@ -69,7 +77,7 @@ use yii\widgets\Pjax;
                 [
                     'header' => 'Активность на уроке',
                     'class' => 'yii\grid\ActionColumn',
-                    'template' => '{smile-1}{smile-2}{smile-3}{smile-4}',
+                    'template' => '{smile-1}{smile-2}{smile-3}{smile-4}{smile-5}{smile-6}',
                     'buttons' => [
                         'smile-1' => function ($url,$model,$key) use ($eventID){
                             $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
@@ -90,6 +98,16 @@ use yii\widgets\Pjax;
                             $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
                             if ($active == 4) $active = 'active'; else $active = '';
                             return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile smile smile-4 ' . $active]);
+                        },
+                        'smile-5' => function ($url,$model,$key) use ($eventID) {
+                            $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
+                            if ($active == 5) $active = 'active'; else $active = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile smile smile-5 ' . $active]);
+                        },
+                        'smile-6' => function ($url,$model,$key) use ($eventID) {
+                            $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
+                            if ($active == 6) $active = 'active'; else $active = '';
+                            return Html::a('', '#0', ['data-pupil-id' => $model->id, 'class' => 'js-set-smile smile smile-6 ' . $active]);
                         },
                     ],
                 ],
@@ -188,9 +206,10 @@ use yii\widgets\Pjax;
         <p>Для добавлянения участников сначало создайте событие</p>
     <? } ?>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <? if (!$model->isNewRecord) { ?>
             <?= Html::a('Добавить участников', ['pupils-list', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('Проведено', ['create-mini-group', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
 <!--            --><?//= Html::a('Оценить участников', ['event-pupils-points', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
         <? } ?>
     </div>
@@ -226,6 +245,56 @@ use yii\widgets\Pjax;
 <script>
     $(function() {
 
+        //Переключает набор оценок для каждого типа осбытия
+        function turnMarks(type) {
+            var head = $('th');
+            $('th, td').removeClass('hidden');
+            switch (type) {
+                case 'Урок':
+                    head.eq(8).addClass('hidden');
+                    $('td:nth-child(9)').addClass('hidden');
+                    break;
+                case 'Самостоятельная работа':
+                        head.eq(7).addClass('hidden');
+                        $('td:nth-child(8)').addClass('hidden');
+                        head.eq(6).addClass('hidden');
+                        $('td:nth-child(7)').addClass('hidden');
+                        head.eq(5).addClass('hidden');
+                        $('td:nth-child(6)').addClass('hidden');
+                        head.eq(4).addClass('hidden');
+                        $('td:nth-child(5)').addClass('hidden');
+                    break;
+                case 'Секция':
+                        head.eq(8).addClass('hidden');
+                        $('td:nth-child(9)').addClass('hidden');
+                        head.eq(7).addClass('hidden');
+                        $('td:nth-child(8)').addClass('hidden');
+                        head.eq(6).addClass('hidden');
+                        $('td:nth-child(7)').addClass('hidden');
+                        head.eq(5).addClass('hidden');
+                        $('td:nth-child(6)').addClass('hidden');
+                    break;
+                case 'Модуль':
+
+                    break;
+                case 'Урок основной':
+                    head.eq(8).addClass('hidden');
+                    $('td:nth-child(9)').addClass('hidden');
+                    break;
+                case 'Минигруппа':
+                        head.eq(7).addClass('hidden');
+                        $('td:nth-child(8)').addClass('hidden');
+                        head.eq(6).addClass('hidden');
+                        $('td:nth-child(7)').addClass('hidden');
+                        head.eq(5).addClass('hidden');
+                        $('td:nth-child(6)').addClass('hidden');
+                        head.eq(4).addClass('hidden');
+                        $('td:nth-child(5)').addClass('hidden');
+                    break;
+                default:
+            }
+        }
+
         //Hide fields
         function hideFields(type) {
             var s = $('input[name="Events[standard]"]').parent().parent();
@@ -246,9 +315,11 @@ use yii\widgets\Pjax;
 
         $('select[name="Events[name]"]').on('change', function() {
             hideFields($(this).val());
+            turnMarks($(this).val());
         });
 
         hideFields($('select[name="Events[name]"]').val());
+        turnMarks($('select[name="Events[name]"]').val());
 
         function reloadNotesList(pupilID) {
             $.ajax({
@@ -363,6 +434,8 @@ use yii\widgets\Pjax;
             if ($(this).hasClass('smile-2')) value = 2;
             if ($(this).hasClass('smile-3')) value = 3;
             if ($(this).hasClass('smile-4')) value = 4;
+            if ($(this).hasClass('smile-5')) value = 5;
+            if ($(this).hasClass('smile-6')) value = 6;
             var that = $(this);
             $.ajax({
                 url: '/marks/test-mark',

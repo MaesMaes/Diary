@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use DateTime;
 use Yii;
 
 /**
@@ -14,6 +15,9 @@ use Yii;
  * @property integer $duration
  * @property integer $moderator
  * @property string $place
+ * @property string $task1
+ * @property string $task2
+ * @property boolean $spend
  */
 class Events extends \yii\db\ActiveRecord
 {
@@ -22,6 +26,8 @@ class Events extends \yii\db\ActiveRecord
         'Секция' => 'Секция',
         'Самостоятельная работа' => 'Самостоятельная работа',
         'Модуль' => 'Модуль',
+        'Урок основной' => 'Урок основной',
+        'Минигруппа' => 'Минигруппа',
     ];
 
     /**
@@ -39,8 +45,8 @@ class Events extends \yii\db\ActiveRecord
     {
         return [
             [['subject', 'moderator', 'duration'], 'integer'],
-            [['date'], 'safe'],
-            [['name', 'place', 'theme', 'standard', 'deep',], 'string', 'max' => 255],
+            [['date', 'spend'], 'safe'],
+            [['name', 'place', 'theme', 'standard', 'deep', 'task1', 'task2'], 'string', 'max' => 255],
             [['duration'], 'default', 'value' => 45],
 //            [['moderator'], 'required'],
         ];
@@ -62,6 +68,8 @@ class Events extends \yii\db\ActiveRecord
             'theme' => 'Тема',
             'standard' => 'Стандарт',
             'deep' => 'Углубление',
+            'task1' => 'Задание 1',
+            'task2' => 'Задание 2',
         ];
     }
 
@@ -118,15 +126,21 @@ class Events extends \yii\db\ActiveRecord
      * Возвращает названия классов участвующих в событии
      *
      * @param bool $toString - возвротить в виде строки
+     * @param bool $one - вернуть первый класс
      * @return array
      */
-    public function getEventClasses($toString = false)
+    public function getEventClasses($toString = false, $one = false)
     {
         $classes = [];
         $users = User::find()->joinWith('events')->where(['event_id' => $this->id])->all();
         foreach ($users as $user)
             if (!in_array($user->className, $classes))
                 $classes[] = $user->className;
+
+        if ($one)
+            return ($classes[0] ?? '')
+                ? $classes[0]
+                : $classes[1] ?? '';
 
         if($toString) {
             $str = '';
@@ -150,5 +164,115 @@ class Events extends \yii\db\ActiveRecord
         $queryParams = parse_url($link)['query'];
         parse_str($queryParams, $params);
         return $params['id'];
+    }
+
+    /**
+     * Вернет рабочие дни
+     *
+     * @param $count
+     * @param string $clock
+     * @return array
+     */
+    public static function getNoWeekendDays($count, $clock = ' 16:00:00')
+    {
+        $dates = [];
+        $date = new DateTime();
+
+        while(count($dates) < $count)
+        {
+            //Следующий день
+            $date->setTimestamp(strtotime($date->format('Y-m-d H:i:s')) + 24 * 60 * 60);
+
+            //Не выходной
+            if (date('N', strtotime($date->format('Y-m-d'))) < 6) {
+                $dates[] = $date->format('Y-m-d') . $clock;
+            }
+        }
+
+        return $dates;
+    }
+
+    /**
+     * Создает минигруппы
+     *
+     * @param $lastEvent - инфо о ивенте для групп: модератор и предмет
+     * @param $pupils - список id учеников
+     * @param $daysCount - количество дней
+     */
+    public static function createMiniGroup($lastEvent, $pupils, $daysCount)
+    {
+        $days = Events::getNoWeekendDays($daysCount);
+
+        for($i = 0; $i < $daysCount; $i++) {
+            $event = new Events();
+            $event->moderator = $lastEvent->moderator;
+            $event->subject = $lastEvent->subject;
+            $event->duration = 45;
+            $event->date = $days[$i];
+            $event->name = 'Минигруппа';
+            $event->save(false);
+            $event->refresh();
+
+            foreach ($pupils as $pupilID) {
+                $eventUsers = new EventsUsers();
+                $eventUsers->event_id = $event->id;
+                $eventUsers->user_id = $pupilID;
+                $eventUsers->save();
+            }
+        }
+    }
+
+    /**
+     * Проверяет будем ли создавать минигруппы, устанавливает
+     * свойство "Проведено", если свойство установлено создавать
+     * не будем.
+     *
+     * @param $id
+     * @return bool
+     */
+    public static function checkSpendStatusOfEvent($id)
+    {
+        $eventModel = Events::findOne($id);
+
+        if (isset($eventModel->spend) && $eventModel->spend == true) return false;
+
+        $eventModel->spend = true;
+        $eventModel->save(false);
+
+        return true;
+    }
+
+    /**
+     * Возвращает цвет события в зависимости от названия класса
+     */
+    public function getEventColor()
+    {
+        $className = $this->getEventClasses(true, true);
+//        print_r($className); die;
+        $color = "LightGrey";
+
+        if (isset($this->spend) && $this->spend == true)
+            return $color;
+
+        switch ($className) {
+            case '0 а':
+                return 'DodgerBlue';
+            case '0 б':
+                return 'Coral';
+            case '0 г':
+                return 'CornflowerBlue';
+            case '1 а':
+                return 'Crimson';
+            case '1 б':
+                return 'DarkSlateGray';
+            case '2 а':
+                return 'Gold';
+            case '3 а':
+                return 'IndianRed';
+            case '5 а':
+                return 'LightBlue';
+            default:
+                return 'orange';
+        }
     }
 }

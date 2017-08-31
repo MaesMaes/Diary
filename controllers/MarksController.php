@@ -2,6 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\EventNotes;
+use app\models\Events;
+use DateTime;
 use Yii;
 use app\models\Marks;
 use app\models\MarksSearch;
@@ -133,9 +136,21 @@ class MarksController extends Controller
             $value = Yii::$app->request->post('value');
             $type = Yii::$app->request->post('type');
 
+
+            //Начислять суприки всем ученикам кто присутствовал и не имеет за прошлый день замечаний по поведению
+            $eventModel = Events::findOne($eventID);
+            $date = new DateTime();
+            $date->setTimestamp(strtotime($eventModel->date) - 60 * 60 * 24);
+            $lastDaySQLFormat = $date->format('Y-m-d');
+            $eventNoteModel = EventNotes::find()
+                                ->where(['between', 'date', "$lastDaySQLFormat 0:0:0", "$lastDaySQLFormat 23:59:59" ])
+                                ->all();
+
+
             if (!$this->validateActionType($type)) return;
 
             $model = Marks::getOrCreateModel($eventID, $pupilID);
+            $model->validateNotes = (isset($eventNoteModel) && empty($eventNoteModel)) ? true : false;
             $model->{$type} = $value;
             print_r($model);
             $model->save();

@@ -1,6 +1,8 @@
 <?php
 
+use app\models\SchoolClass;
 use app\models\User;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -30,10 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Роль',
                 'attribute' => 'role',
+                'filter' => User::getRolesMap(),
                 'value' => function($model) {
                     return User::getRoleDescByUserId($model->id);
                 },
-                'filter' => User::getRolesMap()
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],

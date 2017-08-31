@@ -40,6 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'sum',
+                'value' => function($model) {
+                    return number_format($model->sum, 0, '', ' ');
+                }
             ],
             [
                 'attribute' => 'checkingAccount',

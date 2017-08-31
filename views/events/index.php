@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'clientOptions' => [
             'weekNumbers' => true,
             'selectable'  => true,
-            'defaultView' => 'agendaDay',
+            'defaultView' => 'agendaWeek',
         ],
         'events' => $events
     ]);

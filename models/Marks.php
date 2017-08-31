@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use DateTime;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "marks".
@@ -16,9 +18,12 @@ use Yii;
  * @property integer $lights
  * @property integer $active
  * @property integer $suprik
+ * @property boolean $validateNotes
  */
 class Marks extends \yii\db\ActiveRecord
 {
+    public $validateNotes;
+
     /**
      * @inheritdoc
      */
@@ -100,16 +105,28 @@ class Marks extends \yii\db\ActiveRecord
         $suprik = 0;
 
         if ($this->active != null) {
-            if ($this->active == 1) $suprik++;
-            else $suprik--;
+            if ($this->active == 1) {
+                if ($this->validateNotes)
+                    $suprik++;
+            } else {
+                $suprik--;
+            }
         }
         if ($this->test_lesson != null) {
-            if ($this->test_lesson >= 80) $suprik++;
-            else $suprik--;
+            if ($this->test_lesson >= 80) {
+                if ($this->validateNotes)
+                    $suprik++;
+            } else {
+                $suprik--;
+            }
         }
         if ($this->lights != null) {
-            if ($this->lights == 1) $suprik++;
-            else $suprik--;
+            if ($this->lights == 1) {
+                if ($this->validateNotes)
+                    $suprik++;
+            } else {
+                $suprik--;
+            }
         }
 
         $this->suprik = $suprik;
@@ -134,5 +151,31 @@ class Marks extends \yii\db\ActiveRecord
         }
 
         return $suprik;
+    }
+
+    /**
+     * Возвращает учеников с плохими результатами в переделах ивента
+     *
+     * @param $eventID
+     * @return array
+     */
+    public static function getBadPupils($eventID)
+    {
+        $thirdGroup = Marks::find()
+            ->select('pupilID')
+            ->where(['eventID' => $eventID])
+            ->andWhere(['<', 'test_lesson', 60])
+            ->column();
+        $fifthGroup = Marks::find()
+            ->select('pupilID')
+            ->where(['eventID' => $eventID])
+            ->where(['>=', 'test_lesson', 60])
+            ->andWhere(['<', 'test_lesson', 80])
+            ->column();
+
+        return [
+            'thirdGroup' => $thirdGroup,
+            'fifthGroup' => $fifthGroup,
+        ];
     }
 }

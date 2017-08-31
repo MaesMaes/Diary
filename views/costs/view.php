@@ -43,7 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     else return '';
                 }
             ],
-            'sum',
+            [
+                'attribute' => 'sum',
+                'value' => function($model) {
+                    return number_format($model->sum, 0, '', ' ') . ' руб.';
+                }
+            ],
             'description',
         ],
     ]) ?>

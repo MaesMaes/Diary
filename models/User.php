@@ -46,7 +46,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['isAdmin', 'child', 'classManagement', 'parent'], 'integer'],
             [['name', 'lastName', 'email', 'phone', 'password', 'photo'], 'string', 'max' => 50],
             [['birthDate'], 'default', 'value' => date('Y-m-d')],
-//            [['point'], 'safe'],
+            [['role'], 'safe'],
         ];
     }
 
@@ -292,6 +292,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasOne(Events::className(), ['id' => 'event_id'])
             ->viaTable('events_users', ['user_id' => 'id']);
     }
+
 
     public function getPoints()
     {

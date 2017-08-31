@@ -231,13 +231,16 @@ a.desc:after {
     border: 0;
 }
 .lights-green {
-    background: #5acd5e;
+    background: url('../images/smiles/5-SM_Smiles2-09.png') center center no-repeat;
+    background-size: cover;
 }
 .lights-yellow {
-    background: #e9eb51;
+    background: url('../images/smiles/5-SM_Smiles2-08.png') center center no-repeat;
+    background-size: cover;
 }
 .lights-red {
-    background: #ef5e4c;
+    background: url('../images/smiles/5-SM_Smiles2-07.png') center center no-repeat;
+    background-size: cover;
 }
 .test__lesson__mark {
     width: 25px;
@@ -267,19 +270,27 @@ a.desc:after {
     transition: .15s;
 }
 .smile-1 {
-    background: url('../images/004-happy.png') center center no-repeat;
+    background: url('../images/smiles/5-SM_Smiles2-05.png') center center no-repeat;
     background-size: cover;
 }
 .smile-2 {
-    background: url('../images/002-surprised.png') center center no-repeat;
+    background: url('../images/smiles/5-SM_Smiles2-04.png') center center no-repeat;
     background-size: cover;
 }
 .smile-3 {
-    background: url('../images/001-nervous.png') center center no-repeat;
+    background: url('../images/smiles/5-SM_Smiles2-06.png') center center no-repeat;
     background-size: cover;
 }
 .smile-4 {
-    background: url('../images/003-sad.png') center center no-repeat;
+    background: url('../images/smiles/5-SM_Smiles2-02.png') center center no-repeat;
+    background-size: cover;
+}
+.smile-5 {
+    background: url('../images/smiles/5-SM_Smiles2-01.png') center center no-repeat;
+    background-size: cover;
+}
+.smile-6 {
+    background: url('../images/smiles/5-SM_Smiles2-03.png') center center no-repeat;
     background-size: cover;
 }
 .smile-no:hover {

@@ -11,6 +11,7 @@ use yii\data\ActiveDataProvider;
 class UserSearch extends User
 {
     public $className;
+    public $role;
 
     /**
      * @inheritdoc
@@ -18,7 +19,8 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'isAdmin'], 'integer'],
+            [['id', 'isAdmin', ], 'integer'],
+            [['role'], 'safe'],
             [['name', 'email', 'password', 'photo', 'lastName', 'phone', 'birthDate', 'class', 'className'], 'safe'],
         ];
     }
@@ -49,10 +51,16 @@ class UserSearch extends User
 
         $query->joinWith(['class']);
 
+
         $this->load($params);
 
         if (!$this->validate()) {
             return $dataProvider;
+        }
+
+        if($this->role){
+            $query->join('LEFT JOIN','auth_assignment','auth_assignment.user_id = user.id')
+                ->andFilterWhere(['auth_assignment.item_name' => $this->role]);
         }
 
         $query->andFilterWhere(['like', 'name', $this->name])
