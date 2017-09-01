@@ -63,7 +63,7 @@ class UserSearch extends User
                 ->andFilterWhere(['auth_assignment.item_name' => $this->role]);
         }
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'user.name', $this->name])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'photo', $this->photo])

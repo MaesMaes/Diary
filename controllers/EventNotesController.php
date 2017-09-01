@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Events;
 use app\models\User;
+use app\models\UserSearch;
 use Yii;
 use app\models\EventNotes;
 use app\models\EventNotesSearch;
@@ -70,11 +71,18 @@ class EventNotesController extends Controller
         $model = new EventNotes();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('create', [
+            $s = new UserSearch();
+            $dataProviderPupils = $s->search(Yii::$app->request->queryParams);
+            $dataProviderPupils->sort = ['defaultOrder' => ['lastName' => SORT_ASC]];
+            $dataProviderPupils->refresh();
+            $dataProviderPupils->pagination  = false;
+            return $this->render('update', [
                 'model' => $model,
                 'pupils' => User::getAllPupil(true),
+                'dataProviderUsers' => $dataProviderPupils,
+                'searchModelUsers' => $s,
             ]);
         }
     }
@@ -90,11 +98,18 @@ class EventNotesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
+            $s = new UserSearch();
+            $dataProviderPupils = $s->search(Yii::$app->request->queryParams);
+            $dataProviderPupils->sort = ['defaultOrder' => ['lastName' => SORT_ASC]];
+            $dataProviderPupils->refresh();
+            $dataProviderPupils->pagination  = false;
             return $this->render('update', [
                 'model' => $model,
-                'pupils' => User::getAllPupil(true)
+                'pupils' => User::getAllPupil(true),
+                'dataProviderUsers' => $dataProviderPupils,
+                'searchModelUsers' => $s,
             ]);
         }
     }
