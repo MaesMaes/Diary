@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Imagick;
 use Yii;
 
 /**
@@ -103,5 +104,35 @@ class Banners extends \yii\db\ActiveRecord
     public static function getUploadPath()
     {
         return Yii::getAlias('@web') . 'tmp/banners';
+    }
+
+    /**
+     * Находит нужную ориентацию картинки
+     *
+     * @param $path - путь до шпега
+     */
+    public static function autoRotateImage($path) {
+        $image = new Imagick($path);
+
+        $orientation = $image->getImageOrientation();
+
+        switch($orientation) {
+            case Imagick::ORIENTATION_BOTTOMRIGHT:
+                $image->rotateImage("#000", 180); // rotate 180 degrees
+                break;
+
+            case Imagick::ORIENTATION_RIGHTTOP:
+                $image->rotateImage("#000", 90); // rotate 90 degrees CW
+                break;
+
+            case Imagick::ORIENTATION_LEFTBOTTOM:
+                $image->rotateImage("#000", -90); // rotate 90 degrees CCW
+                break;
+        }
+
+        // Now that it's auto-rotated, make sure the EXIF data is correct in case the EXIF gets saved with the image!
+        $image->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
+
+        $image->writeImage($path);
     }
 }

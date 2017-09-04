@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\ImageUpload;
 use app\models\User;
+use Imagick;
 use Yii;
 use app\models\Banners;
 use app\models\BannersSearch;
@@ -147,7 +148,11 @@ class BannersController extends Controller
 
             $fileObj = UploadedFile::getInstanceByName($fileName);
             $fileUniqueName = $bannerId . '-' . $fileObj->name;
+
             $fileObj->saveAs($uploadPath . '/' . $fileUniqueName);
+
+            // Пробуем фиксить ориентацию на мобилках
+//            Banners::autoRotateImage($uploadPath . '/' . $fileUniqueName);
 
             $bannerModel = Banners::findOne($bannerId);
             $bannerModel->saveImages($fileUniqueName);

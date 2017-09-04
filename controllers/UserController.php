@@ -80,7 +80,7 @@ class UserController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
             'role' => User::getRoleName($id),
-            'suprik' => Marks::getSuprikFromEvents($id) - EventNotes::getSuprikBalance($id),
+            'suprik' => Marks::getSuprikFromEvents($id) - EventNotes::getSuprikBalance($id) * 3,
         ]);
     }
 

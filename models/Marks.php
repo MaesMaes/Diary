@@ -107,7 +107,7 @@ class Marks extends \yii\db\ActiveRecord
         if ($this->active != null) {
             if ($this->active == 1) {
                 if ($this->validateNotes)
-                    $suprik++;
+                    $suprik += 2;
             } else {
                 $suprik--;
             }

@@ -213,8 +213,8 @@ a.desc:after {
 }
 
 .lights {
-    width: 15px;
-    height: 15px;
+    width: 30px;
+    height: 30px;
     display: inline-block;
     margin-right: 5px;
     margin-top: 6px;
@@ -255,8 +255,8 @@ a.desc:after {
 }
 
 .smile {
-    width: 15px;
-    height: 15px;
+    width: 30px;
+    height: 30px;
     display: inline-block;
     margin-right: 5px;
     margin-top: 6px;
@@ -295,6 +295,9 @@ a.desc:after {
 }
 .smile-no:hover {
     border: 0;
+}
+.pupils__list-table tbody tr td:not(tbody tr td:nth-child(5), tbody tr td:nth-child(9)){
+     padding-top: 19px;
 }
 
 .notes-container, .buttons-container {

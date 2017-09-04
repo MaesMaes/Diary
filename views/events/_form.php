@@ -67,8 +67,12 @@ use yii\widgets\Pjax;
     <? if (!$model->isNewRecord) {
         $eventID = $model->id;
         ?>
+        <div class="pupils__list-table">
         <?= GridView::widget([
             'dataProvider' => $dataProviderPupilsOnEvent,
+//            'options' => [
+//                'class' => ' table-responsive kv-grid-container'
+//            ],
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 ['attribute' => 'lastName'],
@@ -77,7 +81,7 @@ use yii\widgets\Pjax;
                 [
                     'header' => 'Активность на уроке',
                     'class' => 'yii\grid\ActionColumn',
-                    'template' => '{smile-1}{smile-2}{smile-3}{smile-4}{smile-5}{smile-6}',
+                    'template' => '{smile-5}{smile-1}{smile-2}{smile-4}{smile-6}',
                     'buttons' => [
                         'smile-1' => function ($url,$model,$key) use ($eventID){
                             $active = Marks::findOne(['eventID' => $eventID, 'pupilID' => $model->id])->active ?? 0;
@@ -202,6 +206,7 @@ use yii\widgets\Pjax;
                 ],
             ],
         ]); ?>
+        </div>
     <? } else { ?>
         <p>Для добавлянения участников сначало создайте событие</p>
     <? } ?>
