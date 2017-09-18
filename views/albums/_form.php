@@ -18,7 +18,6 @@ use yii\widgets\ActiveForm;
     <? if (!$model->isNewRecord): ?>
         <div class="row">
             <?php
-//            $images = json_decode($model->images);
             if (!empty($images))
                 foreach ($images as $img):
                     ?>

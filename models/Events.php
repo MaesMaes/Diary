@@ -17,6 +17,7 @@ use Yii;
  * @property string $place
  * @property string $task1
  * @property string $task2
+ * @property string $event_title
  * @property boolean $spend
  */
 class Events extends \yii\db\ActiveRecord
@@ -45,7 +46,7 @@ class Events extends \yii\db\ActiveRecord
     {
         return [
             [['subject', 'moderator', 'duration'], 'integer'],
-            [['date', 'spend'], 'safe'],
+            [['date', 'spend', 'event_title'], 'safe'],
             [['name', 'place', 'theme', 'standard', 'deep', 'task1', 'task2'], 'string', 'max' => 255],
             [['duration'], 'default', 'value' => 45],
 //            [['moderator'], 'required'],
@@ -256,23 +257,34 @@ class Events extends \yii\db\ActiveRecord
 
         switch ($className) {
             case '0 а':
-                return 'DodgerBlue';
+                return '#cc3a37';
             case '0 б':
-                return 'Coral';
+                return '#e69301';
             case '0 г':
-                return 'CornflowerBlue';
+                return '#ebe300';
             case '1 а':
-                return 'Crimson';
+                return '#50b754';
             case '1 б':
-                return 'DarkSlateGray';
+                return '#38b7ab';
             case '2 а':
-                return 'Gold';
+                return '#2228dc';
             case '3 а':
-                return 'IndianRed';
+                return '#d602bb';
             case '5 а':
-                return 'LightBlue';
+                return '#cc071f';
             default:
                 return 'orange';
+        }
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->event_title = $this->getEventClasses(true) . ' ' . Subject::findOne($this->subject)->name;
+
+            return parent::beforeSave($insert);
+        } else {
+            return false;
         }
     }
 }

@@ -16,11 +16,13 @@ use app\models\Events;
 use app\models\EventsSearch;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * EventsController implements the CRUD actions for Events model.
@@ -48,22 +50,29 @@ class EventsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new EventsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $eventsForCalendar = $dataProvider->query->all();
+//        $searchModel = new EventsSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//        $eventsForCalendar = $dataProvider->query->where(['between', 'date', new Expression('CURRENT_TIMESTAMP - INTERVAL 10 DAY'), new Expression('CURRENT_TIMESTAMP + INTERVAL 31 DAY')])->all();
 
         //Выводим инфу о событиях только тем пользователям которые его создавали
-        $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);
-        if ($role != User::USER_TYPE_ADMIN) {
-            $dataProvider->query->where('moderator = ' . Yii::$app->user->id);
-//            $eventsForCalendar = $dataProvider->query->where('moderator = ' . Yii::$app->user->id)->all();
-        }
-//        echo '<pre>';
+//        $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);r
+//        if ($role != User::USER_TYPE_ADMIN) {
+//            $dataProvider->query->where('moderator = ' . Yii::$app->user->id);
+//        }
 
+        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//            'events' => $this->getEventsForCalendar($eventsForCalendar),
+        ]);
+    }
+
+    private function getEventsForCalendar($eventsForCalendar)
+    {
         $events = [];
+        $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);
         $classManagementID = User::findOne(Yii::$app->user->id)->classManagement;
         $classManagement = SchoolClass::findOne($classManagementID)->name ?? '';
-//        print_r($classManagement);
 
         foreach ($eventsForCalendar as $event) {
             $date = new DateTime();
@@ -71,8 +80,6 @@ class EventsController extends Controller
             //Показываем только события класса где пользователь ведет руководство
             if ($role != User::USER_TYPE_ADMIN) {
                 $classNames = $event->getEventClasses();
-//                print_r($classNames);
-
                 if ($event->moderator != Yii::$app->user->id && !in_array($classManagement, $classNames)) continue;
             }
 
@@ -84,27 +91,55 @@ class EventsController extends Controller
             $dateEventEnd = $date->format('Y-m-d H:i:s');
 
             $events[] = new Event([
-                    'id'               => $event->id,
-                    'title'            => $event->name . ": "
-                                            . Subject::findOne($event->subject)->name . ' - '
-                                            . $event->place . ', Классы: '
-                                            . $event->getEventClasses(true),
-                    'start'            => str_replace(' ', 'T', $event->date),
-                    'end'              => str_replace(' ', 'T', $dateEventEnd),
-                    'startEditable'    => false,
-                    'durationEditable' => false,
-                    'overlap'          => false,
-                    'url'              => '/events/update?id=' . $event->id,
-                    'color'            => $event->getEventColor(),
+                'id'               => $event->id,
+//                'title'            => $event->name . ": "
+//                                        . Subject::findOne($event->subject)->name . ' - '
+//                                        . $event->place . ', Классы: '
+//                                        . $event->getEventClasses(true),
+                'title'            => $event->event_title,
+                'start'            => str_replace(' ', 'T', $event->date),
+                'end'              => str_replace(' ', 'T', $dateEventEnd),
+                'startEditable'    => false,
+                'durationEditable' => false,
+                'overlap'          => false,
+                'url'              => '/events/update?id=' . $event->id,
+                'color'            => $event->getEventColor(),
             ]);
         }
-//        echo '<pre>'; print_r($events); die;
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'events' => $events,
-        ]);
+        return $events;
+    }
+
+    public function actionGetEventsOnCurrentDate()
+    {
+        $searchModel = new EventsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $currentDate = Yii::$app->request->post('currentDate');
+        $year = Yii::$app->request->post('year');
+        $month = Yii::$app->request->post('month');
+        if (!$currentDate) return false;
+
+//        $date = new DateTime();
+//        $date->setTimestamp(strtotime($currentDate) - 10 * 24 * 60 * 60);
+//        $dateEventStart = $date->format('Y-m-d H:i:s');
+//        $date->setTimestamp(strtotime($currentDate) + 31 * 24 * 60 * 60);
+//        $dateEventEnd = $date->format('Y-m-d H:i:s');
+        $date = new DateTime();
+        $date->setTimestamp(strtotime($year . '-' . $month . '-01'));
+        $dateEventStart = $date->format('Y-m-d H:i:s');
+        $date->setTimestamp(strtotime($year . '-' . $month . '-01') + 31 * 24 * 60 * 60);
+        $dateEventEnd = $date->format('Y-m-d H:i:s');
+
+        $key = $dateEventStart . '-' . $dateEventEnd;
+        $eventsJSON = Yii::$app->cache->getOrSet($key, function () use($dataProvider, $dateEventStart, $dateEventEnd) {
+            $eventsForCalendar = $dataProvider->query->where(['between', 'date', $dateEventStart, $dateEventEnd])->all();
+            $events = $this->getEventsForCalendar($eventsForCalendar);
+            $eventsJSON = json_encode($events);
+            return $eventsJSON;
+        });
+
+        return  $eventsJSON;
     }
 
     /**
@@ -162,11 +197,13 @@ class EventsController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->checkModeratorValue($model);
 
+            Yii::$app->cache->flush();
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'subjects' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
+                'subjects' => ArrayHelper::map(Subject::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'),
                 'moderators' => User::getAllModerators(),
             ]);
         }
@@ -203,13 +240,15 @@ class EventsController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->checkModeratorValue($model);
 
+            Yii::$app->cache->flush();
+
             return $this->redirect('/events');
 //            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             $s = new UserSearch();
             return $this->render('update', [
                 'model' => $model,
-                'subjects' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
+                'subjects' => ArrayHelper::map(Subject::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'),
                 'moderators' => User::getAllModerators(),
                 'dataProviderPupils' => $s->search(Yii::$app->request->queryParams),
                 'dataProviderPupilsOnEvent' => new ActiveDataProvider([
@@ -229,6 +268,8 @@ class EventsController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+
+        Yii::$app->cache->flush();
 
         return $this->redirect(['index']);
     }
@@ -251,6 +292,7 @@ class EventsController extends Controller
                 $pupils = explode(',', $pupils);
                 $model->savePupils($pupils, false);
             }
+            Yii::$app->cache->flush();
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -395,5 +437,21 @@ class EventsController extends Controller
         }
 
         return $this->redirect(['view', 'id' => $id]);
+    }
+
+    public function actionUpdateEventsTitle()
+    {
+        $events = Events::find()->all(); $i = 0;
+//        print_r($events);
+        Yii::$app->cache->flush();
+        echo 'actionUpdateEventsTitle: <br/>';
+        foreach ($events as $event) {
+//            $event->event_title = $event->getEventClasses(true) . ' ' . Subject::findOne($event->subject)->name;
+//
+//            echo $i . ": {$event->event_title}<br/>";
+            echo $i++ . "<br/>";
+
+            $event->save(false);
+        }
     }
 }

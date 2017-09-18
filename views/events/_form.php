@@ -215,6 +215,13 @@ use yii\widgets\Pjax;
         <? if (!$model->isNewRecord) { ?>
             <?= Html::a('Добавить участников', ['pupils-list', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
             <?= Html::a('Проведено', ['create-mini-group', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Вы уверены?',
+                    'method' => 'post',
+                ],
+            ]) ?>
 <!--            --><?//= Html::a('Оценить участников', ['event-pupils-points', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
         <? } ?>
     </div>
@@ -310,6 +317,9 @@ use yii\widgets\Pjax;
             t.addClass('hidden');
 
             if (type == 'Урок') {
+                t.removeClass('hidden');
+            }
+            if (type == 'Урок основной') {
                 t.removeClass('hidden');
             }
             if (type == 'Самостоятельная работа') {

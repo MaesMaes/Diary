@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -66,7 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'Суприки',
-                'value' => $suprik
+                'value' => $suprik,
+                'visible' => User::getRoleNameByUserId($model->id) == User::USER_TYPE_PUPIL
             ]
         ],
     ]) ?>

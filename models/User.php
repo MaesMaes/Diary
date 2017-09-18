@@ -265,7 +265,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getAllModerators()
     {
         $pupilsId = self::getUsersByRole(['expert', 'teacher']);
-        $users = User::find()->where(['id' => $pupilsId])->all();
+        $users = User::find()->where(['id' => $pupilsId])->orderBy(['lastName' => SORT_ASC])->all();
 
         $data = [];
         foreach ($users as $user) {
