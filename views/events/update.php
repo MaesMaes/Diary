@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = 'Редактировать';
         'model' => $model,
         'subjects' => $subjects,
         'moderators' => $moderators,
+        'schoolClasses' => $schoolClasses,
         'dataProviderPupils' => $dataProviderPupils,
         'searchModelPupils' => $searchModelPupils,
         'dataProviderPupilsOnEvent' => $dataProviderPupilsOnEvent,

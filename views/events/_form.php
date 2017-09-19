@@ -4,6 +4,7 @@ use app\models\Marks;
 use kartik\date\DatePicker;
 use kartik\datetime\DateTimePicker;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
@@ -213,7 +214,8 @@ use yii\widgets\Pjax;
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <? if (!$model->isNewRecord) { ?>
-            <?= Html::a('Добавить участников', ['pupils-list', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('Добавить классы', '#myModalAddPupils', ['class' => 'btn btn-default', 'data-toggle' => "modal"]) ?>
+<!--            --><?//= Html::a('Добавить учеников', ['/events/pupils-list', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
             <?= Html::a('Проведено', ['create-mini-group', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
             <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
@@ -230,23 +232,33 @@ use yii\widgets\Pjax;
 </div>
 
 <? if (!$model->isNewRecord) { ?>
-    <div id="myModal" class="modal fade">
+    <div id="myModalAddPupils" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Заголовок модального окна -->
                 <div class="modal-header bg-green">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Замечания</h4>
+                    <h4 class="modal-title">Добавить участников</h4>
                 </div>
                 <!-- Основное содержимое модального окна -->
-                <div class="notes-container js-notes__container"></div>
-                <div class="buttons-container">
-                    <?= Html::textarea('new-note', '', ['class' => 'new-note']) ?><br/>
-                    <?= Html::submitButton('Добавить замечание', ['class' => 'btn btn-success js-add__new__note']) ?>
+                <div class="notes-container">
+                    <h3>Классы</h3>
+                    <p>Добавьте из списка 1 или несколько классов.</p>
+                    <?= Select2::widget([
+                        'name' => 'members',
+                        'data' => $schoolClasses,
+                        'options' => [
+                            'placeholder' => 'Классы',
+                            'multiple' => true
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ]); ?>
                 </div>
                 <div class="modal-body">
                     <div class="modal-footer">
-
+                        <?= Html::submitButton('Добавить', ['class' => 'btn btn-success js-add__members', 'data-event-id' => $model->id]) ?>
                     </div>
                 </div>
             </div>
@@ -376,6 +388,21 @@ use yii\widgets\Pjax;
                     pupilID: pupilID,
                     value: value,
                     type: 'test'
+                },
+                success: function() {
+                }
+            });
+        });
+
+        //Добавить участников
+        $('.js-add__members').on('click', function (e) {
+            var members = $('#w5').val();
+            var eventID = $(this).attr('data-event-id');
+            $.ajax({
+                url: '/events/add-school-classes-to-event?id=' + eventID,
+                method: 'POST',
+                data: {
+                    members: members
                 },
                 success: function() {
                 }

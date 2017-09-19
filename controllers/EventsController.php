@@ -255,6 +255,7 @@ class EventsController extends Controller
                     'query' => User::find()->joinWith('events')->where(['event_id' => $model->id])->orderBy('lastName')
                 ]),
                 'searchModelPupils' => $s,
+                'schoolClasses' => ArrayHelper::map(SchoolClass::find()->asArray()->all(), 'id', 'name'),
             ]);
         }
     }
@@ -452,6 +453,25 @@ class EventsController extends Controller
             echo $i++ . "<br/>";
 
             $event->save(false);
+        }
+    }
+
+    public function actionAddSchoolClassesToEvent($id)
+    {
+        if ($classes = Yii::$app->request->post('members')) {
+            $model = $this->findModel($id);
+            $schoolClassModels = User::find()
+                ->select('user.id')
+                ->joinWith('class')
+                ->where(['school_class_id' => $classes])
+                ->asArray()
+                ->all();
+            $pupils = array_column($schoolClassModels, 'id');
+            $model->savePupils($pupils);
+
+            Yii::$app->cache->flush();
+
+            return $this->redirect('/events/update?id=' . $id);
         }
     }
 }
