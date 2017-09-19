@@ -13,7 +13,7 @@ use Yii;
  * @property integer $child_id
  * @property string $datetime
  * @property string $note
- * @property boolean $is_ended
+ * @property boolean $is_stopped
  */
 
 class Contracts extends \yii\db\ActiveRecord {
@@ -46,6 +46,10 @@ class Contracts extends \yii\db\ActiveRecord {
             'contractType' => 'Тип контракта',
             'datetime' => 'Дата заключения контракта',
             'note' => 'Заметки',
+            'type_id' => 'Тип контракта',
+            'client_id' => 'Клиент',
+            'child_id' => 'Учащийся',
+            'is_stopped' => 'Приостановлен'
         ];
     }
 

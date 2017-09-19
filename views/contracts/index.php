@@ -9,9 +9,12 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Контракты';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $this->title; ?>
+<p>
+    <?= Html::a('Добавить контракт', ['create'], ['class' => 'btn btn-success']) ?>
+</p>
 
-echo GridView::widget([
+<?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
         [
@@ -49,6 +52,10 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'note',
+        ],
+        [
+            'attribute' => 'is_stopped',
+            'format' => 'boolean',
         ],
         [
             'class' => 'yii\grid\ActionColumn',
