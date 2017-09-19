@@ -60,6 +60,12 @@ use app\models\User;
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
                     [
+                        'label' => 'Контракты',
+                        'icon' => 'file-pdf-o',
+                        'url' => ['/contracts'],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+                    ],
+                    [
                         'label' => 'События',
                         'icon' => 'star',
                         'url' => [$eventsUrl],
