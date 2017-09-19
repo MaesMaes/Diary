@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title; ?>
             'class' => 'yii\grid\SerialColumn'
         ],
         [
-            'label' => 'Сумма контракта',
+            'label' => 'Тип контракта',
             'value' => function($model) {
                 return $model->contractType->title;
             }
