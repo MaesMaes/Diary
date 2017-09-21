@@ -474,4 +474,9 @@ class EventsController extends Controller
             return $this->redirect('/events/update?id=' . $id);
         }
     }
+
+    public function actionDeletePupilFromEvent($id)
+    {
+
+    }
 }

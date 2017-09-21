@@ -71,9 +71,6 @@ use yii\widgets\Pjax;
         <div class="pupils__list-table">
         <?= GridView::widget([
             'dataProvider' => $dataProviderPupilsOnEvent,
-//            'options' => [
-//                'class' => ' table-responsive kv-grid-container'
-//            ],
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 ['attribute' => 'lastName'],
@@ -201,7 +198,7 @@ use yii\widgets\Pjax;
                     'template' => '{delete}',
                     'urlCreator' => function ($action, $model, $key, $index) {
                         if ( $action === 'delete' ) {
-                            return '/events/delete-pupil-from-event?id=' . $model->id;
+                            return '/events/delete-pupil-from-event?event-id=' . $model->id;
                         }
                     },
                 ],
