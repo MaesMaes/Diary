@@ -1,10 +1,12 @@
 <?php
 
 use app\models\Marks;
+use app\models\PlacesList;
 use kartik\date\DatePicker;
 use kartik\datetime\DateTimePicker;
 use kartik\grid\GridView;
 use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
@@ -23,7 +25,8 @@ use yii\widgets\Pjax;
             <?= $form->field($model, 'name')->textInput(['maxlength' => true])->dropDownList($model->eventTypes); ?>
         </div>
         <div class="col-md-3">
-            <?= $form->field($model, 'place')->textInput(['maxlength' => true]) ?><br/>
+<!--            --><?//= $form->field($model, 'place')->textInput(['maxlength' => true]) ?><!--<br/>-->
+            <?= $form->field($model, 'place')->dropDownList(ArrayHelper::map(PlacesList::find()->all(), 'id', 'name')) ?><br/>
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'subject')->dropDownList($subjects) ?><br/>

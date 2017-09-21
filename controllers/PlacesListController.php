@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Events;
 use Yii;
 use app\models\PlacesList;
 use app\models\PlacesListSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -119,6 +121,19 @@ class PlacesListController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionUpdateEventsPlace()
+    {
+        $events = Events::find()->all();
+        $places = ArrayHelper::map(PlacesList::find()->all(), 'name', 'id');
+
+        foreach ($events as $event) {
+            if (isset($places[$event->place])) {
+                $event->place = $places[$event->place];
+                $event->save(false);
+            }
         }
     }
 }
