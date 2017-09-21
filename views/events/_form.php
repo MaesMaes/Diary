@@ -25,8 +25,8 @@ use yii\widgets\Pjax;
             <?= $form->field($model, 'name')->textInput(['maxlength' => true])->dropDownList($model->eventTypes); ?>
         </div>
         <div class="col-md-3">
-<!--            --><?//= $form->field($model, 'place')->textInput(['maxlength' => true]) ?><!--<br/>-->
-            <?= $form->field($model, 'place')->dropDownList(ArrayHelper::map(PlacesList::find()->all(), 'id', 'name')) ?><br/>
+            <?= $form->field($model, 'place')->textInput(['maxlength' => true]) ?><br/>
+<!--            --><?//= $form->field($model, 'place')->dropDownList(ArrayHelper::map(PlacesList::find()->all(), 'id', 'name'), ['prompt'=>'Не указано']) ?><!--<br/>-->
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'subject')->dropDownList($subjects) ?><br/>

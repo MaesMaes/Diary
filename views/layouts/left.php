@@ -122,6 +122,7 @@ use app\models\User;
                                 ],
                             ],
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+//                        'visible' => false,
                     ],
                     [
                         'label' => 'Настройки',
