@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $model = User::findOne($model->moderator);
                                 return $model->name . ' ' . $model->lastName;
                             },
-                            'filter' => User::getAllModerators()
+//                            'filter' => User::getAllModerators()
                         ],
 
                         ['class' => 'yii\grid\ActionColumn'],
