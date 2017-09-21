@@ -1,11 +1,15 @@
 <?php
 
+use app\models\Events;
 use app\models\Subject;
 use app\models\User;
 use edofre\fullcalendar\models\Event;
+use kartik\datetime\DateTimePicker;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\web\JsExpression;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EventsSearch */
@@ -22,48 +26,61 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Добавить событие', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-<!--    <div class="panel panel-content">-->
-<!--        <div class="panel-heading">-->
-<!--            Классический список событий-->
-<!--            <button type="button" class="btn btn-primary btn-xs spoiler-trigger pull-right" data-toggle="collapse"><span class="glyphicon glyphicon-chevron-down"></span></button>-->
-<!--        </div>-->
-<!--        <div class="panel-collapse collapse out">-->
-<!--            <div class="panel-body">-->
-<!--                --><?//= GridView::widget([
-//                    'dataProvider' => $dataProvider,
-//                    'filterModel' => $searchModel,
-//                    'columns' => [
-//                        ['class' => 'yii\grid\SerialColumn'],
-//
-////            'id',
-//                        'name',
-//                        [
-//                            'attribute' => 'subject',
-//                            'value' => function($model) {
-//                                return Subject::findOne($model->subject)->name;
-//                            }
-//                        ],
-//                        [
-//                            'attribute' => 'date',
-//                            'value' => function($model) {
-//                                return Yii::$app->formatter->asDatetime($model->date);
-//                            }
-//                        ],
-//                        [
-//                            'attribute' => 'moderator',
-//                            'value' => function($model) {
-//                                $model = User::findOne($model->moderator);
-//                                return $model->name . ' ' . $model->lastName;
-//                            }
-//                        ],
-//
-//                        ['class' => 'yii\grid\ActionColumn'],
-//                    ],
-//                ]); ?>
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div class="panel panel-content">
+        <div class="panel-heading">
+            Классический список событий
+            <button type="button" class="btn btn-primary btn-xs spoiler-trigger pull-right" data-toggle="collapse"><span class="glyphicon glyphicon-chevron-down"></span></button>
+        </div>
+        <div class="panel-collapse collapse out">
+            <div class="panel-body">
+                <?php Pjax::begin(); ?>
 
+                <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+
+                        'event_title',
+                        [
+                            'attribute' => 'name',
+                            'filter' => Events::$eventTypesS,
+                        ],
+                        [
+                            'attribute' => 'subject',
+                            'filter' => ArrayHelper::map(Subject::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name'),
+                            'value' => function($model) {
+                                return Subject::findOne($model->subject)->name;
+                            }
+                        ],
+                        [
+                            'attribute' => 'date',
+                            'filter' => DateTimePicker::widget([
+                                'model'=>$searchModel,
+                                'attribute'=>'date',
+                                'language' => 'ru',
+                            ]),
+                            'value' => function($model) {
+                                return Yii::$app->formatter->asDatetime($model->date);
+                            }
+                        ],
+                        [
+                            'attribute' => 'moderator',
+                            'value' => function($model) {
+                                $model = User::findOne($model->moderator);
+                                return $model->name . ' ' . $model->lastName;
+                            },
+                            'filter' => User::getAllModerators()
+                        ],
+
+                        ['class' => 'yii\grid\ActionColumn'],
+                    ],
+                ]); ?>
+                <?php Pjax::end(); ?>
+
+            </div>
+        </div>
+    </div>
     <?= edofre\fullcalendar\Fullcalendar::widget([
         'options'       => [
             'id'       => 'calendar',

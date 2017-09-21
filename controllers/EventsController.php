@@ -50,19 +50,19 @@ class EventsController extends Controller
      */
     public function actionIndex()
     {
-//        $searchModel = new EventsSearch();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new EventsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 //        $eventsForCalendar = $dataProvider->query->where(['between', 'date', new Expression('CURRENT_TIMESTAMP - INTERVAL 10 DAY'), new Expression('CURRENT_TIMESTAMP + INTERVAL 31 DAY')])->all();
 
         //Выводим инфу о событиях только тем пользователям которые его создавали
-//        $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);r
-//        if ($role != User::USER_TYPE_ADMIN) {
-//            $dataProvider->query->where('moderator = ' . Yii::$app->user->id);
-//        }
+        $role = User::getRoleNameByUserId(Yii::$app->user->identity->id);
+        if ($role != User::USER_TYPE_ADMIN) {
+            $dataProvider->query->where('moderator = ' . Yii::$app->user->id);
+        }
 
         return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
 //            'events' => $this->getEventsForCalendar($eventsForCalendar),
         ]);
     }

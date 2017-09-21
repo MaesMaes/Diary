@@ -60,12 +60,6 @@ use app\models\User;
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
                     [
-                        'label' => 'Контракты',
-                        'icon' => 'file-pdf-o',
-                        'url' => ['/contracts'],
-                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
-                    ],
-                    [
                         'label' => 'События',
                         'icon' => 'star',
                         'url' => [$eventsUrl],
@@ -97,6 +91,18 @@ use app\models\User;
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
                     [
+                        'label' => 'Нормативные документы',
+                        'icon' => 'file-pdf-o',
+                        'url' => '/documents',
+                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN),
+                    ],
+                    [
+                        'label' => 'Нормативные документы',
+                        'icon' => 'file-pdf-o',
+                        'url' => '/documents/smart-view',
+                        'visible' => !$guest && ($role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_PARENT),
+                    ],
+                    [
                         'label' => 'ДДС',
                         'icon' => 'usd',
                         'url' => '#',
@@ -120,17 +126,20 @@ use app\models\User;
                             ],
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
+
                     [
-                        'label' => 'Нормативные документы',
-                        'icon' => 'file-pdf-o',
-                        'url' => '/documents',
-                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN),
-                    ],
-                    [
-                        'label' => 'Нормативные документы',
-                        'icon' => 'file-pdf-o',
-                        'url' => '/documents/smart-view',
-                        'visible' => !$guest && ($role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_PARENT),
+                        'label' => 'Финансы',
+                        'icon' => '',
+                        'url' => '#',
+                        'items' =>
+                            [
+                                [
+                                    'label' => 'Контракты',
+                                    'icon' => 'file-pdf-o',
+                                    'url' => ['/contracts'],
+                                ],
+                            ],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
                     [
                         'label' => 'Настройки',
