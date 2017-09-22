@@ -31,7 +31,11 @@ class Contracts extends \yii\db\ActiveRecord {
      */
     public function rules()
     {
-        return [];
+        return [
+            [['type_id', 'client_id', 'child_id', 'datetime'], 'required'],
+            [['type_id', 'client_id', 'child_id'], 'integer'],
+            [['is_stopped', 'note'], 'safe'],
+        ];
     }
 
     /**

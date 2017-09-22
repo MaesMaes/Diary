@@ -25,13 +25,9 @@ class m170919_171931_create_table_contracts extends Migration
 
     public function safeDown()
     {
-        $this->delete('contracts');
-        $this->delete('contract_types');
+        $this->dropTable('contracts');
+        $this->dropTable('contract_types');
         return true;
-
-        echo "m170919_171931_create_table_contracts cannot be reverted.\n";
-
-        return false;
     }
 
     /*
