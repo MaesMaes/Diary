@@ -8,18 +8,29 @@ use Yii;
  * This is the model class for table "contract_types".
  *
  * @property integer $id
- * @property integer $price
  * @property string $title
+ * @property integer $price
  */
-
-class ContractTypes extends \yii\db\ActiveRecord {
-
+class ContractTypes extends \yii\db\ActiveRecord
+{
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return 'contract_types';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['title', 'price'], 'required'],
+            [['price'], 'integer'],
+            [['title'], 'string', 'max' => 255],
+        ];
     }
 
     /**

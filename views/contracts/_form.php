@@ -1,5 +1,6 @@
 <?php
 
+use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -37,7 +38,7 @@ use yii\widgets\ActiveForm;
     </div>
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'datetime') ?>
+            <?= $form->field($model, 'datetime')->widget(DateTimePicker::classname(), []) ?>
         </div>
     </div>
 

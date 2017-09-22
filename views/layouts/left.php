@@ -42,30 +42,6 @@ use app\models\User;
                     ['label' => 'Профиль', 'icon' => 'user', 'url' => ['/profile'], ],
                     ['label' => 'Меню', 'options' => ['class' => 'header'], ],
                     [
-                        'label' => 'Пользователи',
-                        'icon' => 'user',
-                        'url' => ['/user'],
-                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
-                    ],
-                    [
-                        'label' => 'Предметы',
-                        'icon' => 'th-list',
-                        'url' => ['/subject'],
-                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
-                    ],
-                    [
-                        'label' => 'Классы',
-                        'icon' => 'list-alt',
-                        'url' => ['/school-class'],
-                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
-                    ],
-                    [
-                        'label' => 'Контракты',
-                        'icon' => 'file-pdf-o',
-                        'url' => ['/contracts'],
-                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
-                    ],
-                    [
                         'label' => 'События',
                         'icon' => 'star',
                         'url' => [$eventsUrl],
@@ -89,12 +65,24 @@ use app\models\User;
                         'url' => '/albums/all-index',
                         'visible' => !$guest && ($role == User::USER_TYPE_PARENT || $role == User::USER_TYPE_PUPIL),
                     ],
-                    ['label' => 'О проекте', 'icon' => 'bookmark', 'url' => ['/site/about']],
+//                    ['label' => 'О проекте', 'icon' => 'bookmark', 'url' => ['/site/about']],
+//                    [
+//                        'label' => 'Gii',
+//                        'icon' => 'file-code-o',
+//                        'url' => ['/gii'],
+//                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+//                    ],
                     [
-                        'label' => 'Gii',
-                        'icon' => 'file-code-o',
-                        'url' => ['/gii'],
-                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+                        'label' => 'Нормативные документы',
+                        'icon' => 'file-pdf-o',
+                        'url' => '/documents',
+                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN),
+                    ],
+                    [
+                        'label' => 'Нормативные документы',
+                        'icon' => 'file-pdf-o',
+                        'url' => '/documents/smart-view',
+                        'visible' => !$guest && ($role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_PARENT),
                     ],
                     [
                         'label' => 'ДДС',
@@ -120,17 +108,21 @@ use app\models\User;
                             ],
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
                     ],
+
                     [
-                        'label' => 'Нормативные документы',
-                        'icon' => 'file-pdf-o',
-                        'url' => '/documents',
-                        'visible' => !$guest && ($role == User::USER_TYPE_ADMIN),
-                    ],
-                    [
-                        'label' => 'Нормативные документы',
-                        'icon' => 'file-pdf-o',
-                        'url' => '/documents/smart-view',
-                        'visible' => !$guest && ($role == User::USER_TYPE_TEACHER ||  $role == User::USER_TYPE_PARENT),
+                        'label' => 'Финансы',
+                        'icon' => '',
+                        'url' => '#',
+                        'items' =>
+                            [
+                                [
+                                    'label' => 'Контракты',
+                                    'icon' => 'file-pdf-o',
+                                    'url' => ['/contracts'],
+                                ],
+                            ],
+                        'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
+//                        'visible' => false,
                     ],
                     [
                         'label' => 'Настройки',
@@ -138,6 +130,26 @@ use app\models\User;
                         'url' => '#',
                         'items' =>
                             [
+                                [
+                                    'label' => 'Пользователи',
+                                    'icon' => 'user',
+                                    'url' => ['/user'],
+                                ],
+                                [
+                                    'label' => 'Предметы',
+                                    'icon' => 'th-list',
+                                    'url' => ['/subject'],
+                                ],
+                                [
+                                    'label' => 'Классы',
+                                    'icon' => 'list-alt',
+                                    'url' => ['/school-class'],
+                                ],
+                                [
+                                    'label' => 'Места проведения',
+                                    'icon' => 'arrows',
+                                    'url' => ['/places-list'],
+                                ],
                                 [
                                     'label' => 'Баннеры',
                                     'url' => ['/banners'],
