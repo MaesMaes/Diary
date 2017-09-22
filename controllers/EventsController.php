@@ -475,8 +475,15 @@ class EventsController extends Controller
         }
     }
 
-    public function actionDeletePupilFromEvent($id)
+    public function actionDeletePupilFromEvent()
     {
+        $eventID = Yii::$app->request->post('eventID');
+        $pupilID = Yii::$app->request->post('pupilID');
 
+        if (isset($eventID) && isset($pupilID)) {
+            EventsUsers::findOne(['event_id' => $eventID, 'user_id' => $pupilID])->delete();
+
+            return $this->redirect('/events/update?id=' . $eventID);
+        }
     }
 }

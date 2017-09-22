@@ -8,6 +8,7 @@ use kartik\grid\GridView;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
@@ -199,11 +200,22 @@ use yii\widgets\Pjax;
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{delete}',
-                    'urlCreator' => function ($action, $model, $key, $index) {
-                        if ( $action === 'delete' ) {
-                            return '/events/delete-pupil-from-event?event-id=' . $model->id;
-                        }
-                    },
+//                    'urlCreator' => function ($action, $model, $key, $index) {
+//                        if ( $action === 'delete' ) {
+//                            return Html::a('', '/events/delete-pupil-from-event?event-id=' . $model->id, [
+//                                'data-method'  => 'post',
+//                            ]);
+//                        }
+//                    },
+                    'buttons'  => [
+                        'delete' => function ($url, $pupilModel) use ($model){
+//                            $url = Url::to(['',  ['pupilID' => $pupilModel->id, 'eventID' => $model->id]]);
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                                'data' => ['pupil-id' => $pupilModel->id, 'event-id' => $model->id],
+                                'class' => 'js-delete__pupil__on__event'
+                            ]);
+                        },
+                    ]
                 ],
             ],
         ]); ?>
@@ -388,6 +400,23 @@ use yii\widgets\Pjax;
                     pupilID: pupilID,
                     value: value,
                     type: 'test'
+                },
+                success: function() {
+                }
+            });
+        });
+
+        //Удаление ученика из списка
+        $('.js-delete__pupil__on__event').on('click', function (e) {
+            e.preventDefault();
+            var pupilID = $(this).attr('data-pupil-id');
+            var eventID = $(this).attr('data-event-id');
+            $.ajax({
+                url: '/events/delete-pupil-from-event',
+                method: 'POST',
+                data: {
+                    pupilID: pupilID,
+                    eventID: eventID
                 },
                 success: function() {
                 }
