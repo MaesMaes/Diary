@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title; ?>
         [
             'attribute' => 'datetime',
             'value' => function($model) {
-                return date("d-M-Y h:i:s",  strtotime($model->datetime));
+                return date("d.m.Y h:i:s",  strtotime($model->datetime));
             }
         ],
         [

@@ -12,7 +12,6 @@ class m170921_103921_create_places_list_table extends Migration
      */
     public function up()
     {
-        return true;
         $this->createTable('places_list', [
             'id' => $this->primaryKey(),
             'name' => $this->string()

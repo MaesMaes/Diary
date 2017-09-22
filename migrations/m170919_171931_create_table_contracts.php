@@ -13,7 +13,7 @@ class m170919_171931_create_table_contracts extends Migration
             'child_id' => $this->integer()->notNull(),
             'datetime' => $this->dateTime(),
             'note' => $this->text(),
-            'is_stopped' => $this->boolean()
+            'is_stopped' => $this->boolean()->defaultValue(false),
         ]);
 
         $this->createTable('contract_types', [
