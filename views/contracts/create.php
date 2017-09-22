@@ -2,7 +2,7 @@
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Banners */
+/* @var $model app\models\Contracts */
 /* @var $contractTypesSelect array */
 /* @var $parentsSelect array */
 /* @var $childrenSelect array */

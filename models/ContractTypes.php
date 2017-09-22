@@ -21,4 +21,16 @@ class ContractTypes extends \yii\db\ActiveRecord {
     {
         return 'contract_types';
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'price' => 'Цена',
+            'title' => 'Название контракта'
+        ];
+    }
 }
