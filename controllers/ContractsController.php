@@ -56,40 +56,42 @@ class ContractsController extends Controller {
         $model = new Contracts();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update', 'id' => $model->id]);
-        } else {
-
-            // Типы контрактов
-            $contractTypes = ContractTypes::find()->all();
-            $contractTypesSelect = [];
-            foreach ($contractTypes as $contractType) {
-                $id = $contractType->id;
-                $title = $contractType->title;
-                $contractTypesSelect[$id] = $title;
-            }
-
-            // Родители
-            $parentsSelect = User::getAllParents();
-            $childrenSelect = User::getAllPupil();
-
-            return $this->render('create', [
-                'model' => $model,
-                'contractTypesSelect' => $contractTypesSelect,
-                'parentsSelect' => $parentsSelect,
-                'childrenSelect' => $childrenSelect
-            ]);
+            return $this->redirect(['index']);
         }
+
+        // Типы контрактов
+        $contractTypes = ContractTypes::find()->all();
+        $contractTypesSelect = [];
+        foreach ($contractTypes as $contractType) {
+            $id = $contractType->id;
+            $title = $contractType->title;
+            $contractTypesSelect[$id] = $title;
+        }
+
+        // Родители
+        $parentsSelect = User::getAllParents();
+        $childrenSelect = User::getAllPupil();
+
+        return $this->render('create', [
+            'model' => $model,
+            'contractTypesSelect' => $contractTypesSelect,
+            'parentsSelect' => $parentsSelect,
+            'childrenSelect' => $childrenSelect
+        ]);
     }
 
     /**
      * Updates an existing Contract model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * If update is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
         $model = Contracts::findOne($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
         if($model) {
             // Типы контрактов
             $contractTypes = ContractTypes::find()->all();

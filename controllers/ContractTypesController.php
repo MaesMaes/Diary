@@ -44,18 +44,21 @@ class ContractTypesController extends Controller
         $model = new ContractTypes();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update', 'id' => $model->id]);
-        } else {
-
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->redirect(['index']);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     public function actionUpdate($id)
     {
         $model = ContractTypes::findOne($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+
         if($model) {
             return $this->render('update', [
                 'model' => $model,
