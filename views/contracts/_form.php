@@ -41,9 +41,6 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'datetime')->widget(DateTimePicker::classname(), []) ?>
         </div>
     </div>
-
-
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?php if(!$model->isNewRecord) {

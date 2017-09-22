@@ -123,7 +123,7 @@ use app\models\User;
                                 [
                                     'label' => 'Типы контрактов',
                                     'icon' => 'file-pdf-o',
-                                    'url' => ['/contract-types/'],
+                                    'url' => ['/contract-types'],
                                 ],
                             ],
                         'visible' => !$guest && $role == User::USER_TYPE_ADMIN,
